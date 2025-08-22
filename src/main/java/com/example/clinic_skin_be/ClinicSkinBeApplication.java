@@ -1,13 +1,13 @@
-package com.example.hospitalcare_be;
+package com.example.clinic_skin_be;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HospitalCareBeApplication {
+public class ClinicSkinBeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HospitalCareBeApplication.class, args);
+        SpringApplication.run(ClinicSkinBeApplication.class, args);
     }
 
 }

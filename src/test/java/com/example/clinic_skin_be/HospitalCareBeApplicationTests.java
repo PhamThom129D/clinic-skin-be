@@ -1,4 +1,4 @@
-package com.example.hospitalcare_be;
+package com.example.clinic_skin_be;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
