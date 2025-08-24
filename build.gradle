@@ -1,3 +1,4 @@
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.4'
@@ -7,11 +8,7 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
-    }
-}
+
 
 configurations {
     compileOnly {
@@ -74,6 +71,12 @@ dependencies {
 
     // ====== Gemini API ======
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    // Nếu dùng Lombok song song thì thêm plugin này để tránh conflict
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 }
 
 tasks.named('test') {

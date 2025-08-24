@@ -6,11 +6,11 @@ import java.util.Set;
 @Data
 public class AccountResponse {
     private Long id;
-    private String fullname;
-    private String phonenumber;
+    private String fullName;
+    private String phoneNumber;
     private String email;
     private String gender;
-    private String avatarUrl;
+    private String avtPath;
     private Set<String> roles;
     private String status;
     private String createdAt;

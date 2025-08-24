@@ -1,12 +1,7 @@
 package com.example.clinic_skin_be.model;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,14 +11,19 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long id;
+
+    @Column(name = "role_name", nullable = false, unique = true)
     private String name;
+
     private String description;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<Account> users = new HashSet<>();
-
+    private Set<Account> accounts = new HashSet<>();
 }
