@@ -41,7 +41,7 @@ public class OtpService {
         return identifier.contains("@")
                 ? accountRepo.findByEmail(identifier)
                 .orElseThrow(() -> new RuntimeException("Account not found with email: " + identifier))
-                : accountRepo.findByPhonenumber(identifier)
+                : accountRepo.findByPhoneNumber(identifier)
                 .orElseThrow(() -> new RuntimeException("Account not found with phone: " + identifier));
     }
 }
