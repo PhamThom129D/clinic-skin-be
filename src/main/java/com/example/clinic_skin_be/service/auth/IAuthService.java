@@ -1,8 +1,8 @@
 package com.example.clinic_skin_be.service.auth;
 
 import com.example.clinic_skin_be.dto.AccountRequest;
-import com.example.clinic_skin_be.dto.AuthResponse;
-import com.example.clinic_skin_be.dto.LoginRequest;
+import com.example.clinic_skin_be.dto.auth.AuthResponse;
+import com.example.clinic_skin_be.dto.auth.LoginRequest;
 
 public interface IAuthService {
     AuthResponse register(AccountRequest accountRequest);
