@@ -1,8 +1,8 @@
 package com.example.clinic_skin_be.controller;
 
 import com.example.clinic_skin_be.dto.AccountRequest;
-import com.example.clinic_skin_be.dto.AuthResponse;
-import com.example.clinic_skin_be.dto.LoginRequest;
+import com.example.clinic_skin_be.dto.auth.AuthResponse;
+import com.example.clinic_skin_be.dto.auth.LoginRequest;
 import com.example.clinic_skin_be.service.auth.IAuthService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

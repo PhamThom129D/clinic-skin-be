@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.dto;
+package com.example.clinic_skin_be.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
