@@ -3,6 +3,7 @@ package com.example.clinic_skin_be.service.auth;
 import com.example.clinic_skin_be.dto.AccountRequest;
 import com.example.clinic_skin_be.dto.AuthResponse;
 import com.example.clinic_skin_be.dto.LoginRequest;
+import com.example.clinic_skin_be.mapper.AuthMapper;
 import com.example.clinic_skin_be.model.Account;
 import com.example.clinic_skin_be.model.Role;
 import com.example.clinic_skin_be.repository.IAccountRepository;
@@ -14,9 +15,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Value;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +29,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,11 +44,14 @@ public class AuthService implements IAuthService {
     private final OtpService otpService;
     private final OtpCache otpCache;
     private final EmailService emailService;
+    private final AuthMapper authMapper;
+
+    private String avt_default = "https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg";
 
     @Override
     public AuthResponse register(AccountRequest request) {
         if ((request.getEmail() == null || request.getEmail().isBlank()) &&
-                (request.getPhonenumber() == null || request.getPhonenumber().isBlank())) {
+                (request.getPhoneNumber() == null || request.getPhoneNumber().isBlank())) {
             throw new RuntimeException("Email hoặc số điện thoại không được để trống.");
         }
 
@@ -56,36 +59,37 @@ public class AuthService implements IAuthService {
             throw new RuntimeException("Email đã tồn tại trong hệ thống ");
         }
 
-        if (request.getPhonenumber() != null && accountRepo.existsByPhonenumber(request.getPhonenumber())) {
+        if (request.getPhoneNumber() != null && accountRepo.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new RuntimeException("Số điện thoại đã tồn tại trong hệ thống ");
         }
 
-        Account account = new Account();
-        account.setFullname(request.getFullname());
-        account.setEmail(request.getEmail());
-        account.setPhonenumber(request.getPhonenumber());
+        Account account = authMapper.toEntity(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
-        account.setGender(request.getGender());
-        account.setStatus("PENDING");
 
+        // Xử lý avatar upload
         if (request.getAvatarFile() != null && !request.getAvatarFile().isEmpty()) {
             Map uploadResult = cloudinaryService.uploadImage(request.getAvatarFile(), "avatars");
             account.setAvtPath((String) uploadResult.get("secure_url"));
         } else {
-            account.setAvtPath("https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg");
+            account.setAvtPath(avt_default);
         }
 
+        // Set role
         Role selectedRole = roleRepo.findByName(request.getRole())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         account.setRoles(Set.of(selectedRole));
 
         accountRepo.save(account);
 
-        String identifier = request.getPhonenumber() != null ? request.getPhonenumber() : request.getEmail();
+        // Xác thực lại để sinh JWT
+        String identifier = request.getPhoneNumber() != null ? request.getPhoneNumber() : request.getEmail();
         Authentication auth = performAuthentication(identifier, request.getPassword());
         String token = jwtUtil.generateToken(auth);
 
-        return buildAuthResponse(token, account);
+        // Map Entity -> DTO response
+        AuthResponse response = authMapper.toAuthResponse(account);
+        response.setToken(token); // set token riêng
+        return response;
     }
 
     @Override
@@ -99,22 +103,22 @@ public class AuthService implements IAuthService {
         String token = jwtUtil.generateToken(authentication);
         Account account = otpService.findAccountByIdentifier(request.getEmailOrPhone());
 
-        return buildAuthResponse(token, account);
+        AuthResponse response = authMapper.toAuthResponse(account);
+        response.setToken(token);
+        return response;
     }
 
-
-    @Value("${GOOGLE_CLIENT_ID}")
+   @Value("${GOOGLE_CLIENT_ID}")
     private String googleClientId;
+
     @Override
     public AuthResponse loginWithGoogle(String token) {
         try {
-            // Bước 1: Verify Google Token
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
                     JacksonFactory.getDefaultInstance())
                     .setAudience(Collections.singletonList(googleClientId))
                     .build();
-
 
             GoogleIdToken idToken = verifier.verify(token);
 
@@ -123,44 +127,34 @@ public class AuthService implements IAuthService {
             }
 
             GoogleIdToken.Payload payload = idToken.getPayload();
-
             String email = payload.getEmail();
             String name = (String) payload.get("name");
             String picture = (String) payload.get("picture");
 
-            // Bước 2: Kiểm tra user đã tồn tại chưa
             Account account = accountRepo.findByEmail(email).orElseGet(() -> {
-                // Bước 3: Tạo user mới nếu chưa có
-                Account newUser = new Account();
-                newUser.setEmail(email);
-                newUser.setFullname(name);
-                newUser.setAvtPath(picture);
-                newUser.setPassword("");
-                newUser.setPhonenumber("");
-                newUser.setRoles(Set.of(roleRepo.findByName("ROLE_PATIENT")
-                        .orElseThrow(() -> new RuntimeException("Role USER not found"))));
+                Account newUser = Account.builder()
+                        .email(email)
+                        .fullName(name)
+                        .avtPath(picture)
+                        .password("")
+                        .phoneNumber("")
+                        .roles(Set.of(roleRepo.findByName("ROLE_PATIENT")
+                                .orElseThrow(() -> new RuntimeException("Role USER not found"))))
+                        .build();
                 return accountRepo.save(newUser);
             });
 
-            // Bước 4: Sinh JWT
             String jwt = jwtUtil.generateToken(account.getEmail(),
                     account.getRoles().stream().map(Role::getName).toList());
 
-            // Bước 5: Trả AuthResponse
-            return AuthResponse.builder()
-                    .token(jwt)
-                    .fullname(account.getFullname())
-                    .email(account.getEmail())
-                    .phonenumber(account.getPhonenumber())
-                    .avatarUrl(account.getAvtPath())
-                    .roles(account.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-                    .build();
+            AuthResponse response = authMapper.toAuthResponse(account);
+            response.setToken(jwt);
+            return response;
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Đăng nhập Google thất bại: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -170,24 +164,15 @@ public class AuthService implements IAuthService {
 
         Account account = otpService.findAccountByIdentifier(identifier);
         if (account == null) {
-            log.warn("Tài khoản không tồn tại với identifier: {}", identifier);
             throw new RuntimeException("Tài khoản không tồn tại trong hệ thống.");
         }
 
         if (identifier.contains("@")) {
-            try {
-                otpService.generateAndSendOtp(identifier);
-                log.info("Đã gửi OTP tới email: {}", identifier);
-            } catch (Exception e) {
-                log.error("Lỗi khi gửi OTP tới email: {}", identifier, e);
-                throw new RuntimeException("Không thể gửi OTP. Vui lòng thử lại sau.");
-            }
+            otpService.generateAndSendOtp(identifier);
         } else {
-            log.warn("Identifier không hợp lệ (không phải email): {}", identifier);
             throw new RuntimeException("Email không hợp lệ.");
         }
     }
-
 
     @Override
     public void resendOtp(LoginRequest loginRequest) {
@@ -210,8 +195,6 @@ public class AuthService implements IAuthService {
         String newOtp = otpService.generateOtp();
         otpCache.put(key, newOtp, 180);
         emailService.sendOtpEmail(account.getEmail(), newOtp);
-
-        System.out.println("[INFO] Resent OTP to: " + account.getEmail() + " with code: " + newOtp);
     }
 
     @Override
@@ -228,32 +211,19 @@ public class AuthService implements IAuthService {
                 account.getRoles().stream().map(Role::getName).toList()
         );
 
-        return buildAuthResponse(token, account);
+        AuthResponse response = authMapper.toAuthResponse(account);
+        response.setToken(token);
+        return response;
     }
-
-
 
     @Override
     public void logout() {
-
+        // Có thể blacklist JWT ở đây nếu cần
     }
 
-    private AuthResponse buildAuthResponse(String token, Account account) {
-        return AuthResponse.builder()
-                .token(token)
-                .email(account.getEmail())
-                .phonenumber(account.getPhonenumber())
-                .fullname(account.getFullname())
-                .avatarUrl(account.getAvtPath())
-                .roles(account.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
-                .build();
-    }
     private Authentication performAuthentication(String identifier, String rawPassword) {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(identifier, rawPassword)
         );
     }
-
 }
-
-

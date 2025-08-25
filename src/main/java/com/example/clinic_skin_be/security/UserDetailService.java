@@ -28,11 +28,11 @@ public class UserDetailService implements UserDetailsService {
                     .orElseThrow(() -> new UsernameNotFoundException("Email not found: " + username));
         } else {
             isEmail = false;
-            account = accountRepo.findByPhonenumber(username)
+            account = accountRepo.findByPhoneNumber(username)
                     .orElseThrow(() -> new UsernameNotFoundException("Phone number not found: " + username));
         }
 
-        String principal = isEmail ? account.getEmail() : account.getPhonenumber();
+        String principal = isEmail ? account.getEmail() : account.getPhoneNumber();
 
         List<SimpleGrantedAuthority> authorities = account.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
