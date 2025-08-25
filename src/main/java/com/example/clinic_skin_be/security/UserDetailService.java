@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserDetailService implements UserDetailsService {
+
     private final IAccountRepository accountRepo;
 
     @Override
@@ -34,14 +35,16 @@ public class UserDetailService implements UserDetailsService {
 
         String principal = isEmail ? account.getEmail() : account.getPhoneNumber();
 
+        // Load permissions từ role
         List<SimpleGrantedAuthority> authorities = account.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .flatMap(role -> role.getPermissions().stream())
+                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                 .toList();
+
         return new User(
                 principal,
                 account.getPassword(),
                 authorities
         );
     }
-
 }

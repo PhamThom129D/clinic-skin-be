@@ -1,7 +1,7 @@
 package com.example.clinic_skin_be.mapper;
 
 import com.example.clinic_skin_be.dto.AccountRequest;
-import com.example.clinic_skin_be.dto.AuthResponse;
+import com.example.clinic_skin_be.dto.auth.AuthResponse;
 import com.example.clinic_skin_be.model.Account;
 import com.example.clinic_skin_be.model.Role;
 import org.mapstruct.Mapper;
