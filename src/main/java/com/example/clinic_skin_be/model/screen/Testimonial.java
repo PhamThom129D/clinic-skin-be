@@ -18,5 +18,8 @@ public class Testimonial {
 
     private String img;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 }
 
