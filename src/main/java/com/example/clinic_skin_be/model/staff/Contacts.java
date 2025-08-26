@@ -1,8 +1,12 @@
 package com.example.clinic_skin_be.model.staff;
 
-
+import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "contacts")
@@ -12,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Contacts {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,11 +31,14 @@ public class Contacts {
     private String reason;
 
     @Enumerated(EnumType.STRING)
-    private ConsultationStatus status = ConsultationStatus.PENDING; // e.g., "pending", "in_progress", "completed"
+    @Column(nullable = false)
+    private ConsultationStatus status = ConsultationStatus.PENDING;
 
-    public enum ConsultationStatus {
-        PENDING,    // chưa xử lý
-        IN_PROGRESS, // đang xử lý
-        COMPLETED        // đã xử lý
-    }
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ConsultationAssignment> assignments = new HashSet<>();
+
+
+    @Column(length = 10000)
+    private String note;
 }

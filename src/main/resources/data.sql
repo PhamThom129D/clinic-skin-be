@@ -47,3 +47,20 @@ INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES
 -- ROLE_CASHIER: xem báo cáo
 INSERT IGNORE INTO role_permissions (role_id, permission_id) VALUES
     (7, 3);
+
+
+INSERT INTO consultants (id, fullname, phone, email) VALUES
+                                                         (1, 'Nguyễn Văn A', '0909123456', 'a.consultant@clinic.com'),
+                                                         (2, 'Trần Thị B', '0912345678', 'b.consultant@clinic.com')
+    ON DUPLICATE KEY UPDATE fullname = fullname;
+
+-- -------------------------------
+-- 5. Sample Contacts (Khách hàng yêu cầu tư vấn)
+-- -------------------------------
+INSERT INTO contacts (id, fullname, phone, reason) VALUES
+                                                                     (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
+                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da')
+    ON DUPLICATE KEY UPDATE fullname = fullname;
+
+-- -------------------------------
+-- 6. Consultant - Contact mapping (N-N)
