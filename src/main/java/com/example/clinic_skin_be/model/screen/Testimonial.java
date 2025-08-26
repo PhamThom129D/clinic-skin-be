@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.screen;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,5 +1,7 @@
 package com.example.clinic_skin_be.dto.user;
 
+import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
+import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.example.clinic_skin_be.model.user.Account;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -17,8 +19,9 @@ public class AccountRequest {
     private String address;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
-    private Account.Gender gender;
-    private Account.Status status;
+    private Gender gender;
+    private AccountStatus status;
+
     private MultipartFile avatarFile;
 
     private String role;

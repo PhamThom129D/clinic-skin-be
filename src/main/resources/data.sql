@@ -218,3 +218,20 @@ VALUES
 (5, '11:00', '2025-09-05', 'Khám mụn trứng cá', 'Confirmed', 1),
 
 (6, '16:00', '2025-09-06', 'Tư vấn trị sẹo rỗ', 'Pending', 2);
+
+
+INSERT INTO consultants (id, fullname, phone, email) VALUES
+                                                         (1, 'Nguyễn Văn A', '0909123456', 'a.consultant@clinic.com'),
+                                                         (2, 'Trần Thị B', '0912345678', 'b.consultant@clinic.com')
+    ON DUPLICATE KEY UPDATE fullname = fullname;
+
+-- -------------------------------
+-- 5. Sample Contacts (Khách hàng yêu cầu tư vấn)
+-- -------------------------------
+INSERT INTO contacts (id, fullname, phone, reason) VALUES
+                                                                     (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
+                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da')
+    ON DUPLICATE KEY UPDATE fullname = fullname;
+
+-- -------------------------------
+-- 6. Consultant - Contact mapping (N-N)

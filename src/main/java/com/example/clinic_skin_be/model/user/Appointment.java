@@ -1,5 +1,7 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.user;
 
+import com.example.clinic_skin_be.model.staff.doctor.Doctor;
+import com.example.clinic_skin_be.model.patient.Patient;
 import jakarta.persistence.*;
 import lombok.*;
 

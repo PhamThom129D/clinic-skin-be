@@ -1,5 +1,7 @@
 package com.example.clinic_skin_be.model.user;
 
+import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
+import com.example.clinic_skin_be.model.manage_enum.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -45,7 +47,7 @@ public class Account {
     private String avtPath;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.Active;
+    private AccountStatus status = AccountStatus.Active;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt ;
@@ -59,7 +61,7 @@ public class Account {
         this.createdAt = now;
         this.updatedAt = now;
         if (this.status == null) {
-            this.status = Status.Active;
+            this.status = AccountStatus.Active;
         }
     }
 
@@ -76,11 +78,4 @@ public class Account {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public enum Gender {
-        Male, Female, Other
-    }
-
-    public enum Status {
-        Active, Inactive, Locked
-    }
 }

@@ -1,8 +1,7 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.staff.labStaff;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 
 @Entity
 @Table(name = "departments")

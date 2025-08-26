@@ -1,8 +1,7 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.staff.doctor;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.HashSet;
 import java.util.Set;

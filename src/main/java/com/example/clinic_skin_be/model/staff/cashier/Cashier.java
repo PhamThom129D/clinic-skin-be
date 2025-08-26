@@ -1,5 +1,6 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.staff.cashier;
 
+import com.example.clinic_skin_be.model.user.Account;
 import jakarta.persistence.*;
 import lombok.Data;
 
