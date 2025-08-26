@@ -1,14 +1,15 @@
-package com.example.clinic_skin_be.service.auth;
+package com.example.clinic_skin_be.service.auth.impl;
 
-import com.example.clinic_skin_be.dto.AccountRequest;
+import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
 import com.example.clinic_skin_be.dto.auth.LoginRequest;
 import com.example.clinic_skin_be.mapper.AuthMapper;
-import com.example.clinic_skin_be.model.Account;
-import com.example.clinic_skin_be.model.Role;
-import com.example.clinic_skin_be.repository.IAccountRepository;
-import com.example.clinic_skin_be.repository.IRoleRepository;
+import com.example.clinic_skin_be.model.user.Account;
+import com.example.clinic_skin_be.model.user.Role;
+import com.example.clinic_skin_be.repository.user.IAccountRepository;
+import com.example.clinic_skin_be.repository.user.IRoleRepository;
 import com.example.clinic_skin_be.service.CloudinaryService;
+import com.example.clinic_skin_be.service.auth.IAuthService;
 import com.example.clinic_skin_be.util.JwtUtil;
 import com.example.clinic_skin_be.util.OtpCache;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

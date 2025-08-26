@@ -1,9 +1,9 @@
-package com.example.clinic_skin_be.service;
+package com.example.clinic_skin_be.service.admin;
 
-import com.example.clinic_skin_be.model.Permission;
-import com.example.clinic_skin_be.model.Role;
-import com.example.clinic_skin_be.repository.IPermissionRepository;
-import com.example.clinic_skin_be.repository.IRoleRepository;
+import com.example.clinic_skin_be.model.admin.Permission;
+import com.example.clinic_skin_be.model.user.Role;
+import com.example.clinic_skin_be.repository.admin.IPermissionRepository;
+import com.example.clinic_skin_be.repository.user.IRoleRepository;
 import com.example.clinic_skin_be.service.auth.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

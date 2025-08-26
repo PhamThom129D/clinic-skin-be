@@ -1,6 +1,6 @@
 package com.example.clinic_skin_be.util;
 
-import com.example.clinic_skin_be.model.OtpInfo;
+import com.example.clinic_skin_be.model.user.OtpInfo;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 

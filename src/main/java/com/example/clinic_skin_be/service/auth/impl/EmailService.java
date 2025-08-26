@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.service.auth;
+package com.example.clinic_skin_be.service.auth.impl;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
