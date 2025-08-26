@@ -4,6 +4,7 @@ import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
 import com.example.clinic_skin_be.dto.auth.LoginRequest;
 import com.example.clinic_skin_be.service.auth.IAuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Slf4j
+@Valid
 public class AuthRestController {
 
     private final IAuthService authService;

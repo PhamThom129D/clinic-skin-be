@@ -76,6 +76,9 @@ dependencies {
 
     // Nếu dùng Lombok song song thì thêm plugin này để tránh conflict
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    // Validation
+    implementation "org.springframework.boot:spring-boot-starter-validation"
 }
 
 tasks.named('test') {

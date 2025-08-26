@@ -6,6 +6,9 @@ import com.example.clinic_skin_be.model.patient.Patient;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "appointments")
 @Getter
@@ -16,18 +19,18 @@ import lombok.*;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "appointment_id")
+    @Column(name = "appointment_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @Column (nullable = false)
-    private String time;
+    @Column(nullable = false)
+    private LocalTime time;
 
-    @Column (nullable = false)
-    private String date;
+    @Column(nullable = false)
+    private LocalDate date;
 
     private String note;
 
@@ -35,8 +38,6 @@ public class Appointment {
     private ConsultationStatus status = ConsultationStatus.PENDING;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
-
 }
-
