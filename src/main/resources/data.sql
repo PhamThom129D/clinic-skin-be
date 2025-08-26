@@ -173,7 +173,9 @@ INSERT IGNORE INTO reasons (reason_id, title, content, img) VALUES
 INSERT IGNORE INTO testimonials (content, img) VALUES
                                                        ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null),
                                                        ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null),
-                                                       ('Không gian sang trọng, cảm giác thoải mái.', null) ;
+                                                       ('Không gian sang trọng, cảm giác thoải mái.', null);
+INSERT IGNORE INTO testimonials (content, img) VALUES
+                                                   ('Trải nghiệm khá ổn, tôi sẽ quay lại', null) ;
 
 INSERT IGNORE INTO offers (title, description, img) VALUES
                                                        ('Giảm 50% Nâng mũi', 'Tạo dáng mũi chuẩn Hàn Quốc', 'https://i.pinimg.com/736x/0e/cf/07/0ecf07040c7806a0b017331a5d75d661.jpg'),
