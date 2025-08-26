@@ -1,7 +1,7 @@
 -- -------------------------------
 -- 1. Roles
 -- -------------------------------
-INSERT INTO roles (role_id, role_name, description)
+INSERT IGNORE INTO roles (role_id, role_name, description)
 VALUES (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
        (2, 'ROLE_PATIENT', 'Bệnh nhân'),
        (3, 'ROLE_DOCTOR', 'Bác sĩ'),
@@ -60,31 +60,8 @@ VALUES (6, 3),
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (7, 3);
 
-INSERT INTO product (id, name, description, price)
-VALUES (1, 'La Roche-Posay Effaclar Foaming Gel',
-        'Sữa rửa mặt dành cho da nhạy cảm, giúp làm sạch sâu, giảm dầu thừa và hỗ trợ giảm mụn cho da dầu nhạy cảm',
-        250000),
-       (2, 'Kem dưỡng ẩm chuyên sâu', 'Cung cấp độ ẩm mạnh mẽ, phục hồi hàng rào bảo vệ da sau điều trị.', 450000),
-       (3, 'Serum Vitamin C chống lão hóa', 'Làm sáng da, mờ thâm nám và chống oxy hóa hiệu quả.', 650000),
-       (4, 'Kem chống nắng SPF 50+', 'Bảo vệ da khỏi tia UVA/UVB, ngăn ngừa lão hóa sớm và sạm da.', 320000),
-       (5, 'Mặt nạ đất sét thải độc', 'Giúp làm sạch lỗ chân lông, kiềm dầu và giảm mụn đầu đen.', 180000),
-       (6, 'Liệu trình peel da hóa học', 'Sản phẩm dùng trong liệu trình peel da tại phòng khám để tái tạo da.',
-        1200000),
-       (7, 'Gel bí đao rửa mặt Cocoon',
-        'Sữa rửa mặt tốt nhất thuần chay dành cho da dầu, da hỗn hợp thiên dầu và da mụn giúp làm sạch sâu dầu thừa, bụi bẩn và hỗ trợ giảm mụn ẩn, mụn viêm mà không gây khô da',
-        163000),
-       (8, 'Acnes Oil Control Cleanser - Sữa rửa mặt sạch nhờn',
-        'Làm sạch sâu, điều tiết dầu tự nhiên, se lỗ chân lông và ngăn ngừa mụn hiệu quả', 56000),
-       (9, 'Viên Uống Glutasi Glutathione Hỗ Trợ Chống Oxy Hóa (Hộp 60 Viên)',
-        'Glutasi Glutathione giúp làm đẹp da, chống lão hóa. Hỗ trợ chống oxy hóa, giúp tăng cường chức năng thải độc',
-        790000),
-       (10, 'Ultra Hair Plus (30 viên) - Bổ sung vitamin và khoáng chất cho tóc chắc khỏe',
-        ' Giúp nuôi dưỡng và chăm sóc mái tóc khỏe mạnh, suôn mượt, ngăn chặn tóc bạc sớm, hói đầu.', 920000),
-       (11, 'Yukiwa - Hỗ trợ giữ ẩm và tăng độ đàn hồi cho da',
-        'Sản phẩm cung cấp thành phần chống oxy hóa, hạn chế quá trình lão hóa, giúp làn da mềm mịn, sáng đẹp và tăng cường độ ẩm cho da',
-        1180000);
 
-INSERT INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
+INSERT IGNORE INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
 VALUES ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '1988-02-25',
         '123 Phố Tràng Tiền, Quận Hoàn Kiếm, Hà Nội', 'Male', NULL, 'Active', '2024-05-10 10:00:00',
         '2025-07-20 15:30:00'),
@@ -115,7 +92,7 @@ VALUES ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '
         '707 Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội', 'Female', NULL, 'Active', '2025-03-15 09:00:00',
         '2025-04-05 11:00:00');
 
-INSERT INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
+INSERT IGNORE INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
 VALUES
     ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
      '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'Male', NULL, 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
@@ -139,7 +116,7 @@ VALUES
      '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'Female', NULL, 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00');
 
 -- Doctor
-INSERT INTO doctors (account_id, specialty, level)
+INSERT IGNORE INTO doctors (account_id, specialty, level)
 VALUES
     (3, 'Chuyên khoa nội tổng quát', 'Bác sĩ CKI'),
     (5, 'Chuyên khoa tim mạch', 'Thạc sĩ, Bác sĩ'),
@@ -147,17 +124,17 @@ VALUES
     (15, 'Chuyên khoa sản', 'Tiến sĩ, Bác sĩ');
 
 -- Consultant
-INSERT INTO consultants (customer_count, note, account_id) VALUES
-                                                               (25, 'Chuyên tư vấn liệu trình chăm sóc da cơ bản', 6),
-                                                               (40, 'Tư vấn chuyên sâu về điều trị nám và mụn', 9);
+INSERT IGNORE INTO consultants (account_id) VALUES
+                                                               ( 6),
+                                                               (9);
 
 
 -- Receptionists
-INSERT INTO receptionists (account_id)
+INSERT IGNORE INTO receptionists (account_id)
 VALUES (4), (12);
 
 -- Department
-INSERT INTO departments (department_id, department_name)
+INSERT IGNORE INTO departments (department_id, department_name)
 VALUES
     (1, 'Xét nghiệm máu'),
     (2, 'Xét nghiệm vi sinh'),
@@ -165,18 +142,18 @@ VALUES
 
 
 -- Lab Staff
-INSERT INTO lab_staff (account_id, department_id)
+INSERT IGNORE INTO lab_staff (account_id, department_id)
 VALUES
     (7, 1),
     (16, 2);
 
 
 -- Cashiers
-INSERT INTO cashiers (account_id)
+INSERT IGNORE INTO cashiers (account_id)
 VALUES (8), (18);
 
 -- Patients (các account còn lại)
-INSERT INTO patients (passport_number, occupation, account_id) VALUES
+INSERT IGNORE INTO patients (passport_number, occupation, account_id) VALUES
                                                                    ('P123456789', 'Sinh viên', 10),
                                                                    ('P987654321', 'Nhân viên văn phòng', 11),
                                                                    ('P456789123', 'Giáo viên', 14),
@@ -186,17 +163,17 @@ INSERT INTO patients (passport_number, occupation, account_id) VALUES
 
 
 
-INSERT INTO reasons (reason_id, title, content, img) VALUES
+INSERT IGNORE INTO reasons (reason_id, title, content, img) VALUES
                                                  (1, 'Kinh nghiệm lâu năm', 'Đội ngũ bác sĩ với nhiều năm kinh nghiệm.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
                                                  (2, 'Trang thiết bị hiện đại', 'Ứng dụng công nghệ tiên tiến hàng đầu.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
                                                  (3, 'Dịch vụ tận tâm', 'Chăm sóc khách hàng chu đáo, chuyên nghiệp.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
 
-INSERT INTO testimonials (content, img, account_id) VALUES
-                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null, 10),
-                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null, 11),
-                                                       ('Không gian sang trọng, cảm giác thoải mái.', null, 14);
+INSERT IGNORE INTO testimonials (content, img) VALUES
+                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null),
+                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null),
+                                                       ('Không gian sang trọng, cảm giác thoải mái.', null) ;
 
-INSERT INTO offers (title, `desc`, img) VALUES
+INSERT IGNORE INTO offers (title, description, img) VALUES
                                                        ('Giảm 50% Nâng mũi', 'Tạo dáng mũi chuẩn Hàn Quốc', 'https://i.pinimg.com/736x/0e/cf/07/0ecf07040c7806a0b017331a5d75d661.jpg'),
                                                        ('Ưu đãi Cắt mí', 'Đôi mắt to tròn, tự nhiên', 'https://i.pinimg.com/736x/5f/76/46/5f7646bf405c0f585b60bd97b0080162.jpg'),
                                                        ('Trị nám - trẻ hóa', 'Công nghệ Laser hiện đại', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
@@ -205,7 +182,7 @@ INSERT INTO offers (title, `desc`, img) VALUES
                                                        ('Giảm béo công nghệ cao', 'An toàn, không xâm lấn', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
 
 
-INSERT INTO appointments (patient_id, time, date, note, status, doctor_id)
+INSERT IGNORE INTO appointments (patient_id, time, date, note, status, doctor_id)
 VALUES
 (1, '09:00', '2025-09-01', 'Khám da liễu tổng quát', 'Pending', 1),
 
@@ -220,18 +197,15 @@ VALUES
 (6, '16:00', '2025-09-06', 'Tư vấn trị sẹo rỗ', 'Pending', 2);
 
 
-INSERT INTO consultants (id, fullname, phone, email) VALUES
-                                                         (1, 'Nguyễn Văn A', '0909123456', 'a.consultant@clinic.com'),
-                                                         (2, 'Trần Thị B', '0912345678', 'b.consultant@clinic.com')
-    ON DUPLICATE KEY UPDATE fullname = fullname;
+
 
 -- -------------------------------
 -- 5. Sample Contacts (Khách hàng yêu cầu tư vấn)
 -- -------------------------------
-INSERT INTO contacts (id, fullname, phone, reason) VALUES
+INSERT IGNORE INTO contacts (id, fullname, phone, reason) VALUES
                                                                      (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
                                                                      (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da')
-    ON DUPLICATE KEY UPDATE fullname = fullname;
+
 
 -- -------------------------------
 -- 6. Consultant - Contact mapping (N-N)

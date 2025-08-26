@@ -7,18 +7,19 @@ import lombok.Data;
 @Table(name = "offers")
 @Data
 public class Offer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "offer_id")
+    @Column(name = "offer_id")
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String desc;
 
-    @Column (nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
     private String img;
 }
-

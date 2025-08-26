@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.model.user;
 
+import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.model.patient.Patient;
 import jakarta.persistence.*;
@@ -31,14 +32,11 @@ public class Appointment {
     private String note;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.Pending;
+    private ConsultationStatus status = ConsultationStatus.PENDING;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    public enum Status {
-        Pending, Confirmed, Canceled
-    }
 }
 

@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.model.staff.doctor;
 
+import com.example.clinic_skin_be.model.user.Account;
 import jakarta.persistence.*;
 import lombok.*;
 

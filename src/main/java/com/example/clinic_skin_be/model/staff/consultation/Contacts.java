@@ -38,7 +38,4 @@ public class Contacts {
     @JsonIgnore
     private Set<ConsultationAssignment> assignments = new HashSet<>();
 
-
-    @Column(length = 10000)
-    private String note;
 }

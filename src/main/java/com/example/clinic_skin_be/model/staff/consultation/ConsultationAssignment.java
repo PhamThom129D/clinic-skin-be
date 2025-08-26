@@ -2,6 +2,7 @@ package com.example.clinic_skin_be.model.staff.consultation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import com.example.clinic_skin_be.model.staff.consultant.Consultant;
 import lombok.*;
 
 import java.time.LocalDateTime;

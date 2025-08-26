@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.model.screen;
 
+import com.example.clinic_skin_be.model.user.Account;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,8 +18,5 @@ public class Testimonial {
 
     private String img;
 
-    @ManyToOne
-    @JoinColumn (name = "account_id", nullable = false)
-    private Account account;
 }
 

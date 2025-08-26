@@ -1,6 +1,8 @@
-package com.example.clinic_skin_be.model.staff.consultation;
+package com.example.clinic_skin_be.model.staff.consultant;
 
+import com.example.clinic_skin_be.model.staff.consultation.ConsultationAssignment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.clinic_skin_be.model.user.Account;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,14 +22,11 @@ public class Consultant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fullname;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    private String phone;
-
-    private String email;
-
-    @OneToMany(mappedBy = "consultant")
+    @OneToMany(mappedBy = "consultant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<ConsultationAssignment> assignments = new HashSet<>();
-
 }
