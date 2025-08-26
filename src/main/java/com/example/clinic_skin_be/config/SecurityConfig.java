@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/api/chat/**").permitAll()
+                        .requestMatchers("/api/auth/**","/api/chat/**", "/api/ai/**").permitAll()
                         .requestMatchers( "/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
