@@ -1,8 +1,8 @@
-package com.example.clinic_skin_be.controller;
+package com.example.clinic_skin_be.controller.admin;
 
-import com.example.clinic_skin_be.model.Permission;
-import com.example.clinic_skin_be.model.Role;
-import com.example.clinic_skin_be.service.RoleService;
+import com.example.clinic_skin_be.model.admin.Permission;
+import com.example.clinic_skin_be.model.user.Role;
+import com.example.clinic_skin_be.service.admin.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

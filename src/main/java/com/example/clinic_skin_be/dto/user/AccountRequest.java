@@ -1,6 +1,6 @@
-package com.example.clinic_skin_be.dto;
+package com.example.clinic_skin_be.dto.user;
 
-import com.example.clinic_skin_be.model.Account;
+import com.example.clinic_skin_be.model.user.Account;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,9 +1,9 @@
 package com.example.clinic_skin_be.mapper;
 
-import com.example.clinic_skin_be.dto.AccountRequest;
+import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
-import com.example.clinic_skin_be.model.Account;
-import com.example.clinic_skin_be.model.Role;
+import com.example.clinic_skin_be.model.user.Account;
+import com.example.clinic_skin_be.model.user.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

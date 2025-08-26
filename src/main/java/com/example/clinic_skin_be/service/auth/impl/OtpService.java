@@ -1,7 +1,7 @@
-package com.example.clinic_skin_be.service.auth;
+package com.example.clinic_skin_be.service.auth.impl;
 
-import com.example.clinic_skin_be.model.Account;
-import com.example.clinic_skin_be.repository.IAccountRepository;
+import com.example.clinic_skin_be.model.user.Account;
+import com.example.clinic_skin_be.repository.user.IAccountRepository;
 import com.example.clinic_skin_be.util.OtpCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.dto;
+package com.example.clinic_skin_be.dto.staff;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
