@@ -1,0 +1,35 @@
+[33mb7613a8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/patient/booking[m[33m, [m[1;31morigin/feature/patient/booking[m[33m)[m HEAD@{0}: rebase (abort): returning to refs/heads/feature/patient/booking
+[33mee76d75[m HEAD@{1}: commit: resovle confict
+[33m12c80ab[m HEAD@{2}: commit: fix data and model
+[33mea3cc4e[m HEAD@{3}: pull origin feature/database/data_sql --rebase (pick): contact consultant
+[33madcd3d2[m[33m ([m[1;31morigin/feature/database/data_sql[m[33m)[m HEAD@{4}: pull origin feature/database/data_sql --rebase (start): checkout adcd3d2de97af4cc176c1b317510ef16f3e7c583
+[33mb7613a8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/patient/booking[m[33m, [m[1;31morigin/feature/patient/booking[m[33m)[m HEAD@{5}: commit: fix folder structure
+[33m5b8dadd[m[33m ([m[1;31morigin/feature/staff/consultant/booking[m[33m, [m[1;32mfeature/staff/consultant/booking[m[33m)[m HEAD@{6}: pull origin feature/staff/consultant/booking: Fast-forward
+[33m5d0485e[m HEAD@{7}: checkout: moving from feature/staff/consultant/booking to feature/patient/booking
+[33m5b8dadd[m[33m ([m[1;31morigin/feature/staff/consultant/booking[m[33m, [m[1;32mfeature/staff/consultant/booking[m[33m)[m HEAD@{8}: Branch: renamed refs/heads/feature/staf/consultant/booking to refs/heads/feature/staff/consultant/booking
+[33m5b8dadd[m[33m ([m[1;31morigin/feature/staff/consultant/booking[m[33m, [m[1;32mfeature/staff/consultant/booking[m[33m)[m HEAD@{10}: commit: consultaion assigment
+[33m5d0485e[m HEAD@{11}: pull origin feature/patient/booking: Fast-forward
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{12}: checkout: moving from develop to feature/staf/consultant/booking
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{13}: checkout: moving from feature/patient/booking to develop
+[33m5d0485e[m HEAD@{14}: commit: contact consultant
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{15}: checkout: moving from develop to feature/patient/booking
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{16}: checkout: moving from feature/staff/booking to develop
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{17}: checkout: moving from develop to feature/staff/booking
+[33m845b02a[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{18}: pull origin develop: Fast-forward
+[33m8073f38[m HEAD@{19}: checkout: moving from feature/config/security to develop
+[33m777a7d5[m[33m ([m[1;31morigin/feature/config/security[m[33m, [m[1;32mfeature/config/security[m[33m)[m HEAD@{20}: commit: fix Permission
+[33m8073f38[m HEAD@{21}: checkout: moving from develop to feature/config/security
+[33m8073f38[m HEAD@{22}: pull origin develop: Fast-forward
+[33mf84125a[m HEAD@{23}: checkout: moving from feature/config/model to develop
+[33m2dd90fb[m[33m ([m[1;31morigin/feature/config/model[m[33m, [m[1;32mfeature/config/model[m[33m)[m HEAD@{24}: commit: fix model account
+[33mf84125a[m HEAD@{25}: checkout: moving from develop to feature/config/model
+[33mf84125a[m HEAD@{26}: commit: clone base
+[33m8b46f5e[m HEAD@{27}: checkout: moving from master to develop
+[33mb75f46d[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{28}: commit: init
+[33me4afe38[m HEAD@{29}: commit: first commit
+[33m8b46f5e[m HEAD@{30}: checkout: moving from develop to master
+[33m8b46f5e[m HEAD@{31}: checkout: moving from master to develop
+[33m8b46f5e[m HEAD@{32}: checkout: moving from develop to master
+[33m8b46f5e[m HEAD@{33}: checkout: moving from master to develop
+[33m8b46f5e[m HEAD@{34}: pull origin develop: Fast-forward
+[33m87634cd[m HEAD@{35}: clone: from https://github.com/PhamThom129D/HospitalCare_BE
