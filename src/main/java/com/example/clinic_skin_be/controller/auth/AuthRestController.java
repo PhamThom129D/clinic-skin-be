@@ -19,7 +19,6 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Slf4j
-@Valid
 public class AuthRestController {
 
     private final IAuthService authService;
@@ -31,7 +30,7 @@ public class AuthRestController {
         return ResponseEntity.ok(authResponse);
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@ModelAttribute AccountRequest accountRequest) {
+    public ResponseEntity<?> register(@Valid @ModelAttribute AccountRequest accountRequest) {
         try {
             return ResponseEntity.ok(authService.register(accountRequest));
         } catch (Exception e) {

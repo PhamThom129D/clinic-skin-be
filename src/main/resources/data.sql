@@ -92,28 +92,30 @@ VALUES ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '
         '707 Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội', 'Female', NULL, 'Active', '2025-03-15 09:00:00',
         '2025-04-05 11:00:00');
 
-INSERT IGNORE INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
+INSERT IGNORE INTO accounts
+(full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
 VALUES
     ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
-     '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'Male', NULL, 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
+     '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
     ('Trần Thị Hồng', '0933333444', 'hong.tran@gmail.com', '12345678', '1996-09-09',
-     '909 Đường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 'Female', NULL, 'Active', '2025-03-25 11:00:00', '2025-08-12 13:30:00'),
+     '909 Đường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-03-25 11:00:00', '2025-08-12 13:30:00'),
     ('Phạm Văn Dũng', '0944444555', 'dung.pham@gmail.com', '12345678', '1982-02-28',
-     '111 Phố Tây Sơn, Quận Đống Đa, Hà Nội', 'Male', NULL, 'Active', '2025-04-01 09:45:00', '2025-08-14 14:20:00'),
+     '111 Phố Tây Sơn, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-01 09:45:00', '2025-08-14 14:20:00'),
     ('Lê Thị Ngọc', '0955555666', 'ngoc.le@gmail.com', '12345678', '1990-05-18',
-     '222 Đường Nguyễn Văn Cừ, Quận Long Biên, Hà Nội', 'Female', NULL, 'Active', '2025-04-10 08:30:00', '2025-08-16 15:10:00'),
+     '222 Đường Nguyễn Văn Cừ, Quận Long Biên, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-10 08:30:00', '2025-08-16 15:10:00'),
     ('Hoàng Văn Hải', '0966666777', 'hai.hoang@gmail.com', '12345678', '1987-07-25',
-     '333 Đường Phạm Hùng, Quận Nam Từ Liêm, Hà Nội', 'Male', NULL, 'Active', '2025-04-15 10:15:00', '2025-08-17 10:45:00'),
+     '333 Đường Phạm Hùng, Quận Nam Từ Liêm, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-15 10:15:00', '2025-08-17 10:45:00'),
     ('Đỗ Thị Yến', '0977777888', 'yen.do@gmail.com', '12345678', '1994-11-11',
-     '444 Đường Trần Duy Hưng, Quận Cầu Giấy, Hà Nội', 'Female', NULL, 'Active', '2025-04-20 14:20:00', '2025-08-18 16:00:00'),
+     '444 Đường Trần Duy Hưng, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-20 14:20:00', '2025-08-18 16:00:00'),
     ('Ngô Quang Khải', '0988888999', 'khai.ngo@gmail.com', '12345678', '1986-03-30',
-     '555 Phố Huế, Quận Hai Bà Trưng, Hà Nội', 'Male', NULL, 'Active', '2025-04-25 12:00:00', '2025-08-20 09:30:00'),
+     '555 Phố Huế, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-25 12:00:00', '2025-08-20 09:30:00'),
     ('Vũ Thị Hoa', '0999999000', 'hoa.vu@gmail.com', '12345678', '1997-01-05',
-     '666 Đường Nguyễn Khánh Toàn, Quận Cầu Giấy, Hà Nội', 'Female', NULL, 'Active', '2025-05-01 15:30:00', '2025-08-21 11:00:00'),
+     '666 Đường Nguyễn Khánh Toàn, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-01 15:30:00', '2025-08-21 11:00:00'),
     ('Phan Văn Kiên', '0912121212', 'kien.phan@gmail.com', '12345678', '1992-06-22',
-     '777 Đường Bạch Mai, Quận Hai Bà Trưng, Hà Nội', 'Male', NULL, 'Active', '2025-05-05 09:00:00', '2025-08-22 13:00:00'),
+     '777 Đường Bạch Mai, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-05 09:00:00', '2025-08-22 13:00:00'),
     ('Mai Thị Thuỷ', '0923232323', 'thuy.mai@gmail.com', '12345678', '1999-04-14',
-     '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'Female', NULL, 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00');
+     '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00');
+
 
 -- Doctor
 INSERT IGNORE INTO doctors (account_id, specialty, level)
