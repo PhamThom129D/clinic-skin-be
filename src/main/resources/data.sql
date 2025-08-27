@@ -170,10 +170,10 @@ INSERT IGNORE INTO reasons (reason_id, title, content, img) VALUES
                                                  (2, 'Trang thiết bị hiện đại', 'Ứng dụng công nghệ tiên tiến hàng đầu.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
                                                  (3, 'Dịch vụ tận tâm', 'Chăm sóc khách hàng chu đáo, chuyên nghiệp.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
 
-INSERT IGNORE INTO testimonials (content, img) VALUES
-                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null),
-                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null),
-                                                       ('Không gian sang trọng, cảm giác thoải mái.', null) ;
+INSERT IGNORE INTO testimonials (content, img,account_id) VALUES
+                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null,1),
+                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null,2),
+                                                       ('Không gian sang trọng, cảm giác thoải mái.', null,3) ;
 
 INSERT IGNORE INTO offers (title, description, img) VALUES
                                                        ('Giảm 50% Nâng mũi', 'Tạo dáng mũi chuẩn Hàn Quốc', 'https://i.pinimg.com/736x/0e/cf/07/0ecf07040c7806a0b017331a5d75d661.jpg'),
