@@ -60,9 +60,30 @@ VALUES (6, 3),
 INSERT IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (7, 3);
 
-
-INSERT IGNORE INTO accounts (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
-VALUES ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '1988-02-25',
+INSERT IGNORE INTO accounts
+(full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
+VALUES
+    ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
+     '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
+    ('Trần Thị Hồng', '0933333444', 'hong.tran@gmail.com', '12345678', '1996-09-09',
+     '909 Đường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-03-25 11:00:00', '2025-08-12 13:30:00'),
+    ('Phạm Văn Dũng', '0944444555', 'dung.pham@gmail.com', '12345678', '1982-02-28',
+     '111 Phố Tây Sơn, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-04-01 09:45:00', '2025-08-14 14:20:00'),
+    ('Lê Thị Ngọc', '0955555666', 'ngoc.le@gmail.com', '12345678', '1990-05-18',
+     '222 Đường Nguyễn Văn Cừ, Quận Long Biên, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-04-10 08:30:00', '2025-08-16 15:10:00'),
+    ('Hoàng Văn Hải', '0966666777', 'hai.hoang@gmail.com', '12345678', '1987-07-25',
+     '333 Đường Phạm Hùng, Quận Nam Từ Liêm, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-15 10:15:00', '2025-08-17 10:45:00'),
+    ('Đỗ Thị Yến', '0977777888', 'yen.do@gmail.com', '12345678', '1994-11-11',
+     '444 Đường Trần Duy Hưng, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-20 14:20:00', '2025-08-18 16:00:00'),
+    ('Ngô Quang Khải', '0988888999', 'khai.ngo@gmail.com', '12345678', '1986-03-30',
+     '555 Phố Huế, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-25 12:00:00', '2025-08-20 09:30:00'),
+    ('Vũ Thị Hoa', '0999999000', 'hoa.vu@gmail.com', '12345678', '1997-01-05',
+     '666 Đường Nguyễn Khánh Toàn, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-01 15:30:00', '2025-08-21 11:00:00'),
+    ('Phan Văn Kiên', '0912121212', 'kien.phan@gmail.com', '12345678', '1992-06-22',
+     '777 Đường Bạch Mai, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-05 09:00:00', '2025-08-22 13:00:00'),
+    ('Mai Thị Thuỷ', '0923232323', 'thuy.mai@gmail.com', '12345678', '1999-04-14',
+     '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00'),
+       ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '1988-02-25',
         '123 Phố Tràng Tiền, Quận Hoàn Kiếm, Hà Nội', 'Male', NULL, 'Active', '2024-05-10 10:00:00',
         '2025-07-20 15:30:00'),
        ('Phạm Thị Thu', '0987654321', 'thu.pham@gmail.com', '12345678', '1995-07-10',
@@ -92,38 +113,14 @@ VALUES ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '
         '707 Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội', 'Female', NULL, 'Active', '2025-03-15 09:00:00',
         '2025-04-05 11:00:00');
 
-INSERT IGNORE INTO accounts
-(full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
-VALUES
-    ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
-     '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
-    ('Trần Thị Hồng', '0933333444', 'hong.tran@gmail.com', '12345678', '1996-09-09',
-     '909 Đường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-03-25 11:00:00', '2025-08-12 13:30:00'),
-    ('Phạm Văn Dũng', '0944444555', 'dung.pham@gmail.com', '12345678', '1982-02-28',
-     '111 Phố Tây Sơn, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-01 09:45:00', '2025-08-14 14:20:00'),
-    ('Lê Thị Ngọc', '0955555666', 'ngoc.le@gmail.com', '12345678', '1990-05-18',
-     '222 Đường Nguyễn Văn Cừ, Quận Long Biên, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-10 08:30:00', '2025-08-16 15:10:00'),
-    ('Hoàng Văn Hải', '0966666777', 'hai.hoang@gmail.com', '12345678', '1987-07-25',
-     '333 Đường Phạm Hùng, Quận Nam Từ Liêm, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-15 10:15:00', '2025-08-17 10:45:00'),
-    ('Đỗ Thị Yến', '0977777888', 'yen.do@gmail.com', '12345678', '1994-11-11',
-     '444 Đường Trần Duy Hưng, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-20 14:20:00', '2025-08-18 16:00:00'),
-    ('Ngô Quang Khải', '0988888999', 'khai.ngo@gmail.com', '12345678', '1986-03-30',
-     '555 Phố Huế, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-25 12:00:00', '2025-08-20 09:30:00'),
-    ('Vũ Thị Hoa', '0999999000', 'hoa.vu@gmail.com', '12345678', '1997-01-05',
-     '666 Đường Nguyễn Khánh Toàn, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-01 15:30:00', '2025-08-21 11:00:00'),
-    ('Phan Văn Kiên', '0912121212', 'kien.phan@gmail.com', '12345678', '1992-06-22',
-     '777 Đường Bạch Mai, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-05 09:00:00', '2025-08-22 13:00:00'),
-    ('Mai Thị Thuỷ', '0923232323', 'thuy.mai@gmail.com', '12345678', '1999-04-14',
-     '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00');
-
 
 -- Doctor
 INSERT IGNORE INTO doctors (account_id, specialty, level)
 VALUES
-    (3, 'Chuyên khoa nội tổng quát', 'Bác sĩ CKI'),
-    (5, 'Chuyên khoa tim mạch', 'Thạc sĩ, Bác sĩ'),
-    (13, 'Chuyên khoa nhi', 'Bác sĩ CKII'),
-    (15, 'Chuyên khoa sản', 'Tiến sĩ, Bác sĩ');
+    (1, 'Chuyên khoa nội tổng quát', 'Bác sĩ CKI'),
+    (2, 'Chuyên khoa tim mạch', 'Thạc sĩ, Bác sĩ'),
+    (3, 'Chuyên khoa nhi', 'Bác sĩ CKII'),
+    (4, 'Chuyên khoa sản', 'Tiến sĩ, Bác sĩ');
 
 -- Consultant
 INSERT IGNORE INTO consultants (account_id) VALUES
@@ -171,18 +168,17 @@ INSERT IGNORE INTO reasons (reason_id, title, content, img) VALUES
                                                  (3, 'Dịch vụ tận tâm', 'Chăm sóc khách hàng chu đáo, chuyên nghiệp.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
 
 INSERT IGNORE INTO testimonials (content, img,account_id) VALUES
-                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null,1),
-                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null,2),
-                                                       ('Không gian sang trọng, cảm giác thoải mái.', null,3) ;
+                                                       ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null,5),
+                                                       ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null,6),
+                                                       ('Không gian sang trọng, cảm giác thoải mái.', null,7) ;
 
 INSERT IGNORE INTO offers (title, description, img) VALUES
-                                                       ('Giảm 50% Nâng mũi', 'Tạo dáng mũi chuẩn Hàn Quốc', 'https://i.pinimg.com/736x/0e/cf/07/0ecf07040c7806a0b017331a5d75d661.jpg'),
-                                                       ('Ưu đãi Cắt mí', 'Đôi mắt to tròn, tự nhiên', 'https://i.pinimg.com/736x/5f/76/46/5f7646bf405c0f585b60bd97b0080162.jpg'),
-                                                       ('Trị nám - trẻ hóa', 'Công nghệ Laser hiện đại', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
-                                                       ('Combo dưỡng da', 'Chăm sóc chuyên sâu', 'https://i.pinimg.com/736x/bb/46/3f/bb463f961c29cb926d01b1a4f3a2ca0d.jpg'),
-                                                       ('Khuyến mãi triệt lông', 'Hiệu quả lâu dài', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
-                                                       ('Giảm béo công nghệ cao', 'An toàn, không xâm lấn', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
-
+('Giảm 40% Trị Mụn Chuyên Sâu', 'Liệu trình chuẩn y khoa, giảm viêm mụn, ngăn ngừa tái phát', 'https://i.pinimg.com/736x/cb/1d/af/cb1dafde466c5f541eafdca7d66a4fd8.jpg'),
+('Ưu đãi Trị Nám - Tàn Nhang', 'Ứng dụng Laser hiện đại, hiệu quả an toàn', 'https://i.pinimg.com/1200x/b2/9a/9b/b29a9bae161bfe5c14276a21dbb59dac.jpg'),
+('Chăm Sóc Da Sau Mụn', 'Phục hồi, giảm thâm sẹo, dưỡng sáng da', 'https://i.pinimg.com/736x/af/fc/f9/affcf9e29970feef712c33a8f3ecf73d.jpg'),
+('Combo Dưỡng Trắng - Căng Bóng Da', 'Liệu trình dưỡng da chuyên sâu, cấp ẩm và tái tạo da', 'https://i.pinimg.com/1200x/c5/e7/36/c5e7364fa7312fce00b970beb29d28a7.jpg'),
+('Khuyến mãi Triệt Lông Công Nghệ Cao', 'An toàn, hiệu quả lâu dài, phù hợp mọi loại da', 'https://i.pinimg.com/736x/fd/dd/6b/fddd6be3e7e9400410723debc5bb192a.jpg'),
+('Giảm Giá Điều Trị Sẹo Rỗ', 'Công nghệ RF vi điểm & PRP giúp tái tạo làn da', 'https://i.pinimg.com/736x/28/ba/68/28ba6822f15b82410f55c7dda0fbf208.jpg');
 
 INSERT IGNORE INTO appointments (patient_id, time, date, note, status, doctor_id)
 VALUES
