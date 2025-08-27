@@ -1,5 +1,11 @@
 package com.example.clinic_skin_be.service;
 
+import com.example.clinic_skin_be.model.Disease;
+import com.example.clinic_skin_be.model.TreatmentStep;
+import com.example.clinic_skin_be.model.Medication;
+import com.example.clinic_skin_be.repository.IDiseaseRepository;
+import com.example.clinic_skin_be.repository.IMedicationRepository;
+import com.example.clinic_skin_be.repository.ITreatmentStepRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +16,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OpenAIService {
@@ -22,46 +28,37 @@ public class OpenAIService {
     private static final String HF_MODEL_URL =
             "https://api-inference.huggingface.co/models/facebook/bart-large-mnli";
 
-    private static final List<String> DISEASE_LIST = List.of(
-            "Viêm da tiếp xúc dị ứng",
-            "Viêm da cơ địa",
-            "Mụn trứng cá viêm",
-            "Nấm da",
-            "Vảy nến",
-            "Chàm",
-            "Zona",
-            "Herpes",
-            "Hồng ban",
-            "Mụn nước do vi rút"
-    );
+    private final IDiseaseRepository diseaseRepository;
+    private final ITreatmentStepRepository stepRepository;
+    private final IMedicationRepository medicationRepository;
 
-    private static final Map<String, String> TREATMENT_MAP = Map.of(
-            "Viêm da tiếp xúc dị ứng", "Tránh tiếp xúc dị nguyên, bôi corticosteroid, giữ ẩm.",
-            "Viêm da cơ địa", "Dùng kem dưỡng ẩm, corticosteroid bôi ngoài, kiểm soát ngứa.",
-            "Mụn trứng cá viêm", "Rửa mặt nhẹ nhàng, thuốc bôi kháng sinh, retinoid, nếu nặng có thể dùng thuốc uống.",
-            "Nấm da", "Dùng thuốc chống nấm bôi tại chỗ hoặc toàn thân nếu nặng.",
-            "Vảy nến", "Dùng kem corticosteroid, dưỡng ẩm, liệu pháp ánh sáng nếu cần.",
-            "Chàm", "Giữ ẩm thường xuyên, corticosteroid tại chỗ, tránh kích ứng da.",
-            "Zona", "Thuốc kháng virus (acyclovir), giảm đau, chăm sóc da.",
-            "Herpes", "Thuốc kháng virus (acyclovir), tránh tiếp xúc vùng nhiễm trùng.",
-            "Hồng ban", "Theo dõi triệu chứng, dùng thuốc giảm ngứa hoặc kháng viêm nếu cần.",
-            "Mụn nước do vi rút", "Giữ vệ sinh, thuốc kháng virus nếu cần, tránh chọc hoặc gãi."
-    );
+    public OpenAIService(IDiseaseRepository diseaseRepository,
+                         ITreatmentStepRepository stepRepository,
+                         IMedicationRepository medicationRepository) {
+        this.diseaseRepository = diseaseRepository;
+        this.stepRepository = stepRepository;
+        this.medicationRepository = medicationRepository;
+    }
 
-    public Map<String, String> getDiagnosisWithTreatment(String status, String result) throws Exception {
-        // --- Step 1: tạo prompt
+    public Map<String, Object> getDiagnosisWithTreatment(String status, String result) throws Exception {
+        // --- Lấy danh sách tên bệnh từ DB
+        List<String> diseaseList = diseaseRepository.findAll()
+                .stream()
+                .map(Disease::getName)
+                .collect(Collectors.toList());
+
+        // --- Gọi Hugging Face API để xác định bệnh phù hợp nhất
         String prompt = "Bệnh nhân có triệu chứng: " + status +
-                ". Kết quả khám: " + result;
+                ". Kết quả khám: " + result +
+                ". Chỉ chọn tên bệnh từ danh sách sau: " + String.join(", ", diseaseList) +
+                ". Nếu không có bệnh nào phù hợp, trả về 'Không tồn tại'.";
 
-        // JSON cho zero-shot-classification
+
         String jsonInput = "{"
                 + "\"inputs\": \"" + prompt.replace("\"", "\\\"") + "\","
-                + "\"parameters\": {"
-                + "\"candidate_labels\": [\"" + String.join("\",\"", DISEASE_LIST) + "\"]"
-                + "}"
+                + "\"parameters\": {\"candidate_labels\": [\"" + String.join("\",\"", diseaseList) + "\"]}"
                 + "}";
 
-        // --- Step 2: gọi API Hugging Face
         URL url = new URL(HF_MODEL_URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -78,21 +75,54 @@ public class OpenAIService {
         String response = new String(is.readAllBytes(), StandardCharsets.UTF_8).trim();
 
         if (statusCode >= 400) {
-            throw new RuntimeException("Hugging Face API error: HTTP " + statusCode + " - " + response);
+            throw new RuntimeException("Hugging Face API error: " + statusCode + " - " + response);
         }
 
-        // --- Step 3: parse JSON response
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response);
-
-        // Lấy nhãn có score cao nhất
         String diagnosis = "Không xác định";
         if (root.has("labels") && root.get("labels").isArray() && root.get("labels").size() > 0) {
-            diagnosis = root.get("labels").get(0).asText();
+            diagnosis = root.get("labels").get(0).asText(); // lấy nhãn đầu tiên
         }
 
-        String treatment = TREATMENT_MAP.getOrDefault(diagnosis, "Không có phác đồ sẵn có");
+        List<TreatmentStep> stepsFromDB = stepRepository.findByDisease_Name(diagnosis);
 
-        return Map.of("diagnosis", diagnosis, "treatment", treatment);
+        List<Map<String, Object>> steps = new ArrayList<>();
+        int stepNumber = 1;
+        for (TreatmentStep step : stepsFromDB) {
+            List<Map<String, Object>> meds = medicationRepository.findByStep_Disease_Name(diagnosis)
+                    .stream()
+                    .map(m -> {
+                        Map<String, Object> medMap = new HashMap<>();
+                        medMap.put("name", m.getName());
+                        medMap.put("dosage", m.getDosage());
+                        medMap.put("usageInstructions", m.getUsageInstructions());
+                        medMap.put("price", m.getPrice());
+                        return medMap;
+                    })
+                    .collect(Collectors.toList());
+
+            Map<String, Object> stepMap = new HashMap<>();
+            stepMap.put("stepNumber", stepNumber++);
+            stepMap.put("type", step.getType());
+            stepMap.put("description", step.getDescription());
+            stepMap.put("notes", step.getNotes());
+            stepMap.put("medications", meds);
+
+            steps.add(stepMap);
+        }
+
+        // --- Tạo phác đồ tổng quát từ các step
+        String treatmentTemplate = stepsFromDB.stream()
+                .map(TreatmentStep::getDescription)
+                .collect(Collectors.joining("; "));
+
+        // --- Kết quả trả về
+        Map<String, Object> resultMap = new LinkedHashMap<>();
+        resultMap.put("diagnosis", diagnosis);
+        resultMap.put("treatmentTemplate", treatmentTemplate);
+        resultMap.put("steps", steps);
+
+        return resultMap;
     }
 }

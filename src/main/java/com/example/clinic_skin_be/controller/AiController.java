@@ -22,7 +22,7 @@ public class AiController {
         String result = input.get("result");
 
         try {
-            Map<String, String> response = openAIService.getDiagnosisWithTreatment(status, result);
+            Map<String, Object> response = openAIService.getDiagnosisWithTreatment(status, result);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
