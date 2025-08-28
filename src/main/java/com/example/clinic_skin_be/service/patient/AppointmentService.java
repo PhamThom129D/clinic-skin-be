@@ -1,6 +1,7 @@
 package com.example.clinic_skin_be.service.patient;
 
 import com.example.clinic_skin_be.dto.patient.AppointmentRequest;
+import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
 import com.example.clinic_skin_be.model.patient.Patient;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.model.user.Account;
@@ -67,7 +68,7 @@ public class AppointmentService {
                 .address(request.getAddress())
                 .gender(request.getGender() != null ? Gender.valueOf(request.getGender().toUpperCase()) : null)
                 .dateOfBirth(request.getDateOfBirth() != null ? LocalDate.parse(request.getDateOfBirth(), dateFormatter) : null)
-                .password(passwordEncoder.encode("defaultPassword123")) // hash password
+                .password(passwordEncoder.encode("defaultPassword123"))
                 .build();
 
         return accountRepository.save(account);
@@ -103,6 +104,7 @@ public class AppointmentService {
                 .date(appointmentDate)
                 .time(appointmentTime)
                 .note(request.getNote())
+                .status(ConsultationStatus.PENDING)
                 .build();
     }
 }
