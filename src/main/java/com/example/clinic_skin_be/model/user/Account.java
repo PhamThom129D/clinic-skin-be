@@ -63,6 +63,9 @@ public class Account {
         if (this.status == null) {
             this.status = AccountStatus.Active;
         }
+        if (this.avtPath == null || this.avtPath.isBlank()) {
+            this.avtPath = "https://i.pinimg.com/originals/7f/3f/3c/7f3f3c8b26d0d1a6a5f1a4a9e7f8b7c6.jpg";
+        }
     }
 
     @PreUpdate
