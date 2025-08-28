@@ -1,7 +1,7 @@
 package com.example.clinic_skin_be.security;
 
-import com.example.clinic_skin_be.model.Account;
-import com.example.clinic_skin_be.repository.IAccountRepository;
+import com.example.clinic_skin_be.model.user.Account;
+import com.example.clinic_skin_be.repository.user.IAccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

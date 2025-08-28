@@ -1,7 +1,7 @@
 package com.example.clinic_skin_be.service.auth;
 
-import com.example.clinic_skin_be.model.Permission;
-import com.example.clinic_skin_be.model.Role;
+import com.example.clinic_skin_be.model.admin.Permission;
+import com.example.clinic_skin_be.model.user.Role;
 
 import java.util.List;
 
