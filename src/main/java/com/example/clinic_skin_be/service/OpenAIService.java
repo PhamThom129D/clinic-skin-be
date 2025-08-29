@@ -139,7 +139,7 @@ public class OpenAIService {
 
             Map<String, Object> stepMap = new HashMap<>();
             stepMap.put("stepNumber", stepNumber++);
-            stepMap.put("type", step.getType());
+            stepMap.put("type", step.getStepType().getTypeName());
             stepMap.put("description", step.getDescription());
             stepMap.put("notes", step.getNotes());
             stepMap.put("medications", meds);
