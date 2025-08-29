@@ -3,6 +3,7 @@ package com.example.clinic_skin_be.service.auth.impl;
 import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
 import com.example.clinic_skin_be.dto.auth.LoginRequest;
+import com.example.clinic_skin_be.exception.FieldAlreadyExistsException;
 import com.example.clinic_skin_be.mapper.AuthMapper;
 import com.example.clinic_skin_be.model.user.Account;
 import com.example.clinic_skin_be.model.user.Role;
@@ -57,12 +58,13 @@ public class AuthService implements IAuthService {
         }
 
         if (request.getEmail() != null && accountRepo.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email đã tồn tại trong hệ thống ");
+            throw new FieldAlreadyExistsException("email", "Email đã tồn tại trong hệ thống");
         }
 
         if (request.getPhoneNumber() != null && accountRepo.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new RuntimeException("Số điện thoại đã tồn tại trong hệ thống ");
+            throw new FieldAlreadyExistsException("phoneNumber", "Số điện thoại đã tồn tại trong hệ thống");
         }
+
 
         Account account = authMapper.toEntity(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -118,7 +120,7 @@ public class AuthService implements IAuthService {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                     new NetHttpTransport(),
                     JacksonFactory.getDefaultInstance())
-                    .setAudience(Collections.singletonList(googleClientId))
+                    .setAudience(Collections.singletonList("660467970675-fep06eap4m3m5hgi3kuovhmtdi28l43e.apps.googleusercontent.com"))
                     .build();
 
             GoogleIdToken idToken = verifier.verify(token);

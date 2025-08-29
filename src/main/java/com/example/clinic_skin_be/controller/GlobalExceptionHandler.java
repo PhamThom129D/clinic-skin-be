@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.controller;
 
+import com.example.clinic_skin_be.exception.FieldAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,4 +28,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleOtherExceptions(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(FieldAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleFieldExists(FieldAlreadyExistsException ex) {
+        return ResponseEntity.badRequest()
+                .body(Map.of("field", ex.getField(), "message", ex.getMessage()));
+    }
+
 }
