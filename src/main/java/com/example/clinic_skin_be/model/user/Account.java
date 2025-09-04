@@ -2,6 +2,7 @@ package com.example.clinic_skin_be.model.user;
 
 import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -74,6 +75,7 @@ public class Account {
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "account_roles",
             joinColumns = @JoinColumn(name = "account_id"),
