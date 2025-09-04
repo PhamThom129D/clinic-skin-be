@@ -1,7 +1,7 @@
 package com.example.clinic_skin_be.service;
 
-import com.example.clinic_skin_be.model.Disease;
-import com.example.clinic_skin_be.model.TreatmentStep;
+import com.example.clinic_skin_be.model.staff.doctor.Disease;
+import com.example.clinic_skin_be.model.staff.doctor.TreatmentStep;
 import com.example.clinic_skin_be.repository.IDiseaseRepository;
 import com.example.clinic_skin_be.repository.IMedicationRepository;
 import com.example.clinic_skin_be.repository.ITreatmentStepRepository;

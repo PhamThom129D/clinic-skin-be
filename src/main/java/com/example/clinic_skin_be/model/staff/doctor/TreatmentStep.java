@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.model;
+package com.example.clinic_skin_be.model.staff.doctor;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
