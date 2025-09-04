@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class OpenAIService {
 
-    @Value("${gemini.api.key}")  // key trong application.properties
+    @Value("${gemini.api.key}")
     private String geminiApiKey;
 
     private static final String GEMINI_API_URL =
@@ -39,28 +39,24 @@ public class OpenAIService {
         this.medicationRepository = medicationRepository;
     }
 
-    public Map<String, Object> getDiagnosisWithTreatment(String status, String result) throws Exception {
-        // --- Lấy danh sách tên bệnh từ DB
+    // --- 1. Hàm kiểm tra các bệnh có thể gặp
+    public List<String> checkPossibleDiseases(String status) throws Exception {
         List<String> diseaseList = diseaseRepository.findAll()
                 .stream()
                 .map(Disease::getName)
                 .collect(Collectors.toList());
 
-        // --- Prompt ép Gemini chỉ trả về JSON diagnosis
+        // Prompt yêu cầu AI trả về danh sách các bệnh có khả năng phù hợp
         String prompt = "Bệnh nhân có triệu chứng: " + status +
-                ". Kết quả khám: " + result +
                 ". Danh sách bệnh có thể chọn: " + String.join(", ", diseaseList) +
-                ". Hãy chọn bệnh chính xác nhất trong danh sách trên. " +
-                "Nếu không có bệnh nào phù hợp, trả về 'Không tồn tại'. " +
-                "Chỉ trả về JSON theo format: { \"diagnosis\": \"<tên bệnh giống y hệt trong danh sách hoặc 'Không tồn tại'>\" }";
+                ". Hãy kiểm tra các triệu chứng này có thể thuộc những bệnh nào trong danh sách." +
+                " Trả về JSON theo format: { \"possibleDiseases\": [\"<bệnh 1>\", \"<bệnh 2>\", ...] }." +
+                " Nếu không có bệnh nào phù hợp, trả về mảng rỗng []";
 
-
-        // --- JSON request cho Gemini
         String jsonInput = "{"
                 + "\"contents\": [{\"parts\":[{\"text\":\"" + prompt.replace("\"", "\\\"") + "\"}]}]"
                 + "}";
 
-        // --- Gọi Gemini API
         URL url = new URL(GEMINI_API_URL + geminiApiKey);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -73,53 +69,53 @@ public class OpenAIService {
 
         int statusCode = conn.getResponseCode();
         InputStream is = (statusCode >= 400) ? conn.getErrorStream() : conn.getInputStream();
-        String response = "";
-
-        if (is != null) {
-            response = new String(is.readAllBytes(), StandardCharsets.UTF_8).trim();
-//            System.out.println("👉 Raw Gemini response: " + response);
-        }
-
-//
-//        if (is != null) {
-//            response = new String(is.readAllBytes(), StandardCharsets.UTF_8).trim();
-//        }
+        String response = (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8).trim() : "";
 
         if (statusCode >= 400) {
             throw new RuntimeException("Gemini API error: " + statusCode + " - " + response);
         }
-//        if (is != null) {
-//            response = new String(is.readAllBytes(), StandardCharsets.UTF_8).trim();
-//            System.out.println("👉 Raw Gemini response: " + response);
-//        }
-//
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response);
-        String diagnosis = "Không tồn tại";
+        List<String> possibleDiseases = new ArrayList<>();
 
         if (root.has("candidates") && root.get("candidates").isArray() && root.get("candidates").size() > 0) {
             String text = root.get("candidates").get(0)
                     .path("content").path("parts").get(0).path("text").asText().trim();
 
             if (text.startsWith("```")) {
-                text = text.replaceAll("```json", "")
-                        .replaceAll("```", "")
-                        .trim();
+                text = text.replaceAll("```json", "").replaceAll("```", "").trim();
             }
 
             try {
-                JsonNode diagNode = mapper.readTree(text);
-                diagnosis = diagNode.path("diagnosis").asText("Không tồn tại");
+                // Parse JSON AI trả về
+                JsonNode diseasesNode = mapper.readTree(text);
+                if (diseasesNode.has("possibleDiseases") && diseasesNode.get("possibleDiseases").isArray()) {
+                    for (JsonNode node : diseasesNode.get("possibleDiseases")) {
+                        String diseaseName = node.asText().trim();
+                        // Chỉ lấy bệnh tồn tại trong DB
+                        if (diseaseList.contains(diseaseName)) {
+                            possibleDiseases.add(diseaseName);
+                        }
+                    }
+                }
             } catch (Exception e) {
-                System.out.println("⚠️ Parse lỗi, text gốc: " + text);
-                diagnosis = "Không tồn tại"; // fallback nếu parse lỗi
+                // Fallback: dò xem text trả về có chứa tên bệnh nào trong DB
+                for (String disease : diseaseList) {
+                    if (text.contains(disease)) {
+                        possibleDiseases.add(disease);
+                    }
+                }
             }
         }
 
+        return possibleDiseases;
+    }
 
 
-        // --- Lấy phác đồ từ DB theo bệnh chẩn đoán
+
+    // --- 2. Hàm lấy phác đồ điều trị theo tên bệnh
+    public Map<String, Object> getTreatmentForDisease(String diagnosis) {
         List<TreatmentStep> stepsFromDB = stepRepository.findByDisease_Name(diagnosis);
 
         List<Map<String, Object>> steps = new ArrayList<>();
@@ -158,5 +154,5 @@ public class OpenAIService {
 
         return resultMap;
     }
-
 }
+
