@@ -12,5 +12,4 @@ public interface IAuthService {
     void resendOtp(LoginRequest loginRequest);
     AuthResponse verifyOtp(LoginRequest loginRequest);
 
-    void logout();
 }

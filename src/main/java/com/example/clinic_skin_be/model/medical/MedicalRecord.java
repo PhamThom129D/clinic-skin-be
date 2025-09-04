@@ -1,11 +1,14 @@
 package com.example.clinic_skin_be.model.medical;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.clinic_skin_be.model.patient.Patient;
+import com.example.clinic_skin_be.model.staff.doctor.Doctor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class MedicalRecord {
 
     @Id
@@ -22,11 +27,13 @@ public class MedicalRecord {
     @Column(name = "record_id")
     private Long recordId;
 
-    @Column(name = "patient_id", nullable = false)
-    private Long patientId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 
-    @Column(name = "doctor_id", nullable = false)
-    private Long doctorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
 
     @Column(name = "visit_date", nullable = false)
     private LocalDate visitDate;
@@ -37,9 +44,29 @@ public class MedicalRecord {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<VisitSession> visitSessions;
+    @OneToMany(
+            mappedBy = "medicalRecord",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<VisitSession> visitSessions = new ArrayList<>();
+
+    // convenience helpers to keep both sides in sync
+    public void addVisitSession(VisitSession session) {
+        if (session == null) return;
+        session.setMedicalRecord(this);
+        this.visitSessions.add(session);
+    }
+
+    public void removeVisitSession(VisitSession session) {
+        if (session == null) return;
+        session.setMedicalRecord(null);
+        this.visitSessions.remove(session);
+    }
 
     @PrePersist
     protected void onCreate() {

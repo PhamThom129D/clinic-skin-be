@@ -92,10 +92,4 @@ public class AuthRestController {
                     .body(Map.of("error", "Invalid OTP . Please try again."));
         }
     }
-
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout() {
-        authService.logout();
-        return ResponseEntity.ok("Logged out successfully");
-    }
 }

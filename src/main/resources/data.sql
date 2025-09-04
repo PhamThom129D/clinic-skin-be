@@ -11,107 +11,101 @@ VALUES (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
        (7, 'ROLE_CASHIER', 'Nhân viên thu ngân')
 ON DUPLICATE KEY UPDATE role_name = role_name;
 
-INSERT IGNORE INTO permissions (name, description)
-VALUES ('MANAGE_USERS', 'Quản lý tài khoản người dùng'),
-       ('MANAGE_ROLES', 'Quản lý vai trò'),
-       ('VIEW_REPORTS', 'Xem báo cáo'),
-       ('CREATE_APPOINTMENT', 'Tạo lịch hẹn'),
-       ('UPDATE_APPOINTMENT', 'Cập nhật lịch hẹn'),
-       ('DELETE_APPOINTMENT', 'Xóa lịch hẹn'),
-       ('VIEW_LAB_RESULTS', 'Xem kết quả xét nghiệm');
-
-
--- ROLE_ADMIN: tất cả quyền
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (1, 5),
-       (1, 6),
-       (1, 7);
-
--- ROLE_PATIENT: chỉ xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (2, 3);
-
--- ROLE_DOCTOR: xem báo cáo, xem kết quả xét nghiệm
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (3, 3),
-       (3, 7);
-
--- ROLE_RECEPTIONIST: tạo/cập nhật/xóa lịch hẹn
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (4, 4),
-       (4, 5),
-       (4, 6);
-
--- ROLE_LAB_STAFF: xem kết quả xét nghiệm
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (5, 7);
-
--- ROLE_CONSULTANT: tạo/cập nhật lịch hẹn, xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (6, 3),
-       (6, 4),
-       (6, 5);
-
--- ROLE_CASHIER: xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
-VALUES (7, 3);
 
 INSERT IGNORE INTO accounts
 (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
 VALUES
-    ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
+    ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1993-12-15',
      '808 Đường Nguyễn Chí Thanh, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-03-20 10:00:00', '2025-08-10 12:00:00'),
-    ('Trần Thị Hồng', '0933333444', 'hong.tran@gmail.com', '12345678', '1996-09-09',
+    ('Trần Thị Hồng', '0933333444', 'hong.tran@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1996-09-09',
      '909 Đường Cầu Giấy, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-03-25 11:00:00', '2025-08-12 13:30:00'),
-    ('Phạm Văn Dũng', '0944444555', 'dung.pham@gmail.com', '12345678', '1982-02-28',
+    ('Phạm Văn Dũng', '0944444555', 'dung.pham@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1982-02-28',
      '111 Phố Tây Sơn, Quận Đống Đa, Hà Nội', 'MALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-04-01 09:45:00', '2025-08-14 14:20:00'),
-    ('Lê Thị Ngọc', '0955555666', 'ngoc.le@gmail.com', '12345678', '1990-05-18',
+    ('Lê Thị Ngọc', '0955555666', 'ngoc.le@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1990-05-18',
      '222 Đường Nguyễn Văn Cừ, Quận Long Biên, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dgmrwe4eo/image/upload/v1756275051/doctor_j8qqlk.png', 'Active', '2025-04-10 08:30:00', '2025-08-16 15:10:00'),
-    ('Hoàng Văn Hải', '0966666777', 'hai.hoang@gmail.com', '12345678', '1987-07-25',
+    ('Hoàng Văn Hải', '0966666777', 'hai.hoang@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1987-07-25',
      '333 Đường Phạm Hùng, Quận Nam Từ Liêm, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-15 10:15:00', '2025-08-17 10:45:00'),
-    ('Đỗ Thị Yến', '0977777888', 'yen.do@gmail.com', '12345678', '1994-11-11',
+    ('Đỗ Thị Yến', '0977777888', 'yen.do@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1994-11-11',
      '444 Đường Trần Duy Hưng, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-20 14:20:00', '2025-08-18 16:00:00'),
-    ('Ngô Quang Khải', '0988888999', 'khai.ngo@gmail.com', '12345678', '1986-03-30',
+    ('Ngô Quang Khải', '0988888999', 'khai.ngo@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1986-03-30',
      '555 Phố Huế, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-04-25 12:00:00', '2025-08-20 09:30:00'),
-    ('Vũ Thị Hoa', '0999999000', 'hoa.vu@gmail.com', '12345678', '1997-01-05',
+    ('Vũ Thị Hoa', '0999999000', 'hoa.vu@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1997-01-05',
      '666 Đường Nguyễn Khánh Toàn, Quận Cầu Giấy, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-01 15:30:00', '2025-08-21 11:00:00'),
-    ('Phan Văn Kiên', '0912121212', 'kien.phan@gmail.com', '12345678', '1992-06-22',
+    ('Phan Văn Kiên', '0912121212', 'kien.phan@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1992-06-22',
      '777 Đường Bạch Mai, Quận Hai Bà Trưng, Hà Nội', 'MALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-05 09:00:00', '2025-08-22 13:00:00'),
-    ('Mai Thị Thuỷ', '0923232323', 'thuy.mai@gmail.com', '12345678', '1999-04-14',
+    ('Mai Thị Thuỷ', '0923232323', 'thuy.mai@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1999-04-14',
      '888 Đường Lê Duẩn, Quận Hoàn Kiếm, Hà Nội', 'FEMALE', 'https://res.cloudinary.com/dk6vu2mlh/image/upload/v1754320302/x7hglgokkpmvsvjqm8xz.jpg', 'Active', '2025-05-10 10:10:00', '2025-08-23 14:15:00'),
-       ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '12345678', '1988-02-25',
+       ('Nguyễn Văn Nam', '0912345678', 'nam.nguyen@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1988-02-25',
         '123 Phố Tràng Tiền, Quận Hoàn Kiếm, Hà Nội', 'Male', NULL, 'Active', '2024-05-10 10:00:00',
         '2025-07-20 15:30:00'),
-       ('Phạm Thị Thu', '0987654321', 'thu.pham@gmail.com', '12345678', '1995-07-10',
+       ('Phạm Thị Thu', '0987654321', 'thu.pham@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1995-07-10',
         '456 Phố Bà Triệu, Quận Hai Bà Trưng, Hà Nội', 'Female', NULL, 'Active', '2024-06-15 11:30:00',
         '2025-08-01 09:45:00'),
-       ('Lê Hoàng Long', '0901122334', 'long.le@gmail.com', '12345678', '2000-11-20',
+       ('Lê Hoàng Long', '0901122334', 'long.le@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '2000-11-20',
         '789 Đường Láng, Quận Đống Đa, Hà Nội', 'Male', NULL, 'Active', '2024-07-20 14:00:00', '2025-08-25 10:10:00'),
-       ('Trần Thanh Mai', '0934567890', 'maitran@gmail.com', '12345678', '1992-04-12',
+       ('Trần Thanh Mai', '0934567890', 'maitran@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1992-04-12',
         '101 Phố Hàng Bông, Quận Hoàn Kiếm, Hà Nội', 'Female', NULL, 'Active', '2024-08-01 09:20:00',
         '2025-06-12 17:05:00'),
-       ('Võ Văn Tuấn', '0967890123', 'tuanvo@gmail.com', '12345678', '1985-09-30',
+       ('Võ Văn Tuấn', '0967890123', 'tuanvo@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1985-09-30',
         '202 Đường Xuân Thủy, Quận Cầu Giấy, Hà Nội', 'Male', NULL, 'Active', '2024-09-05 16:45:00',
         '2025-05-30 11:20:00'),
-       ('Hoàng Thị Lan', '0978901234', 'lan.hoang@gmail.com', '12345678', '1975-06-05',
+       ('Hoàng Thị Lan', '0978901234', 'lan.hoang@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1975-06-05',
         '303 Đường Kim Mã, Quận Ba Đình, Hà Nội', 'Female', NULL, 'Active', '2024-10-20 08:30:00',
         '2025-04-15 14:00:00'),
-       ('Đinh Quang Minh', '0908765432', 'minhdinh@gmail.com', '12345678', '1998-01-18',
+       ('Đinh Quang Minh', '0908765432', 'minhdinh@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1998-01-18',
         '404 Phố Khâm Thiên, Quận Đống Đa, Hà Nội', 'Male', NULL, 'Active', '2024-11-25 12:15:00',
         '2025-03-22 09:50:00'),
-       ('Nguyễn Thị Trâm', '0919283746', 'tramnguyen@gmail.com', '12345678', '1991-03-22',
+       ('Nguyễn Thị Trâm', '0919283746', 'tramnguyen@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1991-03-22',
         '505 Đường Nguyễn Trãi, Quận Thanh Xuân, Hà Nội', 'Female', NULL, 'Active', '2025-01-05 10:40:00',
         '2025-02-10 16:30:00'),
-       ('Bùi Văn Thành', '0945678901', 'thanhbui@gmail.com', '12345678', '1980-08-01',
+       ('Bùi Văn Thành', '0945678901', 'thanhbui@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1980-08-01',
         '606 Đường Quang Trung, Quận Gò Vấp, Hà Nội', 'Male', NULL, 'Active', '2025-02-10 15:00:00',
         '2025-03-01 10:00:00'),
-       ('Phạm Lan Hương', '0923456789', 'huongpham@gmail.com', '12345678', '1989-10-10',
+       ('Phạm Lan Hương', '0923456789', 'huongpham@gmail.com', '$2a$12$DQNFuLRhy89KzmM8NYzVIuyIT6Jw3xFzfIlyDKE9BF5Y.QbhdhtF.', '1989-10-10',
         '707 Phố Lê Văn Lương, Quận Thanh Xuân, Hà Nội', 'Female', NULL, 'Active', '2025-03-15 09:00:00',
         '2025-04-05 11:00:00');
+
+       -- -------------------------------
+-- 2. Account Roles
+-- -------------------------------
+INSERT IGNORE INTO account_roles (account_id, role_id) VALUES
+-- ADMIN
+(1, 1),
+
+-- DOCTOR (accounts 1-4 là bác sĩ theo bảng doctors)
+(1, 3),
+(2, 3),
+(3, 3),
+(4, 3),
+
+-- CONSULTANT (accounts 6, 9)
+(6, 6),
+(9, 6),
+
+-- RECEPTIONIST (accounts 4, 12)
+(4, 4),
+(12, 4),
+
+-- LAB_STAFF (accounts 7, 16)
+(7, 5),
+(16, 5),
+
+-- CASHIER (accounts 8, 18)
+(8, 7),
+(18, 7),
+
+-- PATIENT (các account còn lại, không phải admin/doctor/consultant/receptionist/lab_staff/cashier)
+(2, 2),
+(3, 2),
+(5, 2),
+(10, 2),
+(11, 2),
+(13, 2),
+(14, 2),
+(15, 2),
+(17, 2),
+(19, 2),
+(20, 2);
 
 
 -- Doctor
@@ -197,4 +191,4 @@ VALUES
 
 INSERT IGNORE INTO contacts (id, fullname, phone, reason) VALUES
                                                                      (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
-                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da')
+                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da');

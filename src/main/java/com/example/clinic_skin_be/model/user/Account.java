@@ -24,7 +24,7 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false )
     private String fullName;
 
     @Column(name = "phone_number", length = 20)
