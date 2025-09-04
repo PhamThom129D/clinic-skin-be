@@ -4,6 +4,7 @@ import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
 import com.example.clinic_skin_be.dto.auth.LoginRequest;
 import com.example.clinic_skin_be.service.auth.IAuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class AuthRestController {
         return ResponseEntity.ok(authResponse);
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@ModelAttribute AccountRequest accountRequest) {
+    public ResponseEntity<?> register(@Valid @ModelAttribute AccountRequest accountRequest) {
         try {
             return ResponseEntity.ok(authService.register(accountRequest));
         } catch (Exception e) {

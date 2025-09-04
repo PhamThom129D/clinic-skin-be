@@ -3,15 +3,13 @@ package com.example.clinic_skin_be.controller.staff;
 import com.example.clinic_skin_be.dto.staff.ConsultationAssignmentDTO;
 import com.example.clinic_skin_be.dto.staff.ConsultationAssignmentResponseDTO;
 import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
-import com.example.clinic_skin_be.model.staff.ConsultationAssignment;
-import com.example.clinic_skin_be.model.staff.Contacts;
+import com.example.clinic_skin_be.model.staff.consultation.Contacts;
 import com.example.clinic_skin_be.service.staff.ContactService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/contacts")

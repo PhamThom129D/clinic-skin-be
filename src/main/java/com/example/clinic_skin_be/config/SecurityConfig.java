@@ -40,13 +40,11 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**").permitAll()
-                        .requestMatchers( "/images/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
-                        .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**",
+                                "/api/doctors/**", "/api/screen-dashboard/**").permitAll()
+//                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
+                        .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

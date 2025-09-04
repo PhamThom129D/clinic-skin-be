@@ -12,6 +12,5 @@ public class ConsultationAssignmentResponseDTO {
     private Long contactId;
     private String contactName;
     private Long consultantId;
-    private String consultantName;
     private String note;
 }

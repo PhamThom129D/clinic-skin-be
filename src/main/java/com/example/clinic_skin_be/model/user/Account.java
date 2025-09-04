@@ -2,6 +2,7 @@ package com.example.clinic_skin_be.model.user;
 
 import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -63,6 +64,9 @@ public class Account {
         if (this.status == null) {
             this.status = AccountStatus.Active;
         }
+        if (this.avtPath == null || this.avtPath.isBlank()) {
+            this.avtPath = "https://i.pinimg.com/originals/7f/3f/3c/7f3f3c8b26d0d1a6a5f1a4a9e7f8b7c6.jpg";
+        }
     }
 
     @PreUpdate
@@ -71,6 +75,7 @@ public class Account {
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(
             name = "account_roles",
             joinColumns = @JoinColumn(name = "account_id"),
