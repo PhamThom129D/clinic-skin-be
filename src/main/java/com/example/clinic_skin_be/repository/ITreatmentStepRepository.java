@@ -1,6 +1,6 @@
 package com.example.clinic_skin_be.repository;
 
-import com.example.clinic_skin_be.model.TreatmentStep;
+import com.example.clinic_skin_be.model.staff.doctor.TreatmentStep;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
