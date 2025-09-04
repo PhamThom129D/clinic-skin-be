@@ -18,6 +18,7 @@ public class TreatmentStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Nếu trước đây là disease, giữ nguyên quan hệ
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "disease_id", nullable = false)
     private Disease disease;
@@ -25,7 +26,10 @@ public class TreatmentStep {
     @Column(name = "step_number")
     private int stepNumber;
 
-    private String type;
+    // Thay String type bằng StepType
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "type_id", nullable = false)
+    private StepType stepType;
 
     private String description;
 
