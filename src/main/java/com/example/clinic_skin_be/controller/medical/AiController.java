@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.controller;
+package com.example.clinic_skin_be.controller.medical;
 
 import com.example.clinic_skin_be.service.OpenAIService;
 import org.springframework.http.ResponseEntity;

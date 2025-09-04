@@ -35,10 +35,9 @@ public class UserDetailService implements UserDetailsService {
 
         String principal = isEmail ? account.getEmail() : account.getPhoneNumber();
 
-        // Load permissions từ role
+        // ✅ Lấy authorities từ role
         List<SimpleGrantedAuthority> authorities = account.getRoles().stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .toList();
 
         return new User(
@@ -48,3 +47,4 @@ public class UserDetailService implements UserDetailsService {
         );
     }
 }
+

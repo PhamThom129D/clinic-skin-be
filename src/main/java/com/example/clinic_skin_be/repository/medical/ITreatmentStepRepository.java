@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.repository;
+package com.example.clinic_skin_be.repository.medical;
 
 import com.example.clinic_skin_be.model.medical.TreatmentStep;
 import org.springframework.data.jpa.repository.JpaRepository;

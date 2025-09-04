@@ -1,6 +1,5 @@
 package com.example.clinic_skin_be.model.user;
 
-import com.example.clinic_skin_be.model.admin.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,12 +28,4 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<Account> accounts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<Permission> permissions = new HashSet<>();
 }

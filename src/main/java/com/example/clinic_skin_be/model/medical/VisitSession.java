@@ -1,5 +1,7 @@
 package com.example.clinic_skin_be.model.medical;
 
+import com.example.clinic_skin_be.model.staff.doctor.Doctor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class VisitSession {
 
     @Id
@@ -20,15 +24,19 @@ public class VisitSession {
     @Column(name = "session_id")
     private Long sessionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id", nullable = false)
+    @JsonBackReference
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private MedicalRecord medicalRecord;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
 
     @Column(name = "session_date", nullable = false)
     private LocalDateTime sessionDate;
-
-    @Column(name = "doctor_id", nullable = false)
-    private Long doctorId;
 
     @Column(columnDefinition = "TEXT")
     private String symptoms;
@@ -60,7 +68,6 @@ public class VisitSession {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Tự động set thời gian
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

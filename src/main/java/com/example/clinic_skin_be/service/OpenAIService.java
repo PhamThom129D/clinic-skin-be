@@ -4,7 +4,7 @@ import com.example.clinic_skin_be.model.medical.Disease;
 import com.example.clinic_skin_be.model.medical.TreatmentStep;
 import com.example.clinic_skin_be.repository.medical.IDiseaseRepository;
 import com.example.clinic_skin_be.repository.medical.IMedicationRepository;
-import com.example.clinic_skin_be.repository.ITreatmentStepRepository;
+import com.example.clinic_skin_be.repository.medical.ITreatmentStepRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
