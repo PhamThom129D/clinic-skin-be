@@ -3,11 +3,12 @@ package com.example.clinic_skin_be.model.user;
 import com.example.clinic_skin_be.model.admin.Permission;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name= "roles")
+@Table(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor

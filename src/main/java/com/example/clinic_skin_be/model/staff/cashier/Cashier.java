@@ -10,11 +10,11 @@ import lombok.Data;
 public class Cashier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "cashier_id")
+    @Column(name = "cashier_id")
     private Long id;
 
     @OneToOne
-    @JoinColumn (name = "account_id", nullable = false, unique = true)
+    @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 }
 

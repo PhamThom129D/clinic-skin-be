@@ -29,6 +29,7 @@ public class AuthRestController {
         AuthResponse authResponse = authService.loginWithGoogle(token);
         return ResponseEntity.ok(authResponse);
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @ModelAttribute AccountRequest accountRequest) {
         try {

@@ -113,7 +113,6 @@ public class OpenAIService {
     }
 
 
-
     // --- 2. Hàm lấy phác đồ điều trị theo tên bệnh
     public Map<String, Object> getTreatmentForDisease(String diagnosis) {
         List<TreatmentStep> stepsFromDB = stepRepository.findByDisease_Name(diagnosis);

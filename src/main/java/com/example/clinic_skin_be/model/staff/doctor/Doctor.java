@@ -20,7 +20,7 @@ public class Doctor {
     @Column(name = "doctor_id")
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String specialty;
 
     @Column(nullable = false)
@@ -30,7 +30,7 @@ public class Doctor {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    @OneToMany (
+    @OneToMany(
             mappedBy = "doctor",
             cascade = CascadeType.ALL,
             orphanRemoval = true,

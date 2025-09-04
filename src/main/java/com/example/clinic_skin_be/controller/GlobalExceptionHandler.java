@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleOtherExceptions(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
     @ExceptionHandler(FieldAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleFieldExists(FieldAlreadyExistsException ex) {
         return ResponseEntity.badRequest()

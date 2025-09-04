@@ -9,16 +9,16 @@ import lombok.Data;
 public class Reason {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "reason_id")
+    @Column(name = "reason_id")
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String img;
 }
 

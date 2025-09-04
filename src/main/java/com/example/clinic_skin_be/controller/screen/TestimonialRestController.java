@@ -20,7 +20,7 @@ public class TestimonialRestController {
     private ITestimonialRepository testimonialRepository;
 
     @GetMapping("")
-    public List<TestimonialInfoDTO> getAllTestimonials () {
+    public List<TestimonialInfoDTO> getAllTestimonials() {
         List<Testimonial> testimonials = testimonialRepository.findAll();
         return testimonials.stream().map(testimonial -> new TestimonialInfoDTO(
                 testimonial.getId(),

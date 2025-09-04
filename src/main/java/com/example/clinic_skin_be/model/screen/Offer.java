@@ -13,7 +13,7 @@ public class Offer {
     @Column(name = "offer_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
 

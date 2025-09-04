@@ -18,7 +18,7 @@ public class OfferRestController {
     private IOfferRepository offerRepository;
 
     @GetMapping()
-    public List<Offer> getAllOffers () {
+    public List<Offer> getAllOffers() {
         return offerRepository.findAll();
     }
 }

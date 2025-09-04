@@ -1,7 +1,8 @@
 -- -------------------------------
 -- 1. Roles
 -- -------------------------------
-INSERT IGNORE INTO roles (role_id, role_name, description)
+INSERT
+IGNORE INTO roles (role_id, role_name, description)
 VALUES (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
        (2, 'ROLE_PATIENT', 'Bệnh nhân'),
        (3, 'ROLE_DOCTOR', 'Bác sĩ'),
@@ -9,9 +10,11 @@ VALUES (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
        (5, 'ROLE_LAB_STAFF', 'Nhân viên xét nghiệm'),
        (6, 'ROLE_CONSULTANT', 'Nhân viên tư vấn'),
        (7, 'ROLE_CASHIER', 'Nhân viên thu ngân')
-ON DUPLICATE KEY UPDATE role_name = role_name;
+ON DUPLICATE KEY
+UPDATE role_name = role_name;
 
-INSERT IGNORE INTO permissions (name, description)
+INSERT
+IGNORE INTO permissions (name, description)
 VALUES ('MANAGE_USERS', 'Quản lý tài khoản người dùng'),
        ('MANAGE_ROLES', 'Quản lý vai trò'),
        ('VIEW_REPORTS', 'Xem báo cáo'),
@@ -22,7 +25,8 @@ VALUES ('MANAGE_USERS', 'Quản lý tài khoản người dùng'),
 
 
 -- ROLE_ADMIN: tất cả quyền
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (1, 1),
        (1, 2),
        (1, 3),
@@ -32,35 +36,42 @@ VALUES (1, 1),
        (1, 7);
 
 -- ROLE_PATIENT: chỉ xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (2, 3);
 
 -- ROLE_DOCTOR: xem báo cáo, xem kết quả xét nghiệm
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (3, 3),
        (3, 7);
 
 -- ROLE_RECEPTIONIST: tạo/cập nhật/xóa lịch hẹn
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (4, 4),
        (4, 5),
        (4, 6);
 
 -- ROLE_LAB_STAFF: xem kết quả xét nghiệm
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (5, 7);
 
 -- ROLE_CONSULTANT: tạo/cập nhật lịch hẹn, xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (6, 3),
        (6, 4),
        (6, 5);
 
 -- ROLE_CASHIER: xem báo cáo
-INSERT IGNORE INTO role_permissions (role_id, permission_id)
+INSERT
+IGNORE INTO role_permissions (role_id, permission_id)
 VALUES (7, 3);
 
-INSERT IGNORE INTO accounts
+INSERT
+IGNORE INTO accounts
 (full_name, phone_number, email, password, date_of_birth, address, gender, avt_path, status, created_at, updated_at)
 VALUES
     ('Nguyễn Văn Hậu', '0911111222', 'hau.nguyen@gmail.com', '12345678', '1993-12-15',
@@ -115,7 +126,8 @@ VALUES
 
 
 -- Doctor
-INSERT IGNORE INTO doctors (account_id, specialty, level)
+INSERT
+IGNORE INTO doctors (account_id, specialty, level)
 VALUES
     (1, 'Chuyên khoa nội tổng quát', 'Bác sĩ CKI'),
     (2, 'Chuyên khoa tim mạch', 'Thạc sĩ, Bác sĩ'),
@@ -123,17 +135,20 @@ VALUES
     (4, 'Chuyên khoa sản', 'Tiến sĩ, Bác sĩ');
 
 -- Consultant
-INSERT IGNORE INTO consultants (account_id) VALUES
+INSERT
+IGNORE INTO consultants (account_id) VALUES
                                                                ( 6),
                                                                (9);
 
 
 -- Receptionists
-INSERT IGNORE INTO receptionists (account_id)
+INSERT
+IGNORE INTO receptionists (account_id)
 VALUES (4), (12);
 
 -- Department
-INSERT IGNORE INTO departments (department_id, department_name)
+INSERT
+IGNORE INTO departments (department_id, department_name)
 VALUES
     (1, 'Xét nghiệm máu'),
     (2, 'Xét nghiệm vi sinh'),
@@ -141,18 +156,21 @@ VALUES
 
 
 -- Lab Staff
-INSERT IGNORE INTO lab_staff (account_id, department_id)
+INSERT
+IGNORE INTO lab_staff (account_id, department_id)
 VALUES
     (7, 1),
     (16, 2);
 
 
 -- Cashiers
-INSERT IGNORE INTO cashiers (account_id)
+INSERT
+IGNORE INTO cashiers (account_id)
 VALUES (8), (18);
 
 -- Patients (các account còn lại)
-INSERT IGNORE INTO patients (passport_number, occupation, account_id) VALUES
+INSERT
+IGNORE INTO patients (passport_number, occupation, account_id) VALUES
                                                                    ('P123456789', 'Sinh viên', 10),
                                                                    ('P987654321', 'Nhân viên văn phòng', 11),
                                                                    ('P456789123', 'Giáo viên', 14),
@@ -162,17 +180,20 @@ INSERT IGNORE INTO patients (passport_number, occupation, account_id) VALUES
 
 
 
-INSERT IGNORE INTO reasons (reason_id, title, content, img) VALUES
+INSERT
+IGNORE INTO reasons (reason_id, title, content, img) VALUES
                                                  (1, 'Kinh nghiệm lâu năm', 'Đội ngũ bác sĩ với nhiều năm kinh nghiệm.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
                                                  (2, 'Trang thiết bị hiện đại', 'Ứng dụng công nghệ tiên tiến hàng đầu.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg'),
                                                  (3, 'Dịch vụ tận tâm', 'Chăm sóc khách hàng chu đáo, chuyên nghiệp.', 'https://i.pinimg.com/736x/07/cd/c1/07cdc13407209b16816d5ed4460f3874.jpg');
 
-INSERT IGNORE INTO testimonials (content, img,account_id) VALUES
+INSERT
+IGNORE INTO testimonials (content, img,account_id) VALUES
                                                        ('Dịch vụ tuyệt vời, tôi rất hài lòng!', null,5),
                                                        ('Bác sĩ tận tâm, kết quả ngoài mong đợi.', null,6),
                                                        ('Không gian sang trọng, cảm giác thoải mái.', null,7) ;
 
-INSERT IGNORE INTO offers (title, description, img) VALUES
+INSERT
+IGNORE INTO offers (title, description, img) VALUES
 ('Giảm 40% Trị Mụn Chuyên Sâu', 'Liệu trình chuẩn y khoa, giảm viêm mụn, ngăn ngừa tái phát', 'https://i.pinimg.com/736x/cb/1d/af/cb1dafde466c5f541eafdca7d66a4fd8.jpg'),
 ('Ưu đãi Trị Nám - Tàn Nhang', 'Ứng dụng Laser hiện đại, hiệu quả an toàn', 'https://i.pinimg.com/1200x/b2/9a/9b/b29a9bae161bfe5c14276a21dbb59dac.jpg'),
 ('Chăm Sóc Da Sau Mụn', 'Phục hồi, giảm thâm sẹo, dưỡng sáng da', 'https://i.pinimg.com/736x/af/fc/f9/affcf9e29970feef712c33a8f3ecf73d.jpg'),
@@ -180,7 +201,8 @@ INSERT IGNORE INTO offers (title, description, img) VALUES
 ('Khuyến mãi Triệt Lông Công Nghệ Cao', 'An toàn, hiệu quả lâu dài, phù hợp mọi loại da', 'https://i.pinimg.com/736x/fd/dd/6b/fddd6be3e7e9400410723debc5bb192a.jpg'),
 ('Giảm Giá Điều Trị Sẹo Rỗ', 'Công nghệ RF vi điểm & PRP giúp tái tạo làn da', 'https://i.pinimg.com/736x/28/ba/68/28ba6822f15b82410f55c7dda0fbf208.jpg');
 
-INSERT IGNORE INTO appointments (patient_id, time, date, note, status, doctor_id)
+INSERT
+IGNORE INTO appointments (patient_id, time, date, note, status, doctor_id)
 VALUES
 (1, '09:00', '2025-09-01', 'Khám da liễu tổng quát', 'Pending', 1),
 
@@ -195,6 +217,106 @@ VALUES
 (6, '16:00', '2025-09-06', 'Tư vấn trị sẹo rỗ', 'Pending', 2);
 
 
-INSERT IGNORE INTO contacts (id, fullname, phone, reason) VALUES
+INSERT
+IGNORE INTO contacts (id, fullname, phone, reason) VALUES
                                                                      (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
-                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da')
+                                                                     (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da');
+
+INSERT
+IGNORE INTO treatment_templates (id, name, treatment_template) VALUES
+(1, 'Viêm da tiếp xúc dị ứng', 'Tránh tiếp xúc dị nguyên, bôi corticosteroid, giữ ẩm.'),
+(2, 'Viêm da cơ địa', 'Dùng kem dưỡng ẩm, corticosteroid bôi ngoài, kiểm soát ngứa.'),
+(3, 'Mụn trứng cá viêm', 'Rửa mặt dịu nhẹ, thuốc bôi kháng sinh, retinoid.'),
+(4, 'Nấm da', 'Bôi thuốc kháng nấm, giữ vệ sinh da.'),
+(5, 'Vảy nến', 'Dùng kem corticosteroid, dưỡng ẩm, quang trị liệu.'),
+(6, 'Chàm', 'Giữ ẩm thường xuyên, corticosteroid tại chỗ, tránh kích ứng.'),
+(7, 'Zona', 'Thuốc kháng virus, giảm đau, chăm sóc da.'),
+(8, 'Herpes', 'Thuốc kháng virus, tránh tiếp xúc vùng nhiễm trùng.'),
+(9, 'Hồng ban', 'Theo dõi triệu chứng, thuốc giảm ngứa hoặc kháng viêm nếu cần.'),
+(10, 'Mụn nước do vi rút', 'Giữ vệ sinh, thuốc kháng virus nếu cần, tránh gãi.');
+
+       INSERT
+IGNORE INTO treatment_steps (id, disease_id, step_number, type_id, description, notes) VALUES
+-- Viêm da tiếp xúc dị ứng
+(1, 1, 1, 1, 'Tránh tiếp xúc dị nguyên', NULL),
+(2, 1, 2, 2, 'Bôi corticosteroid vùng da tổn thương', NULL),
+
+-- Viêm da cơ địa
+(3, 2, 1, 1, 'Dưỡng ẩm đều đặn', 'Ít nhất 2 lần/ngày'),
+(4, 2, 2, 2, 'Bôi corticosteroid khi bùng phát', NULL),
+
+-- Mụn trứng cá viêm
+(5, 3, 1, 1, 'Rửa mặt dịu nhẹ', '2 lần/ngày'),
+(6, 3, 2, 2, 'Bôi retinoid buổi tối', NULL),
+(7, 3, 3, 2, 'Bôi kháng sinh tại chỗ', NULL),
+
+-- Nấm da
+(8, 4, 1, 1, 'Giữ vệ sinh, lau khô vùng da', NULL),
+(9, 4, 2, 2, 'Bôi thuốc kháng nấm', NULL),
+
+-- Vảy nến
+(10, 5, 1, 1, 'Dưỡng ẩm da toàn thân', NULL),
+(11, 5, 2, 2, 'Bôi corticosteroid vùng da tổn thương', NULL),
+(12, 5, 3, 3, 'Quang trị liệu', 'Theo chỉ định bác sĩ'),
+
+-- Chàm
+(13, 6, 1, 1, 'Tránh gãi và chất gây kích ứng', NULL),
+(14, 6, 2, 2, 'Dùng corticosteroid tại chỗ', NULL),
+
+-- Zona
+(15, 7, 1, 2, 'Dùng thuốc kháng virus (acyclovir)', 'Trong 72h đầu'),
+(16, 7, 2, 2, 'Thuốc giảm đau nếu cần', NULL),
+
+-- Herpes
+(17, 8, 1, 2, 'Dùng thuốc kháng virus (acyclovir)', NULL),
+(18, 8, 2, 1, 'Giữ vệ sinh, tránh lây lan', NULL),
+
+-- Hồng ban
+(19, 9, 1, 1, 'Theo dõi triệu chứng', NULL),
+(20, 9, 2, 2, 'Dùng thuốc kháng histamine hoặc kháng viêm nếu cần', NULL),
+
+-- Mụn nước do vi rút
+(21, 10, 1, 1, 'Giữ vệ sinh, tránh gãi', NULL),
+(22, 10, 2, 2, 'Dùng thuốc kháng virus nếu cần', NULL);
+
+              INSERT
+IGNORE INTO medications (id, step_id, name, dosage, usage_instructions, price) VALUES
+-- Viêm da tiếp xúc dị ứng
+(1, 2, 'Hydrocortisone 1%', '2 lần/ngày trong 7 ngày', 'Bôi lớp mỏng lên vùng viêm đỏ', 45000.00),
+
+-- Viêm da cơ địa
+(2, 4, 'Cetaphil Moisturizing Cream', '2 lần/ngày', 'Bôi vào vùng da khô', 250000.00),
+(3, 4, 'Hydrocortisone 1%', '2 lần/ngày trong 7 ngày', 'Bôi lớp mỏng lên vùng viêm đỏ', 45000.00),
+
+-- Mụn trứng cá viêm
+(4, 6, 'Adapalene 0.1%', '1 lần/ngày buổi tối', 'Thoa lớp mỏng lên vùng có mụn', 120000.00),
+(5, 7, 'Clindamycin Gel', '2 lần/ngày', 'Bôi trực tiếp lên nốt mụn', 80000.00),
+
+-- Nấm da
+(6, 9, 'Clotrimazole cream', '2 lần/ngày', 'Bôi tại chỗ vùng da nấm', 60000.00),
+
+-- Vảy nến
+(7, 11, 'Eucerin UreaRepair', '2-3 lần/ngày', 'Bôi toàn thân sau tắm', 320000.00),
+(8, 11, 'Betamethasone cream', '2 lần/ngày', 'Bôi lên vùng da đỏ, bong vảy', 70000.00),
+
+-- Chàm
+(9, 14, 'Mometasone furoate', '1 lần/ngày', 'Bôi lớp mỏng vào vùng da viêm', 95000.00),
+
+-- Zona
+(10, 15, 'Acyclovir', '800mg x 5 lần/ngày', 'Uống trong 7 ngày', 150000.00),
+(11, 16, 'Paracetamol', '500mg mỗi 6 giờ khi đau', 'Uống sau ăn', 30000.00),
+
+-- Herpes
+(12, 17, 'Acyclovir', '200mg x 5 lần/ngày', 'Uống trong 5 ngày', 120000.00),
+
+-- Hồng ban
+(13, 20, 'Cetirizine', '10mg/ngày', 'Uống 1 viên buổi tối', 50000.00),
+
+-- Mụn nước do vi rút
+(14, 22, 'Acyclovir', '200mg x 5 lần/ngày', 'Uống trong 5 ngày', 120000.00);
+
+                     INSERT
+IGNORE INTO step_types (type_id, type_name, description, required, price) VALUES
+(1, 'care_instructions', 'Hướng dẫn chăm sóc', FALSE, NULL),
+(2, 'medication', 'Bước dùng thuốc', FALSE, NULL),
+(3, 'procedure', 'Thủ thuật/xét nghiệm', FALSE, 200000.00);

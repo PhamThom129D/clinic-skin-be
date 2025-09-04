@@ -4,6 +4,7 @@ import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -50,10 +51,10 @@ public class Account {
     private AccountStatus status = AccountStatus.Active;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt ;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt ;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {

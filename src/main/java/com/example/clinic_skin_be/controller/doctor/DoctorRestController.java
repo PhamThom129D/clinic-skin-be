@@ -14,17 +14,17 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping ("/api/doctors")
+@RequestMapping("/api/doctors")
 @AllArgsConstructor
 public class DoctorRestController {
     @Autowired
     private IDoctorRepository doctorRepository;
 
     @GetMapping("/basic")
-    public List<DoctorInfoDTO> getAllDoctors () {
+    public List<DoctorInfoDTO> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
         return doctors.stream().map(doctor -> new DoctorInfoDTO(
-               doctor.getId(),
+                doctor.getId(),
                 doctor.getAccount().getFullName(),
                 doctor.getSpecialty(),
                 doctor.getAccount().getAvtPath()

@@ -13,7 +13,7 @@ import lombok.*;
 public class Certificate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "certificate_id")
+    @Column(name = "certificate_id")
     private Long id;
 
     @Column(nullable = false)

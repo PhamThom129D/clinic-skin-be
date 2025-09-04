@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class LabStaff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "lab_staff_id")
+    @Column(name = "lab_staff_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -40,14 +40,12 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**", "/api/doctors/**", "/api/offers/**", "/api/testimonials/**").permitAll()
-                        .requestMatchers("/api/auth/**","/api/chat/**", "/api/ai/**").permitAll()
-                        .requestMatchers( "/images/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/chat/**", "/api/contacts/**", "/api/appointments/**", "/api/offers/**", "/api/testimonials/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/chat/**", "/api/ai/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
-                        .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers("/api/doctors/**").hasAnyRole("DOCTOR")
+                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,6 +53,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -67,6 +66,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

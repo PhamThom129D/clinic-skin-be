@@ -10,7 +10,7 @@ import lombok.Data;
 public class Testimonial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "testimonial_id")
+    @Column(name = "testimonial_id")
     private Long id;
 
     @Column(nullable = false, columnDefinition = "TEXT")

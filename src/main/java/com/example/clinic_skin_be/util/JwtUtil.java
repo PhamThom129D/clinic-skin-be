@@ -76,6 +76,7 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token);
     }
+
     public String generateToken(String email, List<String> roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
