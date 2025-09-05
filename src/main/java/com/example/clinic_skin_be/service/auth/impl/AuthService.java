@@ -91,7 +91,8 @@ public class AuthService implements IAuthService {
 
         // Map Entity -> DTO response
         AuthResponse response = authMapper.toAuthResponse(account);
-        response.setToken(token); // set token riêng
+        response.setToken(token);
+        emailService.sendRegisterSuccessEmail(account);
         return response;
     }
 
@@ -108,6 +109,7 @@ public class AuthService implements IAuthService {
 
         AuthResponse response = authMapper.toAuthResponse(account);
         response.setToken(token);
+        emailService.sendLoginSuccessEmail(account);
         return response;
     }
 
@@ -135,11 +137,13 @@ public class AuthService implements IAuthService {
             String picture = (String) payload.get("picture");
 
             Account account = accountRepo.findByEmail(email).orElseGet(() -> {
+                String defaultPassword = passwordEncoder.encode("Abc@1234");
+
                 Account newUser = Account.builder()
                         .email(email)
                         .fullName(name)
                         .avtPath(picture)
-                        .password("")
+                        .password(defaultPassword)
                         .phoneNumber("")
                         .roles(Set.of(roleRepo.findByName("ROLE_PATIENT")
                                 .orElseThrow(() -> new RuntimeException("Role USER not found"))))
@@ -159,6 +163,7 @@ public class AuthService implements IAuthService {
             throw new RuntimeException("Đăng nhập Google thất bại: " + e.getMessage());
         }
     }
+
 
     @Override
     public void loginWithOtp(LoginRequest loginRequest) {
@@ -219,10 +224,6 @@ public class AuthService implements IAuthService {
         return response;
     }
 
-    @Override
-    public void logout() {
-        // Có thể blacklist JWT ở đây nếu cần
-    }
 
     private Authentication performAuthentication(String identifier, String rawPassword) {
         return authenticationManager.authenticate(

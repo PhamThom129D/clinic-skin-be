@@ -1,10 +1,10 @@
 package com.example.clinic_skin_be.service;
 
-import com.example.clinic_skin_be.model.Disease;
-import com.example.clinic_skin_be.model.TreatmentStep;
-import com.example.clinic_skin_be.repository.IDiseaseRepository;
-import com.example.clinic_skin_be.repository.IMedicationRepository;
-import com.example.clinic_skin_be.repository.ITreatmentStepRepository;
+import com.example.clinic_skin_be.model.medical.Disease;
+import com.example.clinic_skin_be.model.medical.TreatmentStep;
+import com.example.clinic_skin_be.repository.medical.IDiseaseRepository;
+import com.example.clinic_skin_be.repository.medical.IMedicationRepository;
+import com.example.clinic_skin_be.repository.medical.ITreatmentStepRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

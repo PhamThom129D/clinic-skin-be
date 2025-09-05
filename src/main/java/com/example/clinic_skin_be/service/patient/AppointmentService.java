@@ -2,15 +2,16 @@ package com.example.clinic_skin_be.service.patient;
 
 import com.example.clinic_skin_be.dto.patient.AppointmentRequest;
 import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
+import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.example.clinic_skin_be.model.patient.Patient;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.model.user.Account;
 import com.example.clinic_skin_be.model.user.Appointment;
-import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import com.example.clinic_skin_be.repository.patient.IPatientRepository;
 import com.example.clinic_skin_be.repository.user.IAccountRepository;
 import com.example.clinic_skin_be.repository.user.IAppointmentRepository;
+import com.example.clinic_skin_be.service.auth.impl.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +30,8 @@ public class AppointmentService {
     private final IPatientRepository patientRepository;
     private final IAppointmentRepository appointmentRepository;
     private final IDoctorRepository doctorRepository;
-    private final PasswordEncoder passwordEncoder; // để hash password
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -37,13 +39,19 @@ public class AppointmentService {
     @Transactional
     public Appointment registerAppointment(AppointmentRequest request) {
 
+        boolean isNewAccount = false;
         Account account = findOrCreateAccount(request);
+        if (account.getId() == null) {
+            isNewAccount = true;
+        }
+
         Patient patient = findOrCreatePatient(account, request);
         Doctor doctor = findDoctor(request.getDoctorId());
-
         Appointment appointment = buildAppointment(patient, doctor, request);
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        emailService.sendAppointmentEmail(account, savedAppointment, isNewAccount);
 
-        return appointmentRepository.save(appointment);
+        return savedAppointment;
     }
 
     private Account findOrCreateAccount(AppointmentRequest request) {
@@ -68,7 +76,7 @@ public class AppointmentService {
                 .address(request.getAddress())
                 .gender(request.getGender() != null ? Gender.valueOf(request.getGender().toUpperCase()) : null)
                 .dateOfBirth(request.getDateOfBirth() != null ? LocalDate.parse(request.getDateOfBirth(), dateFormatter) : null)
-                .password(passwordEncoder.encode("defaultPassword123"))
+                .password(passwordEncoder.encode("Abc@1234"))
                 .build();
 
         return accountRepository.save(account);
