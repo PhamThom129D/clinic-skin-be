@@ -4,9 +4,11 @@ import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.model.medical.VisitSession;
 import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -54,4 +56,20 @@ public class VisitSessionRestController {
         visitSessionService.deleteVisitSession(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Danh sach phien kham trong ngay
+    @GetMapping("/list-session-date")
+    public ResponseEntity<List<VisitSessionDTO>> getSessionByDate(
+            @RequestParam(value = "date", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        if (date == null) {
+            date = LocalDate.now();
+        }
+
+        List<VisitSessionDTO> sessions = visitSessionService.getSessionByDate(date);
+        return ResponseEntity.ok(sessions);
+    }
+
+
 }

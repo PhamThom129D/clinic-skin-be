@@ -192,3 +192,27 @@ VALUES
 INSERT IGNORE INTO contacts (id, fullname, phone, reason) VALUES
                                                                      (1, 'Phạm Văn C', '0988123456', 'Muốn tư vấn về trị mụn'),
                                                                      (2, 'Lê Thị D', '0977123123', 'Quan tâm dịch vụ chăm sóc da');
+-- -------------------------------
+-- 3. Medical Records
+-- -------------------------------
+INSERT IGNORE INTO medical_records
+(record_id, patient_id, doctor_id, visit_date, created_at, updated_at)
+VALUES
+(1, 5, 1, '2025-07-10', '2025-07-10 09:00:00', '2025-07-10 09:00:00'),
+(2, 10, 2, '2025-07-15', '2025-07-15 10:30:00', '2025-07-15 10:30:00'),
+(3, 11, 3, '2025-07-20', '2025-07-20 11:00:00', '2025-07-20 11:00:00'),
+(4, 13, 1, '2025-07-22', '2025-07-22 14:00:00', '2025-07-22 14:00:00'),
+(5, 14, 4, '2025-07-25', '2025-07-25 15:00:00', '2025-07-25 15:00:00');
+
+-- -------------------------------
+-- 4. Visit Sessions
+-- -------------------------------
+INSERT IGNORE INTO visit_sessions
+(session_id, record_id, doctor_id, session_date, symptoms, clinical_notes, diagnosis, treatment_plan, prescriptions, lab_tests, follow_up_date, progress_notes, created_at, updated_at)
+VALUES
+(1, 1, 1, '2025-07-10 09:30:00', 'Đau đầu, chóng mặt', 'Khám lâm sàng bình thường', 'Migraine nhẹ', 'Uống thuốc giảm đau', 'Paracetamol 500mg', 'Máu tổng quát', '2025-07-17', 'Đang cải thiện', '2025-07-10 09:30:00', '2025-07-10 09:30:00'),
+(2, 1, 1, '2025-07-17 09:30:00', 'Đau đầu giảm', 'Đang theo dõi', 'Migraine cải thiện', 'Tiếp tục uống thuốc khi cần', 'Paracetamol 500mg', NULL, '2025-07-24', 'Tốt', '2025-07-17 09:30:00', '2025-07-17 09:30:00'),
+(3, 2, 2, '2025-07-15 11:00:00', 'Khó thở, mệt', 'Nghe phổi bình thường', 'Viêm phổi nhẹ', 'Uống kháng sinh', 'Amoxicillin 500mg', 'X-quang phổi', '2025-07-22', 'Đang cải thiện', '2025-07-15 11:00:00', '2025-07-15 11:00:00'),
+(4, 3, 3, '2025-07-20 11:30:00', 'Sốt, ho', 'Khám tai mũi họng bình thường', 'Cảm cúm', 'Uống thuốc hạ sốt', 'Paracetamol', NULL, '2025-07-27', 'Tốt', '2025-07-20 11:30:00', '2025-07-20 11:30:00'),
+(5, 4, 1, '2025-07-22 14:30:00', 'Đau bụng', 'Siêu âm bình thường', 'Rối loạn tiêu hóa', 'Điều chỉnh chế độ ăn', 'Men tiêu hóa', NULL, '2025-07-29', 'Ổn định', '2025-07-22 14:30:00', '2025-07-22 14:30:00'),
+(6, 5, 4, '2025-07-25 15:30:00', 'Ngứa da', 'Khám da liễu', 'Dị ứng nhẹ', 'Sử dụng kem dưỡng', 'Hydrocortisone 1%', NULL, '2025-08-01', 'Đang cải thiện', '2025-07-25 15:30:00', '2025-07-25 15:30:00');
