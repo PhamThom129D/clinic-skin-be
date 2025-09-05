@@ -11,11 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VisitSessionService {
 
     private final IVisitSessionRepository visitSessionRepo;
@@ -35,7 +38,6 @@ public class VisitSessionService {
                 .orElse(null);
     }
 
-    @Transactional
     public VisitSessionDTO saveVisitSession(Long recordId, VisitSessionDTO dto) {
         MedicalRecord record = medicalRecordRepo.findById(recordId)
                 .orElseThrow(() -> new RuntimeException("Medical record not found"));
@@ -79,6 +81,17 @@ public class VisitSessionService {
 
         return VisitSessionMapper.toDTO(saved);
     }
+
+    public List<VisitSessionDTO> getSessionByDate(LocalDate localDate) {
+        LocalDateTime startOfDay = localDate.atStartOfDay();
+        LocalDateTime endOfDay = localDate.atTime(23, 59, 59);
+
+        return visitSessionRepo.findBySessionDateBetween(startOfDay, endOfDay)
+                .stream()
+                .map(VisitSessionMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     public void deleteVisitSession(Long id) {
         visitSessionRepo.deleteById(id);
