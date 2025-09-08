@@ -24,12 +24,12 @@ public class TreatmentStepTemplate {
     @JoinColumn(name = "type_id", nullable = false)
     private StepType stepType; // Loại bước: thuốc/xét nghiệm/thủ thuật
 
-    private int itemId; // ID thuốc/xét nghiệm/thủ thuật tương ứng
+    private Long itemId; // ID thuốc/xét nghiệm/thủ thuật tương ứng
 
     private String notes;
 
     // Liên kết ngược về phác đồ mẫu
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id", nullable = false)
-    private TreatmentTemplate template; // **mappedBy phải trùng tên này**
+    private TreatmentTemplate template;
 }

@@ -26,5 +26,6 @@ public class PrescriptionDetail {
 
     private String dosage;  // Liều lượng (ví dụ: "2 viên mỗi 8 giờ")
     private int quantity;    // Số lượng thuốc cần dùng
+    private String instructions; // Hướng dẫn sử dụng thêm
 
 }
