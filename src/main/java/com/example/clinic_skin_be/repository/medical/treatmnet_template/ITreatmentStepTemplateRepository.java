@@ -4,6 +4,11 @@ import com.example.clinic_skin_be.model.medical.treatment_template.TreatmentStep
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface ITreatmentStepTemplateRepository extends JpaRepository<TreatmentStepTemplate,Long> {
+public interface ITreatmentStepTemplateRepository extends JpaRepository<TreatmentStepTemplate, Long> {
+
+    // Tìm tất cả các bước theo template ID
+    List<TreatmentStepTemplate> findAllByTemplateId(Long templateId);
 }
