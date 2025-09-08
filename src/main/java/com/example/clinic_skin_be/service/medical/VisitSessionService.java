@@ -5,7 +5,7 @@ import com.example.clinic_skin_be.mapper.VisitSessionMapper;
 import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.medical.VisitSession;
 import com.example.clinic_skin_be.repository.medical.IMedicalRecordRepository;
-import com.example.clinic_skin_be.repository.medical.ITreatmentPlanRepository;
+import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentPlanRepository;
 import com.example.clinic_skin_be.repository.medical.IVisitSessionRepository;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import lombok.RequiredArgsConstructor;

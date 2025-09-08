@@ -47,6 +47,8 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
                         .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
                         .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/treatment-items/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
