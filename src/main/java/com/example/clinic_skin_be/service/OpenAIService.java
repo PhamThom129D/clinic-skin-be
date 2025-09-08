@@ -2,9 +2,6 @@
 //
 //import com.example.clinic_skin_be.model.medical.treatment_template.TreatmentTemplate;
 //import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentStep;
-//import com.example.clinic_skin_be.repository.medical.IDiseaseRepository;
-//import com.example.clinic_skin_be.repository.medical.IMedicationRepository;
-//import com.example.clinic_skin_be.repository.medical.ITreatmentStepRepository;
 //import com.fasterxml.jackson.databind.JsonNode;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.springframework.beans.factory.annotation.Value;
