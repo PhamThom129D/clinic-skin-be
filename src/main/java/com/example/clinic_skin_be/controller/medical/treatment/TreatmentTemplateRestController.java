@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.controller.medical;
+package com.example.clinic_skin_be.controller.medical.treatment;
 
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentTemplateDTO;

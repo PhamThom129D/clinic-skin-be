@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.controller.medical;
+package com.example.clinic_skin_be.controller.medical.treatment;
 
 import com.example.clinic_skin_be.model.medical.lab_test.LabTest;
 import com.example.clinic_skin_be.model.medical.medication.Medication;

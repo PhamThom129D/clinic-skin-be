@@ -23,7 +23,7 @@ public class TreatmentStep {
     @JoinColumn(name = "type_id", nullable = false)
     private StepType stepType; // Loại bước: thuốc/xét nghiệm/thủ thuật
 
-    private int itemId; // ID của thuốc/xét nghiệm/thủ thuật tương ứng
+    private int itemId; // ID của don thuốc/xét nghiệm/thủ thuật tương ứng
 
     private String notes;   // Ghi chú
 
