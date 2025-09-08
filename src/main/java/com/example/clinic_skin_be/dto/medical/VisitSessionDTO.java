@@ -2,7 +2,6 @@ package com.example.clinic_skin_be.dto.medical;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,12 +19,9 @@ public class VisitSessionDTO {
     private LocalDateTime sessionDate;
     private String symptoms;
     private String clinicalNotes;
-    private String diagnosis;
-    private String treatmentPlan;
-    private String prescriptions;
-    private String labTests;
-    private LocalDate followUpDate;
-    private String progressNotes;
+
+    private Long treatmentPlanId;
+    private String treatmentPlanName;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

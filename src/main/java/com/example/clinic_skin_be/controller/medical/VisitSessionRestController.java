@@ -1,7 +1,6 @@
 package com.example.clinic_skin_be.controller.medical;
 
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
-import com.example.clinic_skin_be.model.medical.VisitSession;
 import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;

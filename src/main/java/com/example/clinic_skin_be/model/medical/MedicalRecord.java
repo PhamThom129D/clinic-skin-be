@@ -31,10 +31,6 @@ public class MedicalRecord {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
-
     @Column(name = "visit_date", nullable = false)
     private LocalDate visitDate;
 

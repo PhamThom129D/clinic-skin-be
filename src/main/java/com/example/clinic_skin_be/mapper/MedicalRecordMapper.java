@@ -14,8 +14,6 @@ public class MedicalRecordMapper {
                 .recordId(record.getRecordId())
                 .patientId(record.getPatient() != null ? record.getPatient().getId() : null)
                 .patientName(record.getPatient() != null ? record.getPatient().getAccount().getFullName() : null)
-                .doctorId(record.getDoctor() != null ? record.getDoctor().getId() : null)
-                .doctorName(record.getDoctor() != null ? record.getDoctor().getAccount().getFullName() : null)
                 .visitDate(record.getVisitDate())
                 .createdAt(record.getCreatedAt())
                 .updatedAt(record.getUpdatedAt())

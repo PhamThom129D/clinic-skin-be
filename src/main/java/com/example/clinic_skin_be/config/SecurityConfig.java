@@ -42,6 +42,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**",
                                 "/api/doctors/**", "/api/screen-dashboard/**").permitAll()
+
+
 //                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
                         .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
                         .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")

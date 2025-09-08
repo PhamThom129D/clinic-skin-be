@@ -5,6 +5,7 @@ import com.example.clinic_skin_be.mapper.VisitSessionMapper;
 import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.medical.VisitSession;
 import com.example.clinic_skin_be.repository.medical.IMedicalRecordRepository;
+import com.example.clinic_skin_be.repository.medical.ITreatmentPlanRepository;
 import com.example.clinic_skin_be.repository.medical.IVisitSessionRepository;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class VisitSessionService {
     private final IVisitSessionRepository visitSessionRepo;
     private final IMedicalRecordRepository medicalRecordRepo;
     private final IDoctorRepository doctorRepo;
+    private final ITreatmentPlanRepository treatmentPlanRepo;
 
     public List<VisitSessionDTO> getSessionsByRecord(Long recordId) {
         return visitSessionRepo.findByMedicalRecord_RecordId(recordId)
@@ -47,40 +49,54 @@ public class VisitSessionService {
             // update existing
             session = visitSessionRepo.findById(dto.getSessionId())
                     .orElseThrow(() -> new RuntimeException("Visit session not found"));
-            // update fields
+
             session.setSessionDate(dto.getSessionDate());
             session.setSymptoms(dto.getSymptoms());
             session.setClinicalNotes(dto.getClinicalNotes());
-            session.setDiagnosis(dto.getDiagnosis());
-            session.setTreatmentPlan(dto.getTreatmentPlan());
-            session.setPrescriptions(dto.getPrescriptions());
-            session.setLabTests(dto.getLabTests());
-            session.setFollowUpDate(dto.getFollowUpDate());
-            session.setProgressNotes(dto.getProgressNotes());
+
+            // update treatmentPlan nếu có
+            if (dto.getTreatmentPlanId() != null) {
+                var treatmentPlan = treatmentPlanRepo.findById(dto.getTreatmentPlanId())
+                        .orElseThrow(() -> new RuntimeException("Treatment plan not found"));
+                session.setTreatmentPlan(treatmentPlan);
+            }
+
+            session.setUpdatedAt(LocalDateTime.now());
+
         } else {
             // create new
             session = VisitSessionMapper.toEntity(dto);
-            session.setMedicalRecord(record); // set owning side
-        }
+            session.setMedicalRecord(record);
 
-        // set doctor if provided
-        if (dto.getDoctorId() != null) {
-            var doctor = doctorRepo.findById(dto.getDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
-            session.setDoctor(doctor);
-        } else if (session.getDoctor() == null) {
-            throw new RuntimeException("Doctor is required for visit session");
+            // doctor phải có
+            if (dto.getDoctorId() != null) {
+                var doctor = doctorRepo.findById(dto.getDoctorId())
+                        .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                session.setDoctor(doctor);
+            } else {
+                throw new RuntimeException("Doctor is required for visit session");
+            }
+
+            // treatment plan phải có
+            if (dto.getTreatmentPlanId() != null) {
+                var treatmentPlan = treatmentPlanRepo.findById(dto.getTreatmentPlanId())
+                        .orElseThrow(() -> new RuntimeException("Treatment plan not found"));
+                session.setTreatmentPlan(treatmentPlan);
+            } else {
+                throw new RuntimeException("Treatment plan is required for visit session");
+            }
         }
 
         VisitSession saved = visitSessionRepo.save(session);
 
-        // keep both sides consistent in memory
+        // đồng bộ với record trong bộ nhớ
         if (!record.getVisitSessions().contains(saved)) {
             record.getVisitSessions().add(saved);
         }
 
         return VisitSessionMapper.toDTO(saved);
     }
+
 
     public List<VisitSessionDTO> getSessionByDate(LocalDate localDate) {
         LocalDateTime startOfDay = localDate.atStartOfDay();
