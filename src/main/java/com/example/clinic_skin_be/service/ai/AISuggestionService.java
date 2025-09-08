@@ -32,7 +32,7 @@ public class AISuggestionService {
     /**
      * Tạo prompt cho LabTest + Treatment
      */
-    public String buildPrompt(String symptoms, List<String> labTests, List<String> treatments) {
+    public String buildPromptLabTest(String symptoms, List<String> labTests, List<String> treatments) {
         return "Bệnh nhân có triệu chứng: " + symptoms +
                 ". Danh sách xét nghiệm có thể chọn: " + String.join(", ", labTests) +
                 ". Danh sách phác đồ mẫu có sẵn: " + String.join(", ", treatments) +
@@ -57,9 +57,7 @@ public class AISuggestionService {
                 .map(TreatmentTemplate::getName)
                 .collect(Collectors.toList());
 
-        String prompt = buildPrompt(session.getSymptoms(), labTests, treatments);
-
-        // gọi client để nhận kết quả AI
+        String prompt = buildPromptLabTest(session.getSymptoms(), labTests, treatments);
         return aiClient.getAISuggestions(prompt, Arrays.asList("possibleLabTests", "possibleTreatments"));
     }
 }

@@ -26,17 +26,18 @@ public class VisitSessionService {
     private final IMedicalRecordRepository medicalRecordRepo;
     private final IDoctorRepository doctorRepo;
     private final ITreatmentPlanRepository treatmentPlanRepo;
+    private final VisitSessionMapper visitSessionMapper;
 
     public List<VisitSessionDTO> getSessionsByRecord(Long recordId) {
         return visitSessionRepo.findByMedicalRecord_RecordId(recordId)
                 .stream()
-                .map(VisitSessionMapper::toDTO)
+                .map(visitSessionMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     public VisitSessionDTO getSessionById(Long id) {
         return visitSessionRepo.findById(id)
-                .map(VisitSessionMapper::toDTO)
+                .map(visitSessionMapper::toDTO)
                 .orElse(null);
     }
 
@@ -55,8 +56,8 @@ public class VisitSessionService {
             session.setClinicalNotes(dto.getClinicalNotes());
 
             // update treatmentPlan nếu có
-            if (dto.getTreatmentPlanId() != null) {
-                var treatmentPlan = treatmentPlanRepo.findById(dto.getTreatmentPlanId())
+            if (dto.getTreatmentPlan().getId() != null) {
+                var treatmentPlan = treatmentPlanRepo.findById(dto.getTreatmentPlan().getId())
                         .orElseThrow(() -> new RuntimeException("Treatment plan not found"));
                 session.setTreatmentPlan(treatmentPlan);
             }
@@ -65,7 +66,7 @@ public class VisitSessionService {
 
         } else {
             // create new
-            session = VisitSessionMapper.toEntity(dto);
+            session = visitSessionMapper.toEntity(dto);
             session.setMedicalRecord(record);
 
             // doctor phải có
@@ -86,7 +87,7 @@ public class VisitSessionService {
             record.getVisitSessions().add(saved);
         }
 
-        return VisitSessionMapper.toDTO(saved);
+        return visitSessionMapper.toDTO(saved);
     }
 
 
@@ -96,7 +97,7 @@ public class VisitSessionService {
 
         return visitSessionRepo.findBySessionDateBetween(startOfDay, endOfDay)
                 .stream()
-                .map(VisitSessionMapper::toDTO)
+                .map(visitSessionMapper::toDTO)
                 .collect(Collectors.toList());
     }
 

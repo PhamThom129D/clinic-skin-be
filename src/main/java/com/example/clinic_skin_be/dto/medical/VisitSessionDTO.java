@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.dto.medical;
 
+import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentTemplateDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,9 +21,10 @@ public class VisitSessionDTO {
     private String symptoms;
     private String clinicalNotes;
 
-    private Long treatmentPlanId;
-    private String treatmentPlanName;
+    private TreatmentTemplateDTO treatmentPlan;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+
 }
