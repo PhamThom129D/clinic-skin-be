@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**",
-                                "/api/doctors/**", "/api/screen-dashboard/**").permitAll()
+                                "/api/doctors/**", "/api/screen-dashboard/**","/api/ai-suggest/**").permitAll()
 
 
 //                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic

@@ -45,7 +45,7 @@ public class VisitSession {
     private String clinicalNotes;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "treatment_id", nullable = false)
+    @JoinColumn(name = "treatment_id")
     private TreatmentPlan treatmentPlan;
 
     @Column(name = "created_at", updatable = false)

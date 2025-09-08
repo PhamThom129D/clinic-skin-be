@@ -37,7 +37,7 @@ public class TreatmentTemplateRestController {
 
     @PutMapping("/{id}")
     public TreatmentTemplateDTO updateTemplate(@PathVariable Long id, @RequestBody TreatmentTemplateDTO dto) {
-        dto.setId(id); // đảm bảo DTO có ID
+        dto.setId(id);
         return treatmentTemplateService.saveTreatmentTemplate(dto);
     }
 
