@@ -4,58 +4,58 @@ import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTe
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentTemplateDTO;
 import com.example.clinic_skin_be.model.medical.treatment_plan.StepType;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.IStepTypeRepository;
-import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentTemplateService;
+import com.example.clinic_skin_be.service.medical.treatment_plan.TreatmentPlanService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/treatment-templates")
+@RequestMapping("/api/treatment-plans")
 @AllArgsConstructor
-public class TreatmentTemplateRestController {
+public class TreatmentPlanRestController {
 
-    private final TreatmentTemplateService treatmentTemplateService;
+    private final TreatmentPlanService planService;
     private final IStepTypeRepository stepTypeRepository;
 
-    // ------------------- TEMPLATE -------------------
+    // ------------------- PLAN -------------------
 
     @GetMapping
-    public List<TreatmentTemplateDTO> getAllTemplates() {
-        return treatmentTemplateService.listTreatmentTemplates();
+    public List<TreatmentTemplateDTO> getAllPlans() {
+        return planService.listAllPlans();
     }
 
     @GetMapping("/{id}")
-    public TreatmentTemplateDTO getTemplate(@PathVariable Long id) {
-        return treatmentTemplateService.getTreatmentTemplateById(id);
+    public TreatmentTemplateDTO getPlan(@PathVariable Long id) {
+        return planService.getPlanById(id);
     }
 
     @PostMapping
-    public TreatmentTemplateDTO createTemplate(@RequestBody TreatmentTemplateDTO dto) {
-        return treatmentTemplateService.saveTreatmentTemplate(dto);
+    public TreatmentTemplateDTO createPlan(@RequestBody TreatmentTemplateDTO dto) {
+        return planService.savePlan(dto);
     }
 
     @PutMapping("/{id}")
-    public TreatmentTemplateDTO updateTemplate(@PathVariable Long id, @RequestBody TreatmentTemplateDTO dto) {
+    public TreatmentTemplateDTO updatePlan(@PathVariable Long id, @RequestBody TreatmentTemplateDTO dto) {
         dto.setId(id); // đảm bảo DTO có ID
-        return treatmentTemplateService.saveTreatmentTemplate(dto);
+        return planService.savePlan(dto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTemplate(@PathVariable Long id) {
-        treatmentTemplateService.deleteTreatmentTemplate(id);
+    public void deletePlan(@PathVariable Long id) {
+        planService.deletePlan(id);
     }
 
     // ------------------- STEP -------------------
 
     @GetMapping("/steps")
     public List<TreatmentStepTemplateDTO> getAllSteps() {
-        return treatmentTemplateService.listTreatmentStepTemplates();
+        return planService.listStepsByPlan(null);
     }
 
     @GetMapping("/steps/{id}")
     public TreatmentStepTemplateDTO getStep(@PathVariable Long id) {
-        return treatmentTemplateService.getTreatmentStepTemplateById(id);
+        return planService.getStepById(id);
     }
 
     @PostMapping("/steps")
@@ -63,7 +63,7 @@ public class TreatmentTemplateRestController {
         StepType stepType = stepTypeRepository.findById(dto.getStepTypeId())
                 .orElseThrow(() -> new RuntimeException("StepType not found"));
 
-        return treatmentTemplateService.saveTreatmentStepTemplate(dto, stepType);
+        return planService.saveStep(dto, stepType);
     }
 
     @PutMapping("/steps/{id}")
@@ -71,12 +71,12 @@ public class TreatmentTemplateRestController {
         StepType stepType = stepTypeRepository.findById(dto.getStepTypeId())
                 .orElseThrow(() -> new RuntimeException("StepType not found"));
 
-        dto.setId(id); // đảm bảo DTO có ID
-        return treatmentTemplateService.saveTreatmentStepTemplate(dto, stepType);
+        dto.setId(id);
+        return planService.saveStep(dto, stepType);
     }
 
     @DeleteMapping("/steps/{id}")
     public void deleteStep(@PathVariable Long id) {
-        treatmentTemplateService.deleteTreatmentStepTemplate(id);
+        planService.deleteStep(id);
     }
 }

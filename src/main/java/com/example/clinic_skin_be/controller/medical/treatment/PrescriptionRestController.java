@@ -6,7 +6,7 @@ import com.example.clinic_skin_be.model.medical.medication.Medication;
 import com.example.clinic_skin_be.model.medical.medication.Prescription;
 import com.example.clinic_skin_be.model.medical.medication.PrescriptionDetail;
 import com.example.clinic_skin_be.repository.medical.medication.IMedicationRepository;
-import com.example.clinic_skin_be.service.medical.treatment.PrescriptionService;
+import com.example.clinic_skin_be.service.medical.treatment_template.PrescriptionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

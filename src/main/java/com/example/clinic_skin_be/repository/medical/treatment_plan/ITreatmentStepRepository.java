@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.repository.medical.treatment_plan;
 
+import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentStep;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -8,4 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ITreatmentStepRepository extends JpaRepository<TreatmentStep, Long> {
+    List<TreatmentStep> findAllByTreatmentPlanId(Long planId);
 }

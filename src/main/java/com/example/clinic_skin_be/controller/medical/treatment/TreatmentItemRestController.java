@@ -4,7 +4,7 @@ import com.example.clinic_skin_be.model.medical.lab_test.LabTest;
 import com.example.clinic_skin_be.model.medical.medication.Medication;
 import com.example.clinic_skin_be.model.medical.procedure.Procedure;
 import com.example.clinic_skin_be.model.medical.treatment_plan.StepType;
-import com.example.clinic_skin_be.service.medical.treatment.TreatmentItemService;
+import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -15,9 +15,10 @@ public class TreatmentStepTemplateDTO {
     private String stepTypeName; // tên loại bước
     private String stepDesc; // tên loại bước
     private String notes;
-    private Long templateId; // ID phác đồ cha
-    private String templateName;
+    private Long treatmentId; // ID phác đồ cha
+    private String treatmentName;
 
     private Long itemId; // ID don thuốc/xét nghiệm/thủ thuật
     private Object itemDetails;
+
 }

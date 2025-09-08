@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.service.medical.treatment;
+package com.example.clinic_skin_be.service.medical.treatment_template;
 
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentTemplateDTO;
@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -48,7 +47,7 @@ public class TreatmentTemplateService {
 
     public TreatmentStepTemplateDTO saveTreatmentStepTemplate(TreatmentStepTemplateDTO dto, StepType stepType) {
         TreatmentTemplate parentTemplate = new TreatmentTemplate();
-        parentTemplate.setId(dto.getTemplateId());
+        parentTemplate.setId(dto.getTreatmentId());
 
         TreatmentStepTemplate step = mapper.fromDTO(dto, parentTemplate, stepType);
         TreatmentStepTemplate saved = treatmentStepTemplateRepository.save(step);
