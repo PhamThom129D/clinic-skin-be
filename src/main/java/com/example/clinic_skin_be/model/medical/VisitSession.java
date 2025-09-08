@@ -1,11 +1,11 @@
 package com.example.clinic_skin_be.model.medical;
 
+import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentPlan;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,28 +39,14 @@ public class VisitSession {
     private LocalDateTime sessionDate;
 
     @Column(columnDefinition = "TEXT")
-    private String symptoms;
+    private String symptoms; // Trieu chung
 
     @Column(name = "clinical_notes", columnDefinition = "TEXT")
     private String clinicalNotes;
 
-    @Column(columnDefinition = "TEXT")
-    private String diagnosis;
-
-    @Column(name = "treatment_plan", columnDefinition = "TEXT")
-    private String treatmentPlan;
-
-    @Column(columnDefinition = "TEXT")
-    private String prescriptions;
-
-    @Column(name = "lab_tests", columnDefinition = "TEXT")
-    private String labTests;
-
-    @Column(name = "follow_up_date")
-    private LocalDate followUpDate;
-
-    @Column(name = "progress_notes", columnDefinition = "TEXT")
-    private String progressNotes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "treatment_id", nullable = false)
+    private TreatmentPlan treatmentPlan;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

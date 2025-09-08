@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.model.medical;
+package com.example.clinic_skin_be.model.medical.treatment_plan;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,11 +16,10 @@ public class StepType {
     private Long typeId;
 
     @Column(name = "type_name", nullable = false)
-    private String typeName;
+    private String typeName;// Ví dụ: "Medication", "LabTest", "Procedure"
 
     private String description;
 
     private Boolean required = false;
 
-    private Double price = 0.0;
 }

@@ -40,13 +40,10 @@ public class MedicalRecordService {
 
     // Tạo mới
     public MedicalRecordDTO createMedicalRecord(MedicalRecordDTO dto) {
-        var doctor = doctorRepo.findById(dto.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
         var patient = patientRepo.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
         MedicalRecord record = new MedicalRecord();
-        record.setDoctor(doctor);
         record.setPatient(patient);
         record.setVisitDate(dto.getVisitDate());
         record.setCreatedAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : java.time.LocalDateTime.now());
@@ -59,12 +56,6 @@ public class MedicalRecordService {
     public MedicalRecordDTO updateMedicalRecord(MedicalRecordDTO dto) {
         MedicalRecord record = medicalRecordRepo.findById(dto.getRecordId())
                 .orElseThrow(() -> new RuntimeException("Medical record not found"));
-
-        if (dto.getDoctorId() != null) {
-            var doctor = doctorRepo.findById(dto.getDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
-            record.setDoctor(doctor);
-        }
 
         if (dto.getPatientId() != null) {
             var patient = patientRepo.findById(dto.getPatientId())
