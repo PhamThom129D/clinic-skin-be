@@ -31,5 +31,5 @@ public class TreatmentStepTemplate {
     // Liên kết ngược về phác đồ mẫu
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id", nullable = false)
-    private TreatmentTemplate template; // **mappedBy phải trùng tên này**
+    private TreatmentTemplate template;
 }

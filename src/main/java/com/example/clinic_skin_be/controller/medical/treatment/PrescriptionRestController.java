@@ -45,11 +45,6 @@ public class PrescriptionRestController {
 
     // ------------------- PRESCRIPTION DETAIL -------------------
 
-    @GetMapping("/{prescriptionId}/details")
-    public List<PrescriptionDetailDTO> getDetails(@PathVariable Long prescriptionId) {
-        return prescriptionService.listDetailsByPrescription(prescriptionId);
-    }
-
     @PostMapping("/{prescriptionId}/details")
     public PrescriptionDetailDTO createDetail(
             @PathVariable Long prescriptionId,

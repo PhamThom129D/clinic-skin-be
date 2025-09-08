@@ -75,13 +75,6 @@ public class TreatmentTemplateRestController {
         return treatmentTemplateService.saveTreatmentStepTemplate(dto, stepType);
     }
 
-
-    @GetMapping("/steps-by-template/{templateId}")
-    public List<TreatmentStepTemplateDTO> getStepsByTemplate(@PathVariable Long templateId) {
-        return treatmentTemplateService.getStepsByTemplateId(templateId);
-    }
-
-
     @DeleteMapping("/steps/{id}")
     public void deleteStep(@PathVariable Long id) {
         treatmentTemplateService.deleteTreatmentStepTemplate(id);

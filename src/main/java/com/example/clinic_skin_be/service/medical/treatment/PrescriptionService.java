@@ -43,11 +43,6 @@ public class PrescriptionService {
 
     // ------------------- PRESCRIPTION DETAIL -------------------
 
-    public List<PrescriptionDetailDTO> listDetailsByPrescription(Long prescriptionId) {
-        List<PrescriptionDetail> details = detailRepository.findAllByPrescriptionId(prescriptionId);
-        return mapper.toDetailDTO(details);
-    }
-
     public PrescriptionDetailDTO savePrescriptionDetail(PrescriptionDetail detail) {
         PrescriptionDetail saved = detailRepository.save(detail);
         return mapper.toDTO(saved);

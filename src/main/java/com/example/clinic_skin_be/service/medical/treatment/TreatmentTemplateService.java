@@ -56,13 +56,6 @@ public class TreatmentTemplateService {
     }
 
 
-    public List<TreatmentStepTemplateDTO> getStepsByTemplateId(Long templateId) {
-        return treatmentStepTemplateRepository.findAllByTemplateId(templateId).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-
     public void deleteTreatmentTemplate(Long id) {
         treatmentTemplateRepository.deleteById(id);
     }
