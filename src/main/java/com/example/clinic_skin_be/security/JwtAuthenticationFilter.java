@@ -35,7 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Bỏ qua các endpoint public
         if (path.startsWith("/api/auth/")
                 || path.startsWith("/api/chat/")
-                || path.startsWith("/api/ai/")) {
+                || path.startsWith("/api/ai/")
+                || path.startsWith("/admin/home/**")) {
             filterChain.doFilter(request, response);
             return;
         }

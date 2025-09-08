@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.model.staff.doctor;
 
+import com.example.clinic_skin_be.model.StepType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

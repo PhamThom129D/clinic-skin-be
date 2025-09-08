@@ -81,7 +81,9 @@ dependencies {
     // Validation
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'me.paulschwarz:spring-dotenv:3.0.0'
-}
+
+    // Thymeleaf
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'}
 
 tasks.named('test') {
     useJUnitPlatform()

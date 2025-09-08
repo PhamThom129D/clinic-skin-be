@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**", "/api/doctors/**", "/api/offers/**", "/api/testimonials/**", "/api/reasons/**").permitAll()
                         .requestMatchers("/api/auth/**","/api/chat/**", "/api/ai/**").permitAll()
+                        .requestMatchers("/admin/**").permitAll()
                         .requestMatchers( "/images/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic

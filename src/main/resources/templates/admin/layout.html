@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Thu Cúc Clini - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+<div class="flex h-screen">
+    <aside th:replace="~{sidebar :: sidebar}"></aside>
+
+    <div class="flex-1 flex flex-col">
+        <header th:replace="~{header :: header}"></header>
+
+        <main class="flex-1 overflow-y-auto p-6">
+            <div layout:fragment="content"></div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
