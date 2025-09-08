@@ -23,7 +23,7 @@ public class TestAIRestController {
     public ResponseEntity<?> suggestTreatment(@RequestParam Long sessionId) {
         try {
             // gọi service trả về Map chứa: possibleLabTests, possibleTreatments, aiNotes
-            Map<String, Object> result = testService.suggestTreatment(sessionId);
+            Map<String, Object> result = testService.suggestLabTestAndTreatment(sessionId);
             return ResponseEntity.ok(result);
         } catch (IOException e) {
             e.printStackTrace();

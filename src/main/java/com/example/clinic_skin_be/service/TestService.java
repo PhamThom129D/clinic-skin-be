@@ -43,7 +43,7 @@ public class TestService {
     private ITreatmentTemplateRepository treatmentTemplateRepo;
 
 
-    public Map<String, Object> suggestTreatment(Long sessionId) throws IOException {
+    public Map<String, Object> suggestLabTestAndTreatment(Long sessionId) throws IOException {
         VisitSession session = visitSessionRepo.findById(sessionId)
                 .orElseThrow(() -> new RuntimeException("Visit session not found"));
 
