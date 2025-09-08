@@ -77,14 +77,6 @@ public class VisitSessionService {
                 throw new RuntimeException("Doctor is required for visit session");
             }
 
-            // treatment plan phải có
-            if (dto.getTreatmentPlanId() != null) {
-                var treatmentPlan = treatmentPlanRepo.findById(dto.getTreatmentPlanId())
-                        .orElseThrow(() -> new RuntimeException("Treatment plan not found"));
-                session.setTreatmentPlan(treatmentPlan);
-            } else {
-                throw new RuntimeException("Treatment plan is required for visit session");
-            }
         }
 
         VisitSession saved = visitSessionRepo.save(session);
