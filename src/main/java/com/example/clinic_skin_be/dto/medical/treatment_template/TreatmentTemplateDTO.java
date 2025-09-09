@@ -13,6 +13,7 @@ import java.util.List;
 public class TreatmentTemplateDTO {
     private Long id;
     private String name;
+    private String disease_name;
     private String description;
     private List<TreatmentStepTemplateDTO> steps;
 }

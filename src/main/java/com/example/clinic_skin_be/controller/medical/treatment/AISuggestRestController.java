@@ -14,10 +14,23 @@ public class AISuggestRestController {
     @Autowired
     private AISuggestionService aiSuggestionService;
 
-    @GetMapping("/suggest-lab-test-and-treatment")
-    public ResponseEntity<?> suggestTreatment(@RequestParam Long sessionId) {
+    @PostMapping("/suggest-lab-test-and-treatment")
+    public ResponseEntity<?> suggestTreatment(@RequestBody Map<String, String> request) {
         try {
-            Map<String, Object> result = aiSuggestionService.suggestLabTestAndTreatment(sessionId);
+            String symptoms = request.get("symptoms");
+            String labTest = request.get("labTest");
+            String labResult = request.get("labResult");
+
+            Map<String, Object> result;
+
+            if (labTest != null && !labTest.isEmpty() && labResult != null && !labResult.isEmpty()) {
+                // --- Trường hợp có kết quả xét nghiệm → dự đoán bệnh duy nhất
+                result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, labTest, labResult);
+            } else {
+                // --- Trường hợp chỉ có triệu chứng → gợi ý xét nghiệm + bệnh
+                result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, null, null);
+            }
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,7 +39,7 @@ public class AISuggestRestController {
         }
     }
 
-    @GetMapping("/suggest-visit-summary")
+    @PostMapping("/suggest-visit-summary")
     public ResponseEntity<?> suggestVisitSummary(@RequestParam Long recordId) {
         try {
             Map<String, Object> result = aiSuggestionService.suggestVisitSummaryByRecord(recordId);

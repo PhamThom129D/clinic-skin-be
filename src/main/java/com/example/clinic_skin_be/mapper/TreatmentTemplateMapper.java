@@ -80,6 +80,7 @@ public class TreatmentTemplateMapper {
         return new TreatmentTemplateDTO(
                 template.getId(),
                 template.getName(),
+                template.getDisease_name(),
                 template.getDescription(),
                 stepsDTO
         );

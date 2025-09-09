@@ -45,9 +45,12 @@ public class SecurityConfig {
 
 
 //                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
+                        .requestMatchers("/api/medical-records/**").permitAll()
+                        .requestMatchers("/api/visit-sessions/**").permitAll()
+//                        .anyRequest().authenticated()
                         .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
                         .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
-                        .requestMatchers("/api/treatment-items/**","/api/treatment-templates/**","/api/treatment-plans/**").hasRole("ADMIN")
+                        .requestMatchers("/api/treatment-items/**","/api/treatment-templates/**","/api/treatment-plans/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
