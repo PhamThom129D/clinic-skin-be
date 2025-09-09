@@ -21,6 +21,7 @@ public class TreatmentTemplate {
 
     @Column(unique = true, nullable = false)
     private String name; // tên phác đồ mẫu
+    private String disease_name;
 
     @Column(columnDefinition = "TEXT")
     private String description; // mô tả ngắn gọn về phác đồ

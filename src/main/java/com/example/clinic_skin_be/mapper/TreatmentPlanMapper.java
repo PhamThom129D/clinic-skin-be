@@ -74,6 +74,7 @@ public class TreatmentPlanMapper {
         return new TreatmentTemplateDTO(
                 plan.getId(),
                 plan.getTreatmentName(),
+                plan.getDisease_name(),
                 null, // TreatmentPlan không có description, để null
                 stepsDTO
         );
