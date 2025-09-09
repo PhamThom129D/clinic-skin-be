@@ -14,5 +14,6 @@ public class TreatmentTemplateDTO {
     private Long id;
     private String name;
     private String description;
+    private String disease_name;
     private List<TreatmentStepTemplateDTO> steps;
 }

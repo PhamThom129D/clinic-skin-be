@@ -25,6 +25,8 @@ public class TreatmentTemplate {
     @Column(columnDefinition = "TEXT")
     private String description; // mô tả ngắn gọn về phác đồ
 
+    private String disease_name; // tên bệnh/phân loại bệnh
+
     // Danh sách các bước điều trị của phác đồ
     @OneToMany(mappedBy = "template", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TreatmentStepTemplate> steps = new ArrayList<>();

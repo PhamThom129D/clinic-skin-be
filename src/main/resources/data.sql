@@ -1,17 +1,18 @@
 --
+    use clinic_management;
 -- -- 1. Roles
--- -- =====================================================
-INSERT IGNORE INTO roles (role_id, role_name, description)
-VALUES
-    (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
-    (2, 'ROLE_PATIENT', 'Bệnh nhân'),
-    (3, 'ROLE_DOCTOR', 'Bác sĩ'),
-    (4, 'ROLE_RECEPTIONIST', 'Nhân viên tiếp đón'),
-    (5, 'ROLE_LAB_STAFF', 'Nhân viên xét nghiệm'),
-    (6, 'ROLE_CONSULTANT', 'Nhân viên tư vấn'),
-    (7, 'ROLE_CASHIER', 'Nhân viên thu ngân')
-ON DUPLICATE KEY UPDATE role_name = role_name;
-
+-- -- -- =====================================================
+-- INSERT IGNORE INTO roles (role_id, role_name, description)
+-- VALUES
+--     (1, 'ROLE_ADMIN', 'Quản trị hệ thống'),
+--     (2, 'ROLE_PATIENT', 'Bệnh nhân'),
+--     (3, 'ROLE_DOCTOR', 'Bác sĩ'),
+--     (4, 'ROLE_RECEPTIONIST', 'Nhân viên tiếp đón'),
+--     (5, 'ROLE_LAB_STAFF', 'Nhân viên xét nghiệm'),
+--     (6, 'ROLE_CONSULTANT', 'Nhân viên tư vấn'),
+--     (7, 'ROLE_CASHIER', 'Nhân viên thu ngân')
+-- ON DUPLICATE KEY UPDATE role_name = role_name;
+--
 -- -- =====================================================
 -- -- 2. Accounts
 -- -- =====================================================
@@ -228,12 +229,13 @@ ON DUPLICATE KEY UPDATE role_name = role_name;
 --                                                               ('Procedure', 'Bước thủ thuật', true);
 --
 -- -- 5️⃣ Treatment Templates
--- INSERT INTO treatment_templates (name, description) VALUES
---                                                         ('Phác đồ mụn nhẹ', 'Sử dụng thuốc và chăm sóc da tại nhà'),
---                                                         ('Phác đồ mụn trung bình', 'Kết hợp thuốc, peel và laser'),
---                                                         ('Phác đồ nám', 'Điều trị nám bằng thuốc và laser'),
---                                                         ('Phác đồ sẹo', 'Lăn kim + laser CO2'),
---                                                         ('Phác đồ chống lão hóa', 'Peel da và tiêm dưỡng chất');
+-- INSERT INTO treatment_templates (name, description, disease_name) VALUES
+--                                                                       ('Phác đồ mụn nhẹ', 'Sử dụng thuốc và chăm sóc da tại nhà', 'Mụn trứng cá nhẹ'),
+--                                                                       ('Phác đồ mụn trung bình', 'Kết hợp thuốc, peel và laser', 'Mụn trứng cá trung bình'),
+--                                                                       ('Phác đồ nám', 'Điều trị nám bằng thuốc và laser', 'Nám da (Melasma)'),
+--                                                                       ('Phác đồ sẹo', 'Lăn kim + laser CO2', 'Sẹo mụn / Sẹo do tổn thương da'),
+--                                                                       ('Phác đồ chống lão hóa', 'Peel da và tiêm dưỡng chất', 'Lão hóa da');
+--
 --
 -- -- 6️⃣ Treatment Step Templates (Template mẫu)
 -- INSERT INTO treatment_step_templates (step_number, type_id, item_id, notes, template_id) VALUES
@@ -263,13 +265,14 @@ ON DUPLICATE KEY UPDATE role_name = role_name;
 -- (3, 2, 3, 'Test dị ứng trước tiêm', 5);
 --
 -- -- 7️⃣ Treatment Plans (thực tế)
--- INSERT INTO treatment_plans (treatment_name) VALUES
---                                                  ('Plan mụn nhẹ - Bệnh nhân A'),
---                                                  ('Plan mụn trung bình - Bệnh nhân B'),
---                                                  ('Plan nám - Bệnh nhân C'),
---                                                  ('Plan sẹo - Bệnh nhân D'),
---                                                  ('Plan chống lão hóa - Bệnh nhân E');
+-- INSERT INTO treatment_plans (treatment_name, disease_name) VALUES
+--                                                                ('Plan mụn nhẹ - Bệnh nhân A', 'Mụn trứng cá nhẹ'),
+--                                                                ('Plan mụn trung bình - Bệnh nhân B', 'Mụn trứng cá trung bình'),
+--                                                                ('Plan nám - Bệnh nhân C', 'Nám da (Melasma)'),
+--                                                                ('Plan sẹo - Bệnh nhân D', 'Sẹo mụn / Sẹo do tổn thương da'),
+--                                                                ('Plan chống lão hóa - Bệnh nhân E', 'Lão hóa da');
 --
+-- --
 -- -- 8️⃣ Treatment Steps (thực tế)
 -- INSERT INTO treatment_steps (step_number, type_id, item_id, notes, results, plan_id) VALUES
 -- -- Plan 1: mụn nhẹ

@@ -43,33 +43,37 @@ public class AISuggestionService {
     private IProcedureRepository procedureRepo;
 
 
-
-    /** Tạo prompt gợi ý LabTest + Treatment */
-    public String buildPromptLabTest(String symptoms, List<String> labTests, List<String> treatments) {
+    public String buildPromptLabTest(String symptoms, List<String> labTests, List<String> diseases) {
         return "Bệnh nhân có triệu chứng: " + symptoms +
-                ". Danh sách xét nghiệm có thể chọn: " + String.join(", ", labTests) +
-                ". Danh sách phác đồ mẫu có sẵn: " + String.join(", ", treatments) +
+                ". Chỉ sử dụng các xét nghiệm có sẵn: " + String.join(", ", labTests) +
+                ". Chỉ sử dụng các bệnh có sẵn: " + String.join(", ", diseases) +
                 ". Hãy phân tích triệu chứng này và gợi ý:\n" +
                 "1) Các xét nghiệm nên làm trước chẩn đoán (possibleLabTests)\n" +
-                "2) Các phác đồ điều trị phù hợp (possibleTreatments)\n" +
-                "Trả về JSON hợp lệ ví dụ: {\"possibleLabTests\": [\"<xét nghiệm 1>\", ...], \"possibleTreatments\": [\"<phác đồ 1>\", ...] }";
+                "2) Các bệnh có thể gặp phải phù hợp (possibleDiseases)\n" +
+                "Nếu không có xét nghiệm hoặc bệnh nào phù hợp, trả về mảng rỗng [] tương ứng.\n" +
+                "Trả về JSON hợp lệ, ví dụ: " +
+                "{\"possibleLabTests\": [\"<xét nghiệm>\", ...], " +
+                "\"possibleDiseases\": [\"<bệnh>\", ...]}";
     }
 
-    public Map<String, Object> suggestLabTestAndTreatment(Long sessionId) {
-        VisitSession session = visitSessionRepo.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Visit session not found"));
-
+    public Map<String, Object> suggestLabTestAndTreatment(String symptoms) {
+        // Lấy danh sách tất cả xét nghiệm
         List<String> labTests = labTestRepo.findAll().stream()
                 .map(p -> p.getName())
                 .collect(Collectors.toList());
 
-        List<String> treatments = treatmentTemplateRepo.findAll().stream()
-                .map(TreatmentTemplate::getName)
+        // Lấy danh sách bệnh từ treatment template
+        List<String> disease = treatmentTemplateRepo.findAll().stream()
+                .map(TreatmentTemplate::getDisease_name)
                 .collect(Collectors.toList());
 
-        String prompt = buildPromptLabTest(session.getSymptoms(), labTests, treatments);
-        return aiClient.getAISuggestions(prompt, Arrays.asList("possibleLabTests", "possibleTreatments"));
+        // Tạo prompt
+        String prompt = buildPromptLabTest(symptoms, labTests, disease);
+
+        // Gọi AI client
+        return aiClient.getAISuggestions(prompt, Arrays.asList("possibleLabTests", "possibleDiseases"));
     }
+
 
     /** Tạo prompt tóm tắt lịch sử khám */
     public String buildPromptVisitHistory(String symptoms, List<String> medications, List<String> procedures,
