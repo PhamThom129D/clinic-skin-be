@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 1. Xử lý lỗi validation (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
@@ -24,14 +26,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleOtherExceptions(Exception ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
+    // 2. Xử lý lỗi field đã tồn tại
     @ExceptionHandler(FieldAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleFieldExists(FieldAlreadyExistsException ex) {
-        return ResponseEntity.badRequest()
-                .body(Map.of("field", ex.getField(), "message", ex.getMessage()));
+    public ResponseEntity<Map<String, String>> handleFieldAlreadyExists(FieldAlreadyExistsException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("field", ex.getField());
+        error.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    // 3. Xử lý các lỗi khác
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleOtherExceptions(Exception ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage() != null ? ex.getMessage() : "Đã xảy ra lỗi");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

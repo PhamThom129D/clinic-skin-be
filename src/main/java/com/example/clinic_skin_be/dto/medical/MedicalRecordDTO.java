@@ -16,9 +16,6 @@ public class MedicalRecordDTO {
     private Long patientId;
     private String patientName;
 
-    private Long doctorId;
-    private String doctorName;
-
     private LocalDate visitDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

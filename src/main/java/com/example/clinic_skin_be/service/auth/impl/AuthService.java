@@ -64,8 +64,6 @@ public class AuthService implements IAuthService {
         if (request.getPhoneNumber() != null && accountRepo.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new FieldAlreadyExistsException("phoneNumber", "Số điện thoại đã tồn tại trong hệ thống");
         }
-
-
         Account account = authMapper.toEntity(request);
         account.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -78,7 +76,7 @@ public class AuthService implements IAuthService {
         }
 
         // Set role
-        Role selectedRole = roleRepo.findByName(request.getRole())
+        Role selectedRole = roleRepo.findByName("ROLE_PATIENT")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         account.setRoles(Set.of(selectedRole));
 

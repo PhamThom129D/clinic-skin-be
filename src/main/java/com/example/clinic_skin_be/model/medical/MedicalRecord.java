@@ -31,10 +31,6 @@ public class MedicalRecord {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
-
     @Column(name = "visit_date", nullable = false)
     private LocalDate visitDate;
 
@@ -54,19 +50,6 @@ public class MedicalRecord {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<VisitSession> visitSessions = new ArrayList<>();
-
-    // convenience helpers to keep both sides in sync
-    public void addVisitSession(VisitSession session) {
-        if (session == null) return;
-        session.setMedicalRecord(this);
-        this.visitSessions.add(session);
-    }
-
-    public void removeVisitSession(VisitSession session) {
-        if (session == null) return;
-        session.setMedicalRecord(null);
-        this.visitSessions.remove(session);
-    }
 
     @PrePersist
     protected void onCreate() {

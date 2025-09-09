@@ -41,11 +41,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/chat/**","/api/contacts/**", "/api/appointments/**",
-                                "/api/doctors/**", "/api/screen-dashboard/**").permitAll()
+                                "/api/doctors/**", "/api/screen-dashboard/**","/api/ai-suggest/**").permitAll()
+
+
 //                        .requestMatchers("/api/admin/**").hasAuthority("MANAGE_ROLES") // dynamic
-                        .requestMatchers("/api/medical-records/**").permitAll()
-                        .requestMatchers("/api/visit-sessions/**").permitAll()
+//                        .requestMatchers("/api/medical-records/**").permitAll()
+//                        .requestMatchers("/api/visit-sessions/**").permitAll()
 //                        .anyRequest().authenticated()
+                        .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/treatment-items/**","/api/treatment-templates/**","/api/treatment-plans/**").hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
