@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class TreatmentTemplateMapper {
-    private final IMedicationRepository medicationRepository;
     private final ILabTestRepository labTestRepository;
     private final IProcedureRepository procedureRepository;
     private final IPrescriptionRepository prescriptionRepository;
@@ -44,6 +43,7 @@ public class TreatmentTemplateMapper {
         dto.setNotes(step.getNotes());
         dto.setTreatmentId(step.getTemplate() != null ? step.getTemplate().getId() : null);
         dto.setTreatmentName(step.getTemplate() != null ? step.getTemplate().getName() : null);
+
 
         // Tùy theo typeId, load itemDetails
         switch (step.getStepType().getTypeName().toLowerCase()) {

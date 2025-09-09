@@ -21,4 +21,6 @@ public class TreatmentStepTemplateDTO {
     private Long itemId; // ID don thuốc/xét nghiệm/thủ thuật
     private Object itemDetails;
 
+    private String results; // Kết quả sau khi thực hiện bước
+
 }

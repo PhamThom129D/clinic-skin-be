@@ -18,22 +18,21 @@ import java.util.stream.Collectors;
 public class MedicalRecordService {
 
     private final IMedicalRecordRepository medicalRecordRepo;
-    private final IVisitSessionRepository visitSessionRepo;
-    private final IDoctorRepository doctorRepo;
     private final IPatientRepository patientRepo;
+    private final MedicalRecordMapper medicalRecordMapper;
 
     // Lấy tất cả hồ sơ khám
     public List<MedicalRecordDTO> getAllMedicalRecords() {
         return medicalRecordRepo.findAll()
                 .stream()
-                .map(MedicalRecordMapper::toDTO)
+                .map(medicalRecordMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     // Lấy hồ sơ theo ID
     public MedicalRecordDTO getMedicalRecordById(Long id) {
         return medicalRecordRepo.findById(id)
-                .map(MedicalRecordMapper::toDTO)
+                .map(medicalRecordMapper::toDTO)
                 .orElse(null);
     }
 
@@ -49,7 +48,7 @@ public class MedicalRecordService {
         record.setCreatedAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : java.time.LocalDateTime.now());
 
         MedicalRecord saved = medicalRecordRepo.save(record);
-        return MedicalRecordMapper.toDTO(saved);
+        return medicalRecordMapper.toDTO(saved);
     }
 
     // Cập nhật
@@ -67,7 +66,7 @@ public class MedicalRecordService {
         record.setUpdatedAt(java.time.LocalDateTime.now());
 
         MedicalRecord updated = medicalRecordRepo.save(record);
-        return MedicalRecordMapper.toDTO(updated);
+        return medicalRecordMapper.toDTO(updated);
     }
 
 

@@ -33,4 +33,5 @@ public class TreatmentStep {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id", nullable = false)
     private TreatmentPlan treatmentPlan;
+
 }

@@ -5,10 +5,19 @@ import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.medical.VisitSession;
 import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentPlan;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@AllArgsConstructor
 public class VisitSessionMapper {
 
-    public static VisitSessionDTO toDTO(VisitSession session) {
+    private final TreatmentPlanMapper treatmentPlanMapper;
+
+    // ===============================
+    // Map VisitSession -> VisitSessionDTO
+    // ===============================
+    public VisitSessionDTO toDTO(VisitSession session) {
         if (session == null) return null;
 
         return VisitSessionDTO.builder()
@@ -19,21 +28,25 @@ public class VisitSessionMapper {
                 .sessionDate(session.getSessionDate())
                 .symptoms(session.getSymptoms())
                 .clinicalNotes(session.getClinicalNotes())
-                .treatmentPlanId(session.getTreatmentPlan() != null ? session.getTreatmentPlan().getId() : null)
-                .treatmentPlanName(session.getTreatmentPlan() != null ? session.getTreatmentPlan().getTreatmentName() : null)
+                .treatmentPlan(treatmentPlanMapper.toDTO(session.getTreatmentPlan()))
                 .createdAt(session.getCreatedAt())
                 .updatedAt(session.getUpdatedAt())
                 .build();
     }
 
-    public static VisitSession toEntity(VisitSessionDTO dto) {
+    // ===============================
+    // Map VisitSessionDTO -> VisitSession
+    // ===============================
+    public VisitSession toEntity(VisitSessionDTO dto) {
         if (dto == null) return null;
 
         VisitSession.VisitSessionBuilder builder = VisitSession.builder()
                 .sessionId(dto.getSessionId())
                 .sessionDate(dto.getSessionDate())
                 .symptoms(dto.getSymptoms())
-                .clinicalNotes(dto.getClinicalNotes());
+                .clinicalNotes(dto.getClinicalNotes())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt());
 
         // Gắn medicalRecord nếu có recordId
         if (dto.getRecordId() != null) {
@@ -49,10 +62,10 @@ public class VisitSessionMapper {
                     .build());
         }
 
-        // Gắn treatmentPlan nếu có treatmentPlanId
-        if (dto.getTreatmentPlanId() != null) {
+        // Gắn treatmentPlan nếu có DTO
+        if (dto.getTreatmentPlan() != null && dto.getTreatmentPlan().getId() != null) {
             builder.treatmentPlan(TreatmentPlan.builder()
-                    .id(dto.getTreatmentPlanId())
+                    .id(dto.getTreatmentPlan().getId())
                     .build());
         }
 
