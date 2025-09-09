@@ -64,7 +64,7 @@ public class AISuggestionService {
 
         // Lấy danh sách bệnh từ treatment template
         List<String> disease = treatmentTemplateRepo.findAll().stream()
-                .map(TreatmentTemplate::getDisease_name)
+                .map(TreatmentTemplate::getDiseaseName)
                 .collect(Collectors.toList());
 
         // Tạo prompt

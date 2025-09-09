@@ -34,6 +34,12 @@ public class TreatmentTemplateService {
     public TreatmentTemplateDTO getTreatmentTemplateById(Long id) {
         return treatmentTemplateRepository.findById(id).map(mapper::toDTO).orElse(null);
     }
+    public TreatmentTemplateDTO getTreatmentTemplateByDiagnoseName(String diagnoseName) {
+        return treatmentTemplateRepository.findTreatmentTemplateByDiseaseName(diagnoseName)
+                .map(mapper::toDTO)
+                .orElse(null);
+    }
+
 
     public TreatmentStepTemplateDTO getTreatmentStepTemplateById(Long id) {
         return treatmentStepTemplateRepository.findById(id).map(mapper::toDTO).orElse(null);
