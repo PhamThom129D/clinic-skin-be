@@ -39,7 +39,7 @@ public class AISuggestRestController {
         }
     }
 
-    @PostMapping("/suggest-visit-summary")
+    @GetMapping("/suggest-visit-summary")
     public ResponseEntity<?> suggestVisitSummary(@RequestParam Long recordId) {
         try {
             Map<String, Object> result = aiSuggestionService.suggestVisitSummaryByRecord(recordId);

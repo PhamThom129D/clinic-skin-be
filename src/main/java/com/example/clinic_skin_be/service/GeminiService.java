@@ -1,8 +1,8 @@
-
 package com.example.clinic_skin_be.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,45 +11,65 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class GeminiService {
 
-    @Value("${gemini.api.key}")
-    private String geminiApiKey;
+    @Value("${gemini.api.keys}")
+    private String geminiApiKeysStr;
+
+
+    private List<String> geminiApiKeys;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String GEMINI_API_URL =
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    /**
-     * Gọi API Gemini và trả về raw JSON string
-     */
-    public String callGeminiApi(String prompt) throws Exception {
-        String jsonInput = "{ \"contents\": [{\"parts\":[{\"text\":\"" + prompt.replace("\"", "\\\"") + "\"}]}]}";
-
-        URL url = new URL(GEMINI_API_URL + geminiApiKey);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        conn.setDoOutput(true);
-
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
-        }
-
-        InputStream is = (conn.getResponseCode() >= 400) ? conn.getErrorStream() : conn.getInputStream();
-        return (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8) : "";
+    @PostConstruct
+    private void init() {
+        geminiApiKeys = Arrays.stream(geminiApiKeysStr.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
     }
 
     /**
-     * Parse JSON trả về từ AI, trả về map các field theo danh sách expectedFields
+     * Gọi API Gemini với cơ chế thử nhiều key
      */
+    public String callGeminiApi(String prompt) throws Exception {
+        String jsonInput = "{ \"contents\": [{\"parts\":[{\"text\":\""
+                + prompt.replace("\"", "\\\"") + "\"}]}]}";
+
+        Exception lastException = null;
+
+        for (String key : geminiApiKeys) {
+            try {
+                URL url = new URL(GEMINI_API_URL + key);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                conn.setDoOutput(true);
+
+                try (OutputStream os = conn.getOutputStream()) {
+                    os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
+                }
+
+                InputStream is = (conn.getResponseCode() >= 400) ? conn.getErrorStream() : conn.getInputStream();
+                String response = (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8) : "";
+
+                if (!response.isEmpty() && conn.getResponseCode() < 400) {
+                    return response;
+                }
+
+            } catch (Exception e) {
+                lastException = e;
+            }
+        }
+
+        throw lastException != null ? lastException : new RuntimeException("All Gemini API keys failed");
+    }
+
     public Map<String, Object> parseAiResponse(String aiResponse, List<String> expectedFields) {
         Map<String, Object> result = new HashMap<>();
         try {
@@ -83,9 +103,6 @@ public class GeminiService {
         return result;
     }
 
-    /**
-     * Wrapper tiện lợi: gọi API + parse JSON
-     */
     public Map<String, Object> getAISuggestions(String prompt, List<String> expectedFields) {
         try {
             String aiResponse = callGeminiApi(prompt);

@@ -6,9 +6,12 @@ import com.example.clinic_skin_be.model.medical.treatment_plan.StepType;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.IStepTypeRepository;
 import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentTemplateService;
 import lombok.AllArgsConstructor;
+import okhttp3.Request;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/treatment-templates")
@@ -34,6 +37,18 @@ public class TreatmentTemplateRestController {
     public TreatmentTemplateDTO createTemplate(@RequestBody TreatmentTemplateDTO dto) {
         return treatmentTemplateService.saveTreatmentTemplate(dto);
     }
+    @PostMapping("/by-diagnose")
+    public ResponseEntity<TreatmentTemplateDTO> getTreatmentTemplateByDiagnoseName(@RequestBody Map<String, String> request) {
+        String diagnoseName = request.get("diagnoseName");
+        TreatmentTemplateDTO dto = treatmentTemplateService.getTreatmentTemplateByDiagnoseName(diagnoseName);
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dto);
+    }
+
+
 
     @PutMapping("/{id}")
     public TreatmentTemplateDTO updateTemplate(@PathVariable Long id, @RequestBody TreatmentTemplateDTO dto) {
