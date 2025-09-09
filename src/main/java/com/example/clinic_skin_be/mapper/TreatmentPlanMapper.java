@@ -41,6 +41,7 @@ public class TreatmentPlanMapper {
         dto.setNotes(step.getNotes());
         dto.setTreatmentId(step.getTreatmentPlan() != null ? step.getTreatmentPlan().getId() : null);
         dto.setTreatmentName(step.getTreatmentPlan() != null ? step.getTreatmentPlan().getTreatmentName() : null);
+        dto.setResults(step.getResults());
 
         // Load itemDetails theo loại
         switch (step.getStepType().getTypeName().toLowerCase()) {

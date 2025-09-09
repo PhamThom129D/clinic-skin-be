@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -19,6 +18,18 @@ public class AISuggestRestController {
     public ResponseEntity<?> suggestTreatment(@RequestParam Long sessionId) {
         try {
             Map<String, Object> result = aiSuggestionService.suggestLabTestAndTreatment(sessionId);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body(Map.of("error", "Lỗi hệ thống: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/suggest-visit-summary")
+    public ResponseEntity<?> suggestVisitSummary(@RequestParam Long recordId) {
+        try {
+            Map<String, Object> result = aiSuggestionService.suggestVisitSummaryByRecord(recordId);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
