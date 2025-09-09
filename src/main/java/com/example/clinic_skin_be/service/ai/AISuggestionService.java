@@ -72,7 +72,6 @@ public class AISuggestionService {
     }
 
     /** Tạo prompt tóm tắt lịch sử khám */
-    /** Tạo prompt tóm tắt lịch sử khám (siêu ngắn gọn, JSON superShort, hỗ trợ bác sĩ) */
     public String buildPromptVisitHistory(String symptoms, List<String> medications, List<String> procedures,
                                           List<String> labTests, List<String> results) {
         return "Bệnh nhân có triệu chứng: " + symptoms + ".\n" +

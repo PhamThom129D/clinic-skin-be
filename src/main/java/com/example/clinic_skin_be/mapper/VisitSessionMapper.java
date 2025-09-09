@@ -23,6 +23,9 @@ public class VisitSessionMapper {
         return VisitSessionDTO.builder()
                 .sessionId(session.getSessionId())
                 .recordId(session.getMedicalRecord() != null ? session.getMedicalRecord().getRecordId() : null)
+                .patientName(session.getMedicalRecord() != null && session.getMedicalRecord().getPatient() != null
+                        ? session.getMedicalRecord().getPatient().getAccount().getFullName()
+                        : null)
                 .doctorId(session.getDoctor() != null ? session.getDoctor().getId() : null)
                 .doctorName(session.getDoctor() != null ? session.getDoctor().getAccount().getFullName() : null)
                 .sessionDate(session.getSessionDate())
