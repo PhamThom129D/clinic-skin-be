@@ -1,4 +1,4 @@
-package com.example.clinic_skin_be.model.staff.consultant;
+package com.example.clinic_skin_be.model.staff.consultation;
 
 import com.example.clinic_skin_be.model.staff.consultation.ConsultationAssignment;
 import com.fasterxml.jackson.annotation.JsonIgnore;

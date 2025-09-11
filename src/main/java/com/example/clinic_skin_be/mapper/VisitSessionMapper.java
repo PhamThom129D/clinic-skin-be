@@ -30,6 +30,7 @@ public class VisitSessionMapper {
                 .doctorName(session.getDoctor() != null ? session.getDoctor().getAccount().getFullName() : null)
                 .sessionDate(session.getSessionDate())
                 .symptoms(session.getSymptoms())
+                .diagnosis(session.getDiagnosis())
                 .clinicalNotes(session.getClinicalNotes())
                 .treatmentPlan(treatmentPlanMapper.toDTO(session.getTreatmentPlan()))
                 .createdAt(session.getCreatedAt())
@@ -47,6 +48,7 @@ public class VisitSessionMapper {
                 .sessionId(dto.getSessionId())
                 .sessionDate(dto.getSessionDate())
                 .symptoms(dto.getSymptoms())
+                .diagnosis(dto.getDiagnosis())
                 .clinicalNotes(dto.getClinicalNotes())
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt());

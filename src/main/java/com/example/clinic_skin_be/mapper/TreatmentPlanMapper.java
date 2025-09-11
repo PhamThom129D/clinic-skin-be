@@ -75,7 +75,7 @@ public class TreatmentPlanMapper {
                 plan.getId(),
                 plan.getTreatmentName(),
                 plan.getDisease_name(),
-                null, // TreatmentPlan không có description, để null
+                null,
                 stepsDTO
         );
     }

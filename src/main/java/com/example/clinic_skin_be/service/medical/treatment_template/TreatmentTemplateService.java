@@ -68,4 +68,8 @@ public class TreatmentTemplateService {
     public void deleteTreatmentStepTemplate(Long id) {
         treatmentStepTemplateRepository.deleteById(id);
     }
+
+    public TreatmentTemplate getTreatmentTemplateEntityById(Long id) {
+        return treatmentTemplateRepository.findById(id).orElse(null);
+    }
 }

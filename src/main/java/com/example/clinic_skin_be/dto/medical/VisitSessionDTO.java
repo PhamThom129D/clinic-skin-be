@@ -20,9 +20,11 @@ public class VisitSessionDTO {
 
     private LocalDateTime sessionDate;
     private String symptoms;
+    private String diagnosis;
     private String clinicalNotes;
 
     private TreatmentTemplateDTO treatmentPlan;
+
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
