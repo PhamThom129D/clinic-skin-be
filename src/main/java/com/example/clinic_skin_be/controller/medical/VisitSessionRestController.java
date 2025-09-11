@@ -1,6 +1,10 @@
 package com.example.clinic_skin_be.controller.medical;
 
+import com.example.clinic_skin_be.dto.UpdateVisitSessionRequest;
+import com.example.clinic_skin_be.dto.medical.DoctorVisitSessionDTO;
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
+import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDetailDTO;
+import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,18 +39,25 @@ public class VisitSessionRestController {
     public ResponseEntity<VisitSessionDTO> createSession(
             @PathVariable Long recordId,
             @RequestBody VisitSessionDTO dto) {
-        return ResponseEntity.ok(visitSessionService.saveVisitSession(recordId, dto));
+        return ResponseEntity.ok(visitSessionService.createVisitSession(recordId, dto));
     }
 
-    // Cap nhat phien
-    @PutMapping("/{id}/record/{recordId}")
+    @PutMapping("/{id}/record")
     public ResponseEntity<VisitSessionDTO> updateSession(
             @PathVariable Long id,
-            @PathVariable Long recordId,
-            @RequestBody VisitSessionDTO dto) {
-        dto.setSessionId(id);
-        return ResponseEntity.ok(visitSessionService.saveVisitSession(recordId, dto));
+            @RequestBody UpdateVisitSessionRequest request) {
+
+        request.getSession().setSessionId(id);
+        return ResponseEntity.ok(
+                visitSessionService.updateVisitSession(
+                        request.getDoctorVisit(),
+                        request.getSession(),
+                        request.getSteps(),
+                        request.getPrescriptions()
+                )
+        );
     }
+
 
 
     // Xoá phiên khám

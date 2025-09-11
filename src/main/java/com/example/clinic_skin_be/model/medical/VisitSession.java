@@ -32,7 +32,7 @@ public class VisitSession {
     private MedicalRecord medicalRecord;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     @Column(name = "session_date", nullable = false)
@@ -40,6 +40,9 @@ public class VisitSession {
 
     @Column(columnDefinition = "TEXT")
     private String symptoms; // Trieu chung
+
+    @Column(columnDefinition = "TEXT")
+    private String diagnosis;
 
     @Column(name = "clinical_notes", columnDefinition = "TEXT")
     private String clinicalNotes;

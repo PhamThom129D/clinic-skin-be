@@ -6,6 +6,7 @@ import com.example.clinic_skin_be.mapper.TreatmentPlanMapper;
 import com.example.clinic_skin_be.model.medical.treatment_plan.StepType;
 import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentPlan;
 import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentStep;
+import com.example.clinic_skin_be.model.medical.treatment_template.TreatmentStepTemplate;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentPlanRepository;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentStepRepository;
 import lombok.AllArgsConstructor;
@@ -61,8 +62,19 @@ public class TreatmentPlanService {
                 .orElse(null);
     }
 
+    public TreatmentStep getStepEntityByTreatmentId(Long id) {
+        return stepRepo.getTreatmentStepByTreatmentPlan_Id(id);
+    }
+    public TreatmentStep getStepEntityById(Long id) {
+        return stepRepo.findById(id).orElse(null);
+    }
+
 
     public void deleteStep(Long id) {
         stepRepo.deleteById(id);
+    }
+
+    public TreatmentPlan savePlanEntity(TreatmentPlan realPlan) {
+        return planRepo.save(realPlan);
     }
 }

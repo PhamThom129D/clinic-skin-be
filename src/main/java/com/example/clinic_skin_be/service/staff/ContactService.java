@@ -6,13 +6,13 @@ import com.example.clinic_skin_be.exception.AssignmentAlreadyExistsException;
 import com.example.clinic_skin_be.exception.ContactNotFoundException;
 import com.example.clinic_skin_be.exception.ConsultantNotFoundException;
 import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
+import com.example.clinic_skin_be.model.staff.consultation.Consultant;
 import com.example.clinic_skin_be.model.staff.consultation.ConsultationAssignment;
 import com.example.clinic_skin_be.model.staff.consultation.Contacts;
 import com.example.clinic_skin_be.repository.staff.IConsultantRepository;
-import com.example.clinic_skin_be.repository.staff.IConsultationAssignmentRepository;
-import com.example.clinic_skin_be.repository.staff.IContactRepository;
+import com.example.clinic_skin_be.repository.staff.booking.IConsultationAssignmentRepository;
+import com.example.clinic_skin_be.repository.staff.booking.IContactRepository;
 import lombok.AllArgsConstructor;
-import com.example.clinic_skin_be.model.staff.consultant.Consultant;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

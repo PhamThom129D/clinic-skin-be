@@ -24,10 +24,8 @@ public class AISuggestRestController {
             Map<String, Object> result;
 
             if (labTest != null && !labTest.isEmpty() && labResult != null && !labResult.isEmpty()) {
-                // --- Trường hợp có kết quả xét nghiệm → dự đoán bệnh duy nhất
                 result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, labTest, labResult);
             } else {
-                // --- Trường hợp chỉ có triệu chứng → gợi ý xét nghiệm + bệnh
                 result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, null, null);
             }
 

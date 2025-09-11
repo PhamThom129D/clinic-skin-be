@@ -24,9 +24,11 @@ public class MedicalRecordRestController {
     // Lấy hồ sơ khám theo ID
     @GetMapping("/{id}")
     public ResponseEntity<MedicalRecordDTO> getRecordById(@PathVariable Long id) {
-        MedicalRecordDTO dto = medicalRecordService.getMedicalRecordById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        return medicalRecordService.getMedicalRecordById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @PostMapping
     public ResponseEntity<MedicalRecordDTO> createRecord(@RequestBody MedicalRecordDTO dto) {
