@@ -81,6 +81,7 @@ public class TreatmentTemplateMapper {
                 template.getId(),
                 template.getName(),
                 template.getDescription(),
+                template.getDiseaseName(),
                 stepsDTO
         );
     }
@@ -102,6 +103,7 @@ public class TreatmentTemplateMapper {
         TreatmentTemplate template = new TreatmentTemplate();
         template.setId(dto.getId());
         template.setName(dto.getName());
+        template.setDiseaseName(dto.getDisease_name());
         template.setDescription(dto.getDescription());
         return template;
     }

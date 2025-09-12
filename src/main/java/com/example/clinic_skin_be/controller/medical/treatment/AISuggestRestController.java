@@ -14,10 +14,21 @@ public class AISuggestRestController {
     @Autowired
     private AISuggestionService aiSuggestionService;
 
-    @GetMapping("/suggest-lab-test-and-treatment")
-    public ResponseEntity<?> suggestTreatment(@RequestParam Long sessionId) {
+    @PostMapping("/suggest-lab-test-and-treatment")
+    public ResponseEntity<?> suggestTreatment(@RequestBody Map<String, String> request) {
         try {
-            Map<String, Object> result = aiSuggestionService.suggestLabTestAndTreatment(sessionId);
+            String symptoms = request.get("symptoms");
+            String labTest = request.get("labTest");
+            String labResult = request.get("labResult");
+
+            Map<String, Object> result;
+
+            if (labTest != null && !labTest.isEmpty() && labResult != null && !labResult.isEmpty()) {
+                result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, labTest, labResult);
+            } else {
+                result = aiSuggestionService.suggestLabTestAndTreatment(symptoms, null, null);
+            }
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();

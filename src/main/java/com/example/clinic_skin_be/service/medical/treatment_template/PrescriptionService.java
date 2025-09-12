@@ -19,7 +19,6 @@ public class PrescriptionService {
 
     private final IPrescriptionRepository prescriptionRepository;
     private final IPrescriptionDetailRepository detailRepository;
-    private final IMedicationRepository medicationRepository;
     private final PrescriptionMapper mapper;
 
     // ------------------- PRESCRIPTION -------------------

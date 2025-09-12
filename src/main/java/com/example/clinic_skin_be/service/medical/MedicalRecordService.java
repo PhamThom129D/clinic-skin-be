@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +31,9 @@ public class MedicalRecordService {
     }
 
     // Lấy hồ sơ theo ID
-    public MedicalRecordDTO getMedicalRecordById(Long id) {
+    public Optional<MedicalRecordDTO> getMedicalRecordById(Long id) {
         return medicalRecordRepo.findById(id)
-                .map(medicalRecordMapper::toDTO)
-                .orElse(null);
+                .map(medicalRecordMapper::toDTO);
     }
 
 

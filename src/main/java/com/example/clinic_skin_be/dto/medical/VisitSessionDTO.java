@@ -13,15 +13,18 @@ import java.time.LocalDateTime;
 public class VisitSessionDTO {
     private Long sessionId;
     private Long recordId;
+    private String patientName;
 
     private Long doctorId;
     private String doctorName;
 
     private LocalDateTime sessionDate;
     private String symptoms;
+    private String diagnosis;
     private String clinicalNotes;
 
     private TreatmentTemplateDTO treatmentPlan;
+
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

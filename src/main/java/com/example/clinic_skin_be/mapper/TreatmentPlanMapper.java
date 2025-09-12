@@ -74,7 +74,8 @@ public class TreatmentPlanMapper {
         return new TreatmentTemplateDTO(
                 plan.getId(),
                 plan.getTreatmentName(),
-                null, // TreatmentPlan không có description, để null
+                plan.getDisease_name(),
+                null,
                 stepsDTO
         );
     }
@@ -95,6 +96,7 @@ public class TreatmentPlanMapper {
     public TreatmentPlan fromDTO(TreatmentTemplateDTO dto) {
         TreatmentPlan plan = new TreatmentPlan();
         plan.setId(dto.getId());
+        plan.setTreatmentName(dto.getDisease_name());
         plan.setTreatmentName(dto.getName());
         return plan;
     }

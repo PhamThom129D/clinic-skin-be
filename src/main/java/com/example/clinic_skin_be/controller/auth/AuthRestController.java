@@ -23,63 +23,72 @@ public class AuthRestController {
 
     private final IAuthService authService;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
+
+    // --- GOOGLE LOGIN ---
     @PostMapping("/login-google")
     public ResponseEntity<?> loginWithGoogle(@RequestBody Map<String, String> body) {
-        String token = body.get("token");
-        AuthResponse authResponse = authService.loginWithGoogle(token);
-        return ResponseEntity.ok(authResponse);
+        try {
+            String token = body.get("token");
+            AuthResponse authResponse = authService.loginWithGoogle(token);
+            return ResponseEntity.ok(authResponse);
+        } catch (Exception e) {
+            logger.error("Google login failed", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đăng nhập Google thất bại: " + e.getMessage());
+        }
     }
+
+    // --- REGISTER ---
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @ModelAttribute AccountRequest accountRequest) {
         try {
             return ResponseEntity.ok(authService.register(accountRequest));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Register failed", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-
+    // --- LOGIN ---
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        AuthResponse authResponse = authService.login(loginRequest);
         try {
+            long start = System.currentTimeMillis();
+            AuthResponse authResponse = authService.login(loginRequest);
+            long end = System.currentTimeMillis();
+            logger.info("Login success for {} in {} ms", loginRequest.getEmailOrPhone(), (end - start));
             return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đăng nhap thất bại: " + e.getMessage());
+            logger.error("Login failed for {}", loginRequest.getEmailOrPhone(), e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đăng nhập thất bại: " + e.getMessage());
         }
     }
 
-
+    // --- LOGIN OTP ---
     @PostMapping("/login-otp")
     public ResponseEntity<String> loginWithOtp(@RequestBody LoginRequest loginRequest) {
         try {
             authService.loginWithOtp(loginRequest);
             return ResponseEntity.ok("OTP sent successfully");
-        } catch (RuntimeException ex) {
-            log.error("Lỗi khi đăng nhập bằng OTP: {}", ex.getMessage());
+        } catch (Exception ex) {
+            logger.error("Lỗi khi đăng nhập bằng OTP: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
 
+    // --- RESEND OTP ---
     @PostMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestBody LoginRequest loginRequest) {
         try {
             authService.resendOtp(loginRequest);
             return ResponseEntity.ok("OTP resent successfully");
-        } catch (RuntimeException e) {
-            System.err.println("[ERROR] Resend OTP failed: " + e.getMessage());
-            return ResponseEntity.badRequest().body("Failed to resend OTP: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("[UNEXPECTED ERROR] " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error occurred.");
+            logger.error("Resend OTP failed: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to resend OTP: " + e.getMessage());
         }
     }
 
-
-    private static final Logger logger = LoggerFactory.getLogger(AuthRestController.class);
-
+    // --- VERIFY OTP ---
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody LoginRequest loginRequest) {
         try {
@@ -89,7 +98,19 @@ public class AuthRestController {
             logger.error("OTP verification failed for email: {}", loginRequest.getEmailOrPhone(), e);
             return ResponseEntity
                     .badRequest()
-                    .body(Map.of("error", "Invalid OTP . Please try again."));
+                    .body(Map.of("error", "Invalid OTP. Please try again."));
+        }
+    }
+
+    // --- LOGOUT ---
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        try {
+            // Nếu backend có session/token invalidation thì xử lý ở đây
+            return ResponseEntity.ok("Logged out successfully");
+        } catch (Exception e) {
+            logger.error("Logout failed", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed: " + e.getMessage());
         }
     }
 }

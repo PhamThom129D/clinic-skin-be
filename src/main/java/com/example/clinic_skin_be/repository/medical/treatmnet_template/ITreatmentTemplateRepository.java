@@ -5,6 +5,10 @@ import com.example.clinic_skin_be.model.medical.treatment_template.TreatmentTemp
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface ITreatmentTemplateRepository extends JpaRepository<TreatmentTemplate,Long> {
+public interface ITreatmentTemplateRepository extends JpaRepository<TreatmentTemplate, Long> {
+    Optional<TreatmentTemplate> findTreatmentTemplateByDiseaseName(String diagnoseName);
 }
+

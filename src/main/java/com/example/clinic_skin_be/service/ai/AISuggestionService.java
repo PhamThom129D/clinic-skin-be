@@ -43,36 +43,58 @@ public class AISuggestionService {
     private IProcedureRepository procedureRepo;
 
 
+    /**
+     * Build prompt cho AI. Nếu có kết quả xét nghiệm, sẽ yêu cầu chẩn đoán duy nhất.
+     */
+    private String buildPrompt(String symptoms, List<String> allLabTests, List<String> allDiseases,
+                               String labTest, String labResult) {
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("Bệnh nhân có triệu chứng: ").append(symptoms)
+                .append(". Chỉ sử dụng các xét nghiệm có sẵn: ").append(String.join(", ", allLabTests))
+                .append(". Chỉ sử dụng các bệnh có sẵn: ").append(String.join(", ", allDiseases))
+                .append(".\n");
 
-    /** Tạo prompt gợi ý LabTest + Treatment */
-    public String buildPromptLabTest(String symptoms, List<String> labTests, List<String> treatments) {
-        return "Bệnh nhân có triệu chứng: " + symptoms +
-                ". Danh sách xét nghiệm có thể chọn: " + String.join(", ", labTests) +
-                ". Danh sách phác đồ mẫu có sẵn: " + String.join(", ", treatments) +
-                ". Hãy phân tích triệu chứng này và gợi ý:\n" +
-                "1) Các xét nghiệm nên làm trước chẩn đoán (possibleLabTests)\n" +
-                "2) Các phác đồ điều trị phù hợp (possibleTreatments)\n" +
-                "Trả về JSON hợp lệ ví dụ: {\"possibleLabTests\": [\"<xét nghiệm 1>\", ...], \"possibleTreatments\": [\"<phác đồ 1>\", ...] }";
+        if (labTest != null && !labTest.isEmpty() && labResult != null && !labResult.isEmpty()) {
+            prompt.append("Kết quả xét nghiệm: ").append(labTest)
+                    .append(" = ").append(labResult).append(".\n")
+                    .append("Dựa vào kết quả này . Chỉ sử dụng các bệnh có sẵn: ").append(String.join(", ", allDiseases))
+                    .append("không được thêm bệnh mới.\n");
+        } else {
+            prompt.append("Hãy phân tích triệu chứng này và gợi ý:\n")
+                    .append("1) Các xét nghiệm nên làm trước chẩn đoán (possibleLabTests)\n")
+                    .append("2) Các bệnh có thể gặp phải phù hợp (possibleDiseases)\n");
+        }
+
+        prompt.append("Trả về JSON hợp lệ, bắt buộc chỉ chọn từ danh sách có sẵn, ví dụ: ")
+                .append("{\"possibleLabTests\": [\"<xét nghiệm>\", ...], ")
+                .append("\"possibleDiseases\": [\"<bệnh>\", ...]}");
+
+        return prompt.toString();
     }
 
-    public Map<String, Object> suggestLabTestAndTreatment(Long sessionId) {
-        VisitSession session = visitSessionRepo.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Visit session not found"));
-
-        List<String> labTests = labTestRepo.findAll().stream()
+    /**
+     * Gợi ý xét nghiệm + bệnh dựa trên triệu chứng, hoặc chẩn đoán duy nhất nếu có kết quả xét nghiệm.
+     */
+    public Map<String, Object> suggestLabTestAndTreatment(String symptoms, String labTest, String labResult) {
+        List<String> allLabTests = labTestRepo.findAll().stream()
                 .map(p -> p.getName())
                 .collect(Collectors.toList());
 
-        List<String> treatments = treatmentTemplateRepo.findAll().stream()
-                .map(TreatmentTemplate::getName)
+        List<String> allDiseases = treatmentTemplateRepo.findAll().stream()
+                .map(TreatmentTemplate::getDiseaseName)
                 .collect(Collectors.toList());
 
-        String prompt = buildPromptLabTest(session.getSymptoms(), labTests, treatments);
-        return aiClient.getAISuggestions(prompt, Arrays.asList("possibleLabTests", "possibleTreatments"));
+        String prompt = buildPrompt(symptoms, allLabTests, allDiseases, labTest, labResult);
+
+        // Nếu có labResult, trả về chỉ possibleDiseases, không cần possibleLabTests
+        List<String> keys = (labTest != null && !labTest.isEmpty() && labResult != null && !labResult.isEmpty())
+                ? Arrays.asList("possibleDiseases")
+                : Arrays.asList("possibleLabTests", "possibleDiseases");
+
+        return aiClient.getAISuggestions(prompt, keys);
     }
 
     /** Tạo prompt tóm tắt lịch sử khám */
-    /** Tạo prompt tóm tắt lịch sử khám (siêu ngắn gọn, JSON superShort, hỗ trợ bác sĩ) */
     public String buildPromptVisitHistory(String symptoms, List<String> medications, List<String> procedures,
                                           List<String> labTests, List<String> results) {
         return "Bệnh nhân có triệu chứng: " + symptoms + ".\n" +

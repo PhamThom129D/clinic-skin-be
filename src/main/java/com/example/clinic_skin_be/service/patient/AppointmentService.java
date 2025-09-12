@@ -10,7 +10,7 @@ import com.example.clinic_skin_be.model.user.Appointment;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import com.example.clinic_skin_be.repository.patient.IPatientRepository;
 import com.example.clinic_skin_be.repository.user.IAccountRepository;
-import com.example.clinic_skin_be.repository.user.IAppointmentRepository;
+import com.example.clinic_skin_be.repository.staff.booking.IAppointmentRepository;
 import com.example.clinic_skin_be.service.auth.impl.EmailService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

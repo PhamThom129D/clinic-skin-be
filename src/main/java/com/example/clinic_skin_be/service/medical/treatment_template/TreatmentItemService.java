@@ -52,6 +52,4 @@ public class TreatmentItemService {
     public StepType saveStepType(StepType stepType) {
         return stepTypeRepository.save(stepType);
     }
-
-
 }

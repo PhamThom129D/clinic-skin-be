@@ -24,6 +24,8 @@ public class TreatmentPlan {
     @Column(name="treatment_name" ,nullable = false)
     private String treatmentName; // Tên phác đồ
 
+    private String disease_name;
+
     // 1 TreatmentPlan có nhiều bước
     @OneToMany(mappedBy = "treatmentPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TreatmentStep> steps = new ArrayList<>();
