@@ -1,4 +1,3 @@
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.4'
@@ -7,8 +6,6 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-
-
 
 configurations {
     compileOnly {
@@ -37,51 +34,51 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'   // Spring JDBC
 
     // ====== MySQL Driver ======
-    runtimeOnly 'com.mysql:mysql-connector-j'                                  // MySQL JDBC driver
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // ====== Template Engine Extras ======
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'    // Spring Security support in Thymeleaf
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
     // ====== JWT Dependencies ======
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'        // JWT API
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'           // JWT core implementation
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'        // Use Jackson for JSON parsing in JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // ====== Cloudinary SDK for Image Upload ======
     implementation 'com.cloudinary:cloudinary-http44:1.37.0'
 
-    // ====== Lombok (code generator) ======
+    // ====== Lombok ======
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // ====== Devtools (hot reload during dev only) ======
+    // ====== Devtools ======
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // ====== Testing Dependencies ======
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'    // JUnit, Mockito...
-    testImplementation 'org.springframework.security:spring-security-test'    // Security test helpers
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'              // JUnit platform runtime
+    // ====== Testing ======
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // ====== Send Mail ======
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // ====== Logger ======
     implementation 'org.slf4j:slf4j-api:2.0.12'
-//    implementation 'org.slf4j:slf4j-simple:2.0.12'
 
     // ====== Gemini API ======
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
-
+    // ====== MapStruct ======
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-
-    // Nếu dùng Lombok song song thì thêm plugin này để tránh conflict
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
-    // Validation
+    // ====== Validation ======
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 
+    // ====== WebSocket (real-time chat) ======
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {
