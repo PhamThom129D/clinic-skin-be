@@ -136,14 +136,17 @@ public class SecurityConfig {
                         // Các API public
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/chat/**",
+//                                "/api/chat/**",
                                 "/api/contacts/**",
                                 "/api/appointments/**",
                                 "/api/doctors/**",
                                 "/api/screen-dashboard/**",
                                 "/api/ai-suggest/**",
-                                "/ws-chat/**"   // 👈 Cho phép WebSocket handshake
+                                "/ws-chat/**"
                         ).permitAll()
+
+                        .requestMatchers("/api/chat/**").permitAll()
+                        .requestMatchers("/api/chat/reply/**").hasAnyRole("ADMIN","CONSULTANT","PATIENT")
 
                         // Các API cho bác sĩ
                         .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")

@@ -16,14 +16,12 @@ public class ChatRestController {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    // Lưu chat tạm thời
     private final Map<String, List<ChatMessageResponse>> chatStore = new ConcurrentHashMap<>();
 
     private String getKey(Long senderId, String guestId) {
         return senderId != null ? "user-" + senderId : "guest-" + guestId;
     }
 
-    // 🔹 Gửi tin nhắn từ user/guest
     @PostMapping("/send")
     public ChatMessageResponse sendMessage(@RequestBody ChatMessageRequest request) {
         String key = getKey(request.getSenderId(), request.getGuestId());
@@ -51,14 +49,9 @@ public class ChatRestController {
         return response;
     }
 
-
-    // 🔹 Staff trả lời
     @PostMapping("/reply")
     public ChatMessageResponse replyMessage(@RequestBody ChatMessageRequest request,
                                             @RequestParam String role) {
-        if (!"ROLE_CONSULTANT".equals(role) && !"ROLE_ADMIN".equals(role)) {
-            throw new RuntimeException("❌ Không có quyền trả lời tin nhắn");
-        }
 
         String key = request.getGuestId() != null
                 ? "guest-" + request.getGuestId()
@@ -79,13 +72,11 @@ public class ChatRestController {
         return response;
     }
 
-    // 🔹 Lấy lịch sử chat
     @GetMapping("/history/{key}")
     public List<ChatMessageResponse> getHistory(@PathVariable String key) {
         return chatStore.getOrDefault(key, Collections.emptyList());
     }
 
-    // 🔹 Inbox cho staff
     @GetMapping("/inbox/{staffId}")
     public List<Map<String, Object>> getInbox(@PathVariable Long staffId) {
         List<Map<String, Object>> inbox = new ArrayList<>();
