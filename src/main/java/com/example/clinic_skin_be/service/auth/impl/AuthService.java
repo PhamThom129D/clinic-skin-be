@@ -179,8 +179,7 @@ public class AuthService implements IAuthService {
             throw new RuntimeException("Email không hợp lệ.");
         }
     }
-
-    @Override
+   @Override
     public void resendOtp(LoginRequest loginRequest) {
         if (loginRequest.getEmailOrPhone() == null || loginRequest.getEmailOrPhone().isBlank()) {
             throw new RuntimeException("Email or phone must not be empty.");
@@ -221,8 +220,6 @@ public class AuthService implements IAuthService {
         response.setToken(token);
         return response;
     }
-
-
     private Authentication performAuthentication(String identifier, String rawPassword) {
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(identifier, rawPassword)

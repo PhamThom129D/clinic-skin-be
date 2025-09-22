@@ -1,10 +1,7 @@
 package com.example.clinic_skin_be.controller.medical;
 
 import com.example.clinic_skin_be.dto.UpdateVisitSessionRequest;
-import com.example.clinic_skin_be.dto.medical.DoctorVisitSessionDTO;
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
-import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDetailDTO;
-import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,15 +45,17 @@ public class VisitSessionRestController {
             @RequestBody UpdateVisitSessionRequest request) {
 
         request.getSession().setSessionId(id);
+
         return ResponseEntity.ok(
                 visitSessionService.updateVisitSession(
-                        request.getDoctorVisit(),
                         request.getSession(),
                         request.getSteps(),
-                        request.getPrescriptions()
+                        request.getPrescriptions(),
+                        request.getLabTests()
                 )
         );
     }
+
 
 
 
