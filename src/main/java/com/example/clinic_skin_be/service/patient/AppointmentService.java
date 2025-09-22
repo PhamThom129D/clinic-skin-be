@@ -49,6 +49,7 @@ public class AppointmentService {
         Doctor doctor = findDoctor(request.getDoctorId());
         Appointment appointment = buildAppointment(patient, doctor, request);
         Appointment savedAppointment = appointmentRepository.save(appointment);
+
         emailService.sendAppointmentEmail(account, savedAppointment, isNewAccount);
 
         return savedAppointment;
@@ -81,6 +82,8 @@ public class AppointmentService {
 
         return accountRepository.save(account);
     }
+
+
 
     private Patient findOrCreatePatient(Account account, AppointmentRequest request) {
         return patientRepository.findByAccount(account)

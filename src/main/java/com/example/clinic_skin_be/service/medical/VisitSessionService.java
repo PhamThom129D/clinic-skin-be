@@ -1,6 +1,5 @@
 package com.example.clinic_skin_be.service.medical;
 
-import com.example.clinic_skin_be.dto.medical.DoctorVisitSessionDTO;
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDetailDTO;
@@ -10,6 +9,7 @@ import com.example.clinic_skin_be.mapper.TreatmentPlanMapper;
 import com.example.clinic_skin_be.mapper.VisitSessionMapper;
 import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.medical.VisitSession;
+import com.example.clinic_skin_be.model.medical.lab_test.LabTest;
 import com.example.clinic_skin_be.model.medical.medication.Medication;
 import com.example.clinic_skin_be.model.medical.medication.Prescription;
 import com.example.clinic_skin_be.model.medical.medication.PrescriptionDetail;
@@ -19,8 +19,11 @@ import com.example.clinic_skin_be.model.medical.treatment_plan.TreatmentStep;
 import com.example.clinic_skin_be.model.medical.treatment_template.TreatmentTemplate;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.repository.medical.IMedicalRecordRepository;
+import com.example.clinic_skin_be.repository.medical.medication.IPrescriptionDetailRepository;
+import com.example.clinic_skin_be.repository.medical.medication.IPrescriptionRepository;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentPlanRepository;
 import com.example.clinic_skin_be.repository.medical.IVisitSessionRepository;
+import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentStepRepository;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import com.example.clinic_skin_be.service.medical.treatment_plan.TreatmentPlanService;
 import com.example.clinic_skin_be.service.medical.treatment_template.PrescriptionService;
@@ -56,130 +59,129 @@ public class VisitSessionService {
     private final MedicalRecordService medicalRecordService;
     private final TreatmentItemService treatmentItemService;
     private final PrescriptionMapper prescriptionMapper;
+    private final ITreatmentStepRepository treatmentStepRepo;
+    private final IPrescriptionRepository prescriptionRepo;
+    private final IPrescriptionDetailRepository prescriptionDetailRepo;
 
+        // Gán bác sĩ và cập nhật triệu chứng/chẩn đoán
+        public void assignDoctorToSession(VisitSessionDTO dto, VisitSession session) {
+            if (dto.getDoctorId() != null) {
+                Doctor doctor = staffService.getDoctorById(dto.getDoctorId())
+                        .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                session.setDoctor(doctor);
+            }
+            if (dto.getSymptoms() != null) {
+                session.setSymptoms(dto.getSymptoms());
+            }
+            if (dto.getDiagnosis() != null) {
+                session.setDiagnosis(dto.getDiagnosis());
+            }
+            session.setUpdatedAt(LocalDateTime.now());
+        }
 
-    public void addPrescriptionToSession(VisitSession session,
-                                         List<PrescriptionDetailDTO> prescriptionDTOs,
-                                         TreatmentStepTemplateDTO stepTemplateDTO) {
-        if (prescriptionDTOs == null || prescriptionDTOs.isEmpty()) return;
+        // Clone treatment template thành plan thực tế
+        public TreatmentPlan cloneTemplate(VisitSessionDTO dto, TreatmentTemplate template) {
+            if (template == null) {
+                throw new RuntimeException("Treatment template not found");
+            }
+            TreatmentPlan realPlan = new TreatmentPlan();
+            realPlan.setTreatmentName(template.getName().concat(" - Phác đồ ").concat(dto.getPatientName()));
+            realPlan.setDisease_name(template.getDiseaseName());
+            return realPlan;
+        }
 
-        // 1. Tạo đơn thuốc mới
-        Prescription prescription = new Prescription();
-        prescription.setCreatedAt(LocalDateTime.now());
+        @Transactional
+        public VisitSessionDTO updateVisitSession(
+                VisitSessionDTO dto,
+                List<TreatmentStepTemplateDTO> stepDTOs,
+                List<PrescriptionDetailDTO> prescriptions,
+                List<LabTest> labTests
+        ) {
+            // 1. Lấy session hiện tại
+            VisitSession session = visitSessionRepo.findById(dto.getSessionId())
+                    .orElseThrow(() -> new RuntimeException("Visit session not found"));
 
-        // Lưu đơn thuốc để có ID
-        PrescriptionDTO savedPrescription = prescriptionService.savePrescription(prescription);
-        prescription = prescriptionMapper.fromDTO(savedPrescription);
-        prescription.setId(savedPrescription.getId());
+            // 2. Gán bác sĩ + chẩn đoán
+            assignDoctorToSession(dto, session);
 
-        // 2. Tạo chi tiết thuốc dựa trên DTO và lưu
-        List<PrescriptionDetail> details = new ArrayList<>();
-        for (PrescriptionDetailDTO dto : prescriptionDTOs) {
-            Medication medication = treatmentItemService.getMedicationById(dto.getMedicationId());
-            if (medication == null) {
-                throw new RuntimeException("Medication not found: " + dto.getMedicationId());
+            // 3. Tạo và lưu phác đồ thực tế
+            TreatmentTemplate template = treatmentTemplateServiceService
+                    .getTreatmentTemplateEntityById(dto.getTreatmentPlan().getId());
+            TreatmentPlan realPlan = cloneTemplate(dto, template);
+            realPlan = treatmentPlanRepo.save(realPlan);
+            session.setTreatmentPlan(realPlan);
+
+            // 4. Xử lý các bước điều trị
+            if (stepDTOs != null && !stepDTOs.isEmpty()) {
+                List<TreatmentStep> realSteps = new ArrayList<>();
+
+                for (TreatmentStepTemplateDTO stepDTO : stepDTOs) {
+                    StepType stepType = treatmentItemService.getStepTypeById(stepDTO.getStepTypeId());
+
+                    TreatmentStep step = new TreatmentStep();
+                    step.setStepNumber(stepDTO.getStepNumber());
+                    step.setStepType(stepType);
+                    step.setNotes(stepDTO.getNotes());
+                    step.setTreatmentPlan(realPlan);
+
+                    // Nếu là LAB_TEST
+                    if ("LABTEST".equalsIgnoreCase(stepType.getTypeName())) {
+                        if (labTests != null && !labTests.isEmpty()) {
+                            LabTest labTest = labTests.get(0); // tạm: lấy cái đầu
+                            step.setItemId(labTest.getId());
+                            step.setResults(stepDTO.getResults());
+                        }
+                    }
+
+                    // Nếu là PRESCRIPTION
+                    else if ("Medication".equalsIgnoreCase(stepType.getTypeName())) {
+                        Prescription prescription = createPrescriptionFromDTOs(prescriptions);
+                        step.setItemId(prescription.getId());
+                    }
+
+                    treatmentStepRepo.save(step);
+                    realSteps.add(step);
+                }
+
+                realPlan.setSteps(realSteps);
+                treatmentPlanRepo.save(realPlan);
             }
 
-            PrescriptionDetail detail = mapper.fromDTO(dto, prescription, medication);
-            PrescriptionDetailDTO savedDetail = prescriptionService.savePrescriptionDetail(detail);
-            detail.setId(savedDetail.getId());
-            detail = mapper.fromDTO(dto, prescription, medication);
-            details.add(detail);
+            // 5. Lưu lại phiên khám
+            session.setUpdatedAt(LocalDateTime.now());
+            VisitSession saved = visitSessionRepo.save(session);
+
+            return visitSessionMapper.toDTO(saved);
         }
 
-        // 3. Gán chi tiết vào đơn thuốc
-        savedPrescription.setDetails(prescriptionMapper.toDetailDTO(details));
-
-        // 4. Gán đơn thuốc vào bước thực tế trong phác đồ
-        TreatmentPlan treatmentPlan = session.getTreatmentPlan();
-        if (treatmentPlan == null) {
-            throw new RuntimeException("VisitSession chưa có TreatmentPlan");
-        }
-
-        // Lấy step thực tế tương ứng (nếu chưa có, tạo mới dựa trên stepTemplateDTO)
-        TreatmentStep step;
-        if (stepTemplateDTO.getId() != null) {
-            step = treatmentPlanService.getStepEntityById(stepTemplateDTO.getId());
-        } else {
-            step = new TreatmentStep();
-            step.setStepNumber(stepTemplateDTO.getStepNumber());
-            step.setStepType(treatmentItemService.getStepTypeById(stepTemplateDTO.getStepTypeId()));
-            step.setNotes(stepTemplateDTO.getNotes());
-            step.setTreatmentPlan(treatmentPlan);
-        }
-
-        step.setItemId(savedPrescription.getId());
-
-        TreatmentStepTemplateDTO savedStepDTO = treatmentPlanMapper.toStepDTO(step);
-        step.setId(savedStepDTO.getId());
-        treatmentPlanService.saveStep(savedStepDTO, step.getStepType());
-
-        // Nếu step mới thì thêm vào phác đồ thực tế
-        if (!treatmentPlan.getSteps().contains(step)) {
-            treatmentPlan.getSteps().add(step);
-            treatmentPlanRepo.save(treatmentPlan);
-        }
-
-    }
-
-
-    public VisitSessionDTO updateVisitSession(
-            DoctorVisitSessionDTO visitDTO,
-            VisitSessionDTO dto,
-            List<TreatmentStepTemplateDTO> stepDTO,
-            List<PrescriptionDetailDTO> prescriptions
-    ) {
-        VisitSession session = visitSessionRepo.findById(visitDTO.getSessionId())
-                .orElseThrow(() -> new RuntimeException("Visit session not found"));
-        TreatmentTemplate template = treatmentTemplateServiceService.getTreatmentTemplateEntityById(dto.getTreatmentPlan().getId());
-        assignDoctorToSession(visitDTO, dto, session);
-
-        TreatmentPlan realPlan = cloneTemplate(dto, template);
-        // 4. Cập nhật phác đồ điều trị nếu có
-        if (realPlan != null && stepDTO != null) {
-            List<TreatmentStep> steps = new ArrayList<>();
-            for (TreatmentStepTemplateDTO step : stepDTO) {
-                addPrescriptionToSession(session,prescriptions,step);
-                StepType stepType = treatmentItemService.getStepTypeById(step.getStepTypeId());
-                TreatmentStep newStep = treatmentPlanMapper.fromDTO(step,realPlan, stepType);
-                newStep.setTreatmentPlan(realPlan);
-                treatmentPlanService.saveStep(step , stepType);
-                steps.add(newStep);
+        // Helper: tạo đơn thuốc từ danh sách DTO
+        private Prescription createPrescriptionFromDTOs(List<PrescriptionDetailDTO> prescriptionDTOs) {
+            if (prescriptionDTOs == null || prescriptionDTOs.isEmpty()) {
+                throw new RuntimeException("Prescription details cannot be empty");
             }
-            realPlan.setSteps(steps);
-        }
-        VisitSession saved = visitSessionRepo.save(session);
-        return visitSessionMapper.toDTO(saved);
-    }
 
-    public void assignDoctorToSession(DoctorVisitSessionDTO visitDTO, VisitSessionDTO dto, VisitSession session) {
-        // 2. Cập nhật doctor dựa vào tài khoản đăng nhập (nếu có)
-        if (visitDTO.getDoctorId() != null) {
-            Doctor doctor = staffService.getDoctorById(visitDTO.getDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
-            session.setDoctor(doctor);
-        }
-        // 3. Cập nhật triệu chứng, chan doan
-        if (dto.getSymptoms() != null) {
-            session.setSymptoms(dto.getSymptoms());
-        }
-        if (dto.getDiagnosis() != null) {
-            session.setDiagnosis(dto.getDiagnosis());
-        }
-        session.setUpdatedAt(LocalDateTime.now());
+            Prescription prescription = new Prescription();
+            prescription.setCreatedAt(LocalDateTime.now());
+            prescription = prescriptionRepo.save(prescription); // ✅ save entity để có ID
 
-    }
-    public TreatmentPlan cloneTemplate(VisitSessionDTO dto, TreatmentTemplate template){
-        if (template == null) {
-            throw new RuntimeException("Treatment template not found");
-        }
-        TreatmentPlan realPlan = new TreatmentPlan();
-        realPlan.setTreatmentName(template.getName().concat("- Phác đò ").concat(dto.getPatientName()));
-        realPlan.setDisease_name(template.getDiseaseName());
+            List<PrescriptionDetail> details = new ArrayList<>();
+            for (PrescriptionDetailDTO dto : prescriptionDTOs) {
+                Medication medication = treatmentItemService.getMedicationById(dto.getMedicationId());
+                if (medication == null) {
+                    throw new RuntimeException("Medication not found: " + dto.getMedicationId());
+                }
 
-        treatmentPlanService.savePlanEntity(realPlan);
-        return realPlan;
-    }
+                PrescriptionDetail detail = mapper.fromDTO(dto, prescription, medication);
+                detail = prescriptionDetailRepo.save(detail); // ✅ save detail
+                details.add(detail);
+            }
+
+            prescription.setDetails(details);
+            return prescription;
+        }
+
+
+
     public List<VisitSessionDTO> getSessionsByRecord(Long recordId) {
         return visitSessionRepo.findByMedicalRecord_RecordId(recordId)
                 .stream()
