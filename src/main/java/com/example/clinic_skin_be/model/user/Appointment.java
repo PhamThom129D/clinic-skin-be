@@ -3,6 +3,8 @@ package com.example.clinic_skin_be.model.user;
 import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
 import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.model.patient.Patient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,9 +24,12 @@ public class Appointment {
     @Column(name = "appointment_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
+    @JsonIgnore
     private Patient patient;
+
+
 
     @Column(nullable = false)
     private LocalTime time;

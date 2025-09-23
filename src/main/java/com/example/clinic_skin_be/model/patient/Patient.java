@@ -1,6 +1,7 @@
 package com.example.clinic_skin_be.model.patient;
 
 import com.example.clinic_skin_be.model.user.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class Patient {
 
     @OneToOne
     @JoinColumn(name = "account_id")
+    @JsonIgnore
     private Account account;
 }
 

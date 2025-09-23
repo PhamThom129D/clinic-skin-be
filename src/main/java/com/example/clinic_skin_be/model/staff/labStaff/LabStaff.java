@@ -17,10 +17,6 @@ public class LabStaff {
     @Column (name = "lab_staff_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
-
     @OneToOne
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
