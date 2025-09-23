@@ -19,35 +19,6 @@ public class StaffRestController {
 
     private final StaffService staffService;
 
-    // ---------- Doctor ----------
-    @GetMapping("/doctors")
-    public ResponseEntity<List<Doctor>> getAllDoctors() {
-        return ResponseEntity.ok(staffService.getAllDoctors());
-    }
-
-    @GetMapping("/doctors/{id}")
-    public ResponseEntity<Doctor> getDoctor(@PathVariable Long id) {
-        return staffService.getDoctorById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping("/doctors")
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
-        return ResponseEntity.ok(staffService.saveOrUpdateDoctor(doctor));
-    }
-
-    @PutMapping("/doctors/{id}")
-    public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
-        doctor.setId(id);
-        return ResponseEntity.ok(staffService.saveOrUpdateDoctor(doctor));
-    }
-
-    @DeleteMapping("/doctors/{id}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
-        staffService.deleteDoctor(id);
-        return ResponseEntity.noContent().build();
-    }
 
     // ---------- Consultant ----------
     @GetMapping("/consultants")

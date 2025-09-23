@@ -16,7 +16,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StaffService {
 
-    private final IDoctorRepository doctorRepo;
     private final IConsultantRepository consultantRepo;
     private final ICashierRepository cashierRepo;
     private final IReceptionistRepository receptionistRepo;
@@ -24,9 +23,6 @@ public class StaffService {
 
 
     // list
-    public List<Doctor> getAllDoctors() {
-        return doctorRepo.findAll();
-    }
     public List<Consultant> getAllConsultants() {
         return consultantRepo.findAll();
     }
@@ -41,9 +37,6 @@ public class StaffService {
     }
 
     //detail
-    public Optional<Doctor> getDoctorById(Long id) {
-        return doctorRepo.findById(id);
-    }
     public Consultant getConsultantById(Long id) {
         return consultantRepo.findById(id).orElse(null);
     }
@@ -58,9 +51,6 @@ public class StaffService {
     }
 
     // create or update
-    public Doctor saveOrUpdateDoctor(Doctor doctor) {
-        return doctorRepo.save(doctor);
-    }
     public Consultant saveOrUpdateConsultant(Consultant consultant) {
         return consultantRepo.save(consultant);
     }
@@ -75,9 +65,6 @@ public class StaffService {
     }
 
     // delete
-    public void deleteDoctor(Long id) {
-        doctorRepo.deleteById(id);
-    }
     public void deleteConsultant(Long id) {
         consultantRepo.deleteById(id);
     }

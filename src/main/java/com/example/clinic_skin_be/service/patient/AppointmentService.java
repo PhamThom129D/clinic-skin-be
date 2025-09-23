@@ -46,8 +46,7 @@ public class AppointmentService {
         }
 
         Patient patient = findOrCreatePatient(account, request);
-        Doctor doctor = findDoctor(request.getDoctorId());
-        Appointment appointment = buildAppointment(patient, doctor, request);
+        Appointment appointment = buildAppointment(patient, request);
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
         emailService.sendAppointmentEmail(account, savedAppointment, isNewAccount);
@@ -100,18 +99,13 @@ public class AppointmentService {
         return patientRepository.save(patient);
     }
 
-    private Doctor findDoctor(Long doctorId) {
-        return doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found with ID: " + doctorId));
-    }
 
-    private Appointment buildAppointment(Patient patient, Doctor doctor, AppointmentRequest request) {
+    private Appointment buildAppointment(Patient patient,AppointmentRequest request) {
         LocalDate appointmentDate = LocalDate.parse(request.getAppointmentDate(), dateFormatter);
         LocalTime appointmentTime = LocalTime.parse(request.getAppointmentTime(), timeFormatter);
 
         return Appointment.builder()
                 .patient(patient)
-                .doctor(doctor)
                 .date(appointmentDate)
                 .time(appointmentTime)
                 .note(request.getNote())

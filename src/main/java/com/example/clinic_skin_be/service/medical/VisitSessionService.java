@@ -4,6 +4,8 @@ import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDetailDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
+import com.example.clinic_skin_be.dto.staff.DoctorDTO;
+import com.example.clinic_skin_be.mapper.DoctorMapper;
 import com.example.clinic_skin_be.mapper.PrescriptionMapper;
 import com.example.clinic_skin_be.mapper.TreatmentPlanMapper;
 import com.example.clinic_skin_be.mapper.VisitSessionMapper;
@@ -29,6 +31,7 @@ import com.example.clinic_skin_be.service.medical.treatment_plan.TreatmentPlanSe
 import com.example.clinic_skin_be.service.medical.treatment_template.PrescriptionService;
 import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentItemService;
 import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentTemplateService;
+import com.example.clinic_skin_be.service.staff.DoctorService;
 import com.example.clinic_skin_be.service.staff.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,27 +50,22 @@ public class VisitSessionService {
 
     private final IVisitSessionRepository visitSessionRepo;
     private final IMedicalRecordRepository medicalRecordRepo;
-    private final IDoctorRepository doctorRepo;
     private final ITreatmentPlanRepository treatmentPlanRepo;
     private final VisitSessionMapper visitSessionMapper;
-    private final PrescriptionService prescriptionService;
-    private final TreatmentPlanService treatmentPlanService;
     private final TreatmentTemplateService treatmentTemplateServiceService;
     private final PrescriptionMapper mapper;
-    private final TreatmentPlanMapper treatmentPlanMapper;
-    private final StaffService staffService;
-    private final MedicalRecordService medicalRecordService;
     private final TreatmentItemService treatmentItemService;
-    private final PrescriptionMapper prescriptionMapper;
     private final ITreatmentStepRepository treatmentStepRepo;
     private final IPrescriptionRepository prescriptionRepo;
     private final IPrescriptionDetailRepository prescriptionDetailRepo;
+    private final DoctorService doctorService;
+    private final DoctorMapper doctorMapper;
 
         // Gán bác sĩ và cập nhật triệu chứng/chẩn đoán
         public void assignDoctorToSession(VisitSessionDTO dto, VisitSession session) {
             if (dto.getDoctorId() != null) {
-                Doctor doctor = staffService.getDoctorById(dto.getDoctorId())
-                        .orElseThrow(() -> new RuntimeException("Doctor not found"));
+                DoctorDTO doctorDTO = doctorService.getDoctorDTOById(dto.getDoctorId());
+                Doctor doctor = doctorMapper.toEntity(doctorDTO, null, null);
                 session.setDoctor(doctor);
             }
             if (dto.getSymptoms() != null) {
@@ -200,10 +198,10 @@ public class VisitSessionService {
         VisitSession session = visitSessionMapper.toEntity(dto);
         session.setMedicalRecord(record);
 
-        if (dto.getDoctorId() != null) {
-            staffService.getDoctorById(dto.getDoctorId())
-                    .ifPresent(session::setDoctor);
-        }
+//        if (dto.getDoctorId() != null) {
+//            doctorService.getDoctorDTOById(dto.getDoctorId())
+//                    .ifPresent(session::setDoctor);
+//        }
 
         if (dto.getTreatmentPlan() != null && dto.getTreatmentPlan().getId() != null) {
             treatmentPlanRepo.findById(dto.getTreatmentPlan().getId())
