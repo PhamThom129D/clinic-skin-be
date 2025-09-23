@@ -53,7 +53,6 @@ public class EmailService {
         body.append("<p>Bạn đã đăng ký khám thành công tại <strong>ClinicSkin</strong>.</p>");
         body.append("<p>Thông tin lịch hẹn:</p>");
         body.append("<ul>");
-        body.append("<li>Bác sĩ: ").append(appointment.getDoctor().getAccount().getFullName()).append("</li>");
         body.append("<li>Ngày: ").append(appointment.getDate()).append("</li>");
         body.append("<li>Giờ: ").append(appointment.getTime()).append("</li>");
         body.append("</ul>");

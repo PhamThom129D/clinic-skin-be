@@ -16,6 +16,7 @@ import java.util.Set;
 
 public class AuthResponse {
     private String token;
+    private Long id;
     private String fullName;
     private String email;
     private String phoneNumber;

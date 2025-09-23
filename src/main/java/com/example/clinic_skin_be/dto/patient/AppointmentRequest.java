@@ -44,7 +44,4 @@ public class AppointmentRequest {
 
     private String note;
 
-    @NotNull(message = "Doctor ID không được để trống")
-    @Positive(message = "Doctor ID phải là số dương")
-    private Long doctorId;
 }
