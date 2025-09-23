@@ -16,5 +16,3 @@ public class AccountResponse {
     private String createdAt;
     private String updatedAt;
 }
-
-
