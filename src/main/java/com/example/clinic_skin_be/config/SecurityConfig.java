@@ -51,7 +51,8 @@ public class SecurityConfig {
                                         "/api/ai-suggest/**",
                                         "/ws-chat/**",
                                         "/api/medical-records/**",
-                                        "/api/visit-sessions/**"
+                                        "/api/visit-sessions/**",
+                                        "/api/accounts/**"
                                 ).permitAll()
 
                                 .requestMatchers("/api/chat/**").permitAll()
