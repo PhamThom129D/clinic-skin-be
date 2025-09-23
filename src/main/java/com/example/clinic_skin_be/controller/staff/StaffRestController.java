@@ -1,15 +1,17 @@
 package com.example.clinic_skin_be.controller.staff;
 
+import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.model.staff.cashier.Cashier;
 import com.example.clinic_skin_be.model.staff.consultation.Consultant;
-import com.example.clinic_skin_be.model.staff.doctor.Doctor;
 import com.example.clinic_skin_be.model.staff.labStaff.LabStaff;
 import com.example.clinic_skin_be.model.staff.receptionist.Receptionist;
 import com.example.clinic_skin_be.service.staff.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,57 +21,75 @@ public class StaffRestController {
 
     private final StaffService staffService;
 
-
-    // ---------- Consultant ----------
-    @GetMapping("/consultants")
-    public ResponseEntity<List<Consultant>> getAllConsultants() {
-        return ResponseEntity.ok(staffService.getAllConsultants());
+    /** ================= CREATE ================= */
+    @PostMapping("/consultants")
+    public ResponseEntity<Consultant> createConsultant(@ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.createConsultant(request));
     }
+
+    @PostMapping("/cashiers")
+    public ResponseEntity<Cashier> createCashier(@ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.createCashier(request));
+    }
+
+    @PostMapping("/receptionists")
+    public ResponseEntity<Receptionist> createReceptionist(@ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.createReceptionist(request));
+    }
+
+    @PostMapping("/lab-staffs")
+    public ResponseEntity<LabStaff> createLabStaff(@ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.createLabStaff(request));
+    }
+
+    /** ================= READ ================= */
 
     @GetMapping("/consultants/{id}")
-    public ResponseEntity<Consultant> getConsultant(@PathVariable Long id) {
-        Consultant consultant = staffService.getConsultantById(id);
-        return consultant != null ? ResponseEntity.ok(consultant) : ResponseEntity.notFound().build();
+    public ResponseEntity<Consultant> getConsultantById(@PathVariable Long id) {
+        return ResponseEntity.ok(staffService.getConsultantById(id));
     }
 
-    @PostMapping("/consultants")
-    public ResponseEntity<Consultant> createConsultant(@RequestBody Consultant consultant) {
-        return ResponseEntity.ok(staffService.saveOrUpdateConsultant(consultant));
+    @GetMapping("/cashiers/{id}")
+    public ResponseEntity<Cashier> getCashierById(@PathVariable Long id) {
+        return ResponseEntity.ok(staffService.getCashierById(id));
     }
 
+    @GetMapping("/receptionists/{id}")
+    public ResponseEntity<Receptionist> getReceptionistById(@PathVariable Long id) {
+        return ResponseEntity.ok(staffService.getReceptionistById(id));
+    }
+
+    @GetMapping("/lab-staffs/{id}")
+    public ResponseEntity<LabStaff> getLabStaffById(@PathVariable Long id) {
+        return ResponseEntity.ok(staffService.getLabStaffById(id));
+    }
+
+    /** ================= UPDATE ================= */
     @PutMapping("/consultants/{id}")
-    public ResponseEntity<Consultant> updateConsultant(@PathVariable Long id, @RequestBody Consultant consultant) {
-        consultant.setId(id);
-        return ResponseEntity.ok(staffService.saveOrUpdateConsultant(consultant));
+    public ResponseEntity<Consultant> updateConsultant(@PathVariable Long id, @ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.updateConsultant(id, request));
     }
 
+    @PutMapping("/cashiers/{id}")
+    public ResponseEntity<Cashier> updateCashier(@PathVariable Long id, @ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.updateCashier(id, request));
+    }
+
+    @PutMapping("/receptionists/{id}")
+    public ResponseEntity<Receptionist> updateReceptionist(@PathVariable Long id, @ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.updateReceptionist(id, request));
+    }
+
+    @PutMapping("/lab-staffs/{id}")
+    public ResponseEntity<LabStaff> updateLabStaff(@PathVariable Long id, @ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(staffService.updateLabStaff(id, request));
+    }
+
+    /** ================= DELETE ================= */
     @DeleteMapping("/consultants/{id}")
     public ResponseEntity<Void> deleteConsultant(@PathVariable Long id) {
         staffService.deleteConsultant(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // ---------- Cashier ----------
-    @GetMapping("/cashiers")
-    public ResponseEntity<List<Cashier>> getAllCashiers() {
-        return ResponseEntity.ok(staffService.getAllCashiers());
-    }
-
-    @GetMapping("/cashiers/{id}")
-    public ResponseEntity<Cashier> getCashier(@PathVariable Long id) {
-        Cashier cashier = staffService.getCashierById(id);
-        return cashier != null ? ResponseEntity.ok(cashier) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/cashiers")
-    public ResponseEntity<Cashier> createCashier(@RequestBody Cashier cashier) {
-        return ResponseEntity.ok(staffService.saveOrUpdateCashier(cashier));
-    }
-
-    @PutMapping("/cashiers/{id}")
-    public ResponseEntity<Cashier> updateCashier(@PathVariable Long id, @RequestBody Cashier cashier) {
-        cashier.setId(id);
-        return ResponseEntity.ok(staffService.saveOrUpdateCashier(cashier));
     }
 
     @DeleteMapping("/cashiers/{id}")
@@ -78,56 +98,10 @@ public class StaffRestController {
         return ResponseEntity.noContent().build();
     }
 
-    // ---------- Receptionist ----------
-    @GetMapping("/receptionists")
-    public ResponseEntity<List<Receptionist>> getAllReceptionists() {
-        return ResponseEntity.ok(staffService.getAllReceptionists());
-    }
-
-    @GetMapping("/receptionists/{id}")
-    public ResponseEntity<Receptionist> getReceptionist(@PathVariable Long id) {
-        Receptionist receptionist = staffService.getReceptionistById(id);
-        return receptionist != null ? ResponseEntity.ok(receptionist) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/receptionists")
-    public ResponseEntity<Receptionist> createReceptionist(@RequestBody Receptionist receptionist) {
-        return ResponseEntity.ok(staffService.saveOrUpdateReceptionist(receptionist));
-    }
-
-    @PutMapping("/receptionists/{id}")
-    public ResponseEntity<Receptionist> updateReceptionist(@PathVariable Long id, @RequestBody Receptionist receptionist) {
-        receptionist.setId(id);
-        return ResponseEntity.ok(staffService.saveOrUpdateReceptionist(receptionist));
-    }
-
     @DeleteMapping("/receptionists/{id}")
     public ResponseEntity<Void> deleteReceptionist(@PathVariable Long id) {
         staffService.deleteReceptionist(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // ---------- Lab Staff ----------
-    @GetMapping("/lab-staffs")
-    public ResponseEntity<List<LabStaff>> getAllLabStaffs() {
-        return ResponseEntity.ok(staffService.getAllLabStaffs());
-    }
-
-    @GetMapping("/lab-staffs/{id}")
-    public ResponseEntity<LabStaff> getLabStaff(@PathVariable Long id) {
-        LabStaff labStaff = staffService.getLabStaffById(id);
-        return labStaff != null ? ResponseEntity.ok(labStaff) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/lab-staffs")
-    public ResponseEntity<LabStaff> createLabStaff(@RequestBody LabStaff labStaff) {
-        return ResponseEntity.ok(staffService.saveOrUpdateLabStaff(labStaff));
-    }
-
-    @PutMapping("/lab-staffs/{id}")
-    public ResponseEntity<LabStaff> updateLabStaff(@PathVariable Long id, @RequestBody LabStaff labStaff) {
-        labStaff.setId(id);
-        return ResponseEntity.ok(staffService.saveOrUpdateLabStaff(labStaff));
     }
 
     @DeleteMapping("/lab-staffs/{id}")

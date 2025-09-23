@@ -143,4 +143,10 @@ public class AccountService {
             throw new FieldAlreadyExistsException("phoneNumber", "Số điện thoại đã tồn tại");
         }
     }
+
+    public Account getAccountEntityById(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+    }
+
 }
