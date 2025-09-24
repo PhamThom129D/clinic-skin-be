@@ -2,6 +2,7 @@ package com.example.clinic_skin_be.mapper;
 
 import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.auth.AuthResponse;
+import com.example.clinic_skin_be.dto.user.AccountUpdateRequest;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.example.clinic_skin_be.model.user.Account;
 import com.example.clinic_skin_be.model.user.Role;
@@ -21,6 +22,7 @@ public interface AuthMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Account toEntity(AccountRequest dto);
+    Account toEntity(AccountUpdateRequest dto);
 
     // Map từ Entity -> DTO Response
     @Mapping(target = "token", ignore = true)
