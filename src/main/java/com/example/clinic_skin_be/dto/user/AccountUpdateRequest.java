@@ -1,19 +1,16 @@
 package com.example.clinic_skin_be.dto.user;
 
-import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
-public class AccountRequest {
-
-    @NotBlank(message = "Họ và tên không được để trống")
+public class AccountUpdateRequest {
+    // Không cần @NotBlank
     private String fullName;
 
     @Pattern(regexp = "^\\d{9,15}$", message = "Số điện thoại không hợp lệ, từ 9-15 chữ số")
@@ -22,21 +19,21 @@ public class AccountRequest {
     @Email(message = "Email không hợp lệ")
     private String email;
 
+    // Bỏ @NotBlank cho password và role
     private String password;
 
-    @NotBlank(message = "Địa chỉ không được để trống")
+    // Không @NotBlank
     private String address;
 
     @Past(message = "Ngày sinh phải là ngày trong quá khứ")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     private Gender gender;
 
-    private AccountStatus status;
+    // Bỏ cả status và role nếu bạn không cập nhật chúng
+    // private AccountStatus status;
+    // private String role;
 
     private MultipartFile avatarFile;
-
-    @NotBlank(message = "Role không được để trống")
-    private String role;
 }
