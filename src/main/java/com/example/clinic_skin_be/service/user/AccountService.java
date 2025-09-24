@@ -89,35 +89,46 @@ public class AccountService {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        validateUpdateUnique(account, request.getEmail(), request.getPhoneNumber());
+        // validate email, phone nếu có truyền vào
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            validateUpdateUnique(account, request.getEmail(), null);
+            account.setEmail(request.getEmail());
+        }
+        if (request.getPhoneNumber() != null && !request.getPhoneNumber().isBlank()) {
+            validateUpdateUnique(account, null, request.getPhoneNumber());
+            account.setPhoneNumber(request.getPhoneNumber());
+        }
 
-        account.setFullName(request.getFullName());
-        account.setEmail(request.getEmail());
-        account.setPhoneNumber(request.getPhoneNumber());
-        account.setAddress(request.getAddress());
-        account.setDateOfBirth(request.getDateOfBirth());
-        account.setGender(request.getGender());
+        // update các field còn lại nếu có
+        if (request.getFullName() != null) account.setFullName(request.getFullName());
+        if (request.getAddress() != null) account.setAddress(request.getAddress());
+        if (request.getDateOfBirth() != null) account.setDateOfBirth(request.getDateOfBirth());
+        if (request.getGender() != null) account.setGender(request.getGender());
         if (request.getStatus() != null) account.setStatus(request.getStatus());
+
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             account.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        // Update role
+        // update role nếu có
         if (request.getRole() != null && !request.getRole().isBlank()) {
             Role role = roleRepository.findByName(request.getRole())
                     .orElseThrow(() -> new RuntimeException("Role not found: " + request.getRole()));
-            account.setRoles(Set.of(role));
+            account.getRoles().clear();
+            account.getRoles().add(role);
         }
 
-        // Avatar
+        // update avatar nếu có
         MultipartFile avatarFile = request.getAvatarFile();
         if (avatarFile != null && !avatarFile.isEmpty()) {
-            account.setAvtPath((String) cloudinaryService.uploadImage(avatarFile, "avatars").get("secure_url"));
+            String imageUrl = (String) cloudinaryService.uploadImage(avatarFile, "avatars").get("secure_url");
+            account.setAvtPath(imageUrl);
         }
 
-        accountRepository.save(account);
-        return accountMapper.toResponse(account);
+        Account savedAccount = accountRepository.save(account);
+        return accountMapper.toResponse(savedAccount);
     }
+
 
     /** ================= DELETE ================= */
     @Transactional
