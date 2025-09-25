@@ -5,6 +5,7 @@ import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.*;
@@ -29,8 +30,10 @@ public class AccountRequest {
     @NotBlank(message = "Địa chỉ không được để trống", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     private String address;
 
+
     @Past(message = "Ngày sinh phải là ngày trong quá khứ", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     private Gender gender;
