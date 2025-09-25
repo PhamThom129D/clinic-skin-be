@@ -85,7 +85,7 @@ public class AuthService implements IAuthService {
         // Xác thực lại để sinh JWT
         String identifier = request.getPhoneNumber() != null ? request.getPhoneNumber() : request.getEmail();
         Authentication auth = performAuthentication(identifier, request.getPassword());
-        String token = jwtUtil.generateToken(auth);
+        String token = jwtUtil.generateToken(auth, account.getId());
 
         // Map Entity -> DTO response
         AuthResponse response = authMapper.toAuthResponse(account);
@@ -102,8 +102,10 @@ public class AuthService implements IAuthService {
                 )
         );
 
-        String token = jwtUtil.generateToken(authentication);
         Account account = otpService.findAccountByIdentifier(request.getEmailOrPhone());
+
+        String token = jwtUtil.generateToken(authentication,account.getId());
+//        Account account = otpService.findAccountByIdentifier(request.getEmailOrPhone());
 
         AuthResponse response = authMapper.toAuthResponse(account);
         response.setToken(token);
@@ -150,7 +152,7 @@ public class AuthService implements IAuthService {
             });
 
             String jwt = jwtUtil.generateToken(account.getEmail(),
-                    account.getRoles().stream().map(Role::getName).toList());
+                    account.getRoles().stream().map(Role::getName).toList(), account.getId());
 
             AuthResponse response = authMapper.toAuthResponse(account);
             response.setToken(jwt);
@@ -213,7 +215,7 @@ public class AuthService implements IAuthService {
 
         String token = jwtUtil.generateToken(
                 account.getEmail(),
-                account.getRoles().stream().map(Role::getName).toList()
+                account.getRoles().stream().map(Role::getName).toList(), account.getId()
         );
 
         AuthResponse response = authMapper.toAuthResponse(account);
