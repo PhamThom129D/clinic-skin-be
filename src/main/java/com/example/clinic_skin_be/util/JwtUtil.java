@@ -35,7 +35,7 @@ public class JwtUtil {
     }
 
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication, Long userId) {
         String username = authentication.getName();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -48,6 +48,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", userId)
                 .claim("roles", roles) // 🟢 Nhúng role vào token
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -76,13 +77,14 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token);
     }
-    public String generateToken(String email, List<String> roles) {
+    public String generateToken(String email, List<String> roles, Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
                 .setSubject(email)
                 .claim("roles", roles)
+                .claim("userId", userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -90,10 +92,3 @@ public class JwtUtil {
     }
 
 }
-//JwtUtil là class tiện ích (utility) để:
-//
-//Tạo JWT khi người dùng đăng nhập thành công.
-//
-//Giải mã JWT để lấy username.
-//
-//Xác minh JWT xem có hợp lệ không (chữ ký đúng, chưa hết hạn, đúng định dạng...).
