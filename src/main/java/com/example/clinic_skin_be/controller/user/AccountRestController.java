@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.controller.user;
 
+import com.example.clinic_skin_be.dto.ValidationGroups;
 import com.example.clinic_skin_be.dto.user.AccountRequest;
 import com.example.clinic_skin_be.dto.user.AccountResponse;
 import com.example.clinic_skin_be.dto.user.PasswordChangeRequest;
@@ -36,23 +37,20 @@ public class AccountRestController {
         return ResponseEntity.ok(account);
     }
 
-    /** ================= POST: tạo account mới ================= */
-    @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(@Validated @ModelAttribute AccountRequest request) throws IOException {
-        AccountResponse account = accountService.createAccount(request);
-        return ResponseEntity.ok(account);
+    @PostMapping(consumes = "multipart/form-data")
+    public AccountResponse createAccount(
+            @Validated(ValidationGroups.Create.class) @ModelAttribute AccountRequest request) throws IOException {
+        return accountService.createAccount(request);
     }
 
-    /** ================= PUT: cập nhật account ================= */
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<AccountResponse> updateAccount(
             @PathVariable Long id,
-            @Validated @ModelAttribute AccountRequest request
-    ) throws IOException {
-        System.out.println(request);
-        AccountResponse updated = accountService.updateAccount(id, request);
-        return ResponseEntity.ok(updated);
+            @ModelAttribute AccountRequest request) throws IOException {
+        return ResponseEntity.ok(accountService.updateAccount(id, request));
     }
+
+
 
     /** ================= DELETE: xóa account ================= */
     @DeleteMapping("/{id}")
