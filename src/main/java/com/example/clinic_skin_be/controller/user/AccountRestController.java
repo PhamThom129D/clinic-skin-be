@@ -47,6 +47,7 @@ public class AccountRestController {
     public ResponseEntity<AccountResponse> updateAccount(
             @PathVariable Long id,
             @ModelAttribute AccountRequest request) throws IOException {
+
         return ResponseEntity.ok(accountService.updateAccount(id, request));
     }
 

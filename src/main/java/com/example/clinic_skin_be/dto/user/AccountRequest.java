@@ -33,6 +33,7 @@ public class AccountRequest {
 
     @Past(message = "Ngày sinh phải là ngày trong quá khứ", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     private Gender gender;
