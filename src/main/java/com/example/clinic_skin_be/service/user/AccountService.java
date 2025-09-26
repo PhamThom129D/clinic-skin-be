@@ -5,6 +5,7 @@ import com.example.clinic_skin_be.dto.user.AccountResponse;
 import com.example.clinic_skin_be.exception.FieldAlreadyExistsException;
 import com.example.clinic_skin_be.mapper.AccountMapper;
 import com.example.clinic_skin_be.mapper.AuthMapper;
+import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.user.Account;
 import com.example.clinic_skin_be.model.user.Role;
 import com.example.clinic_skin_be.repository.user.IAccountRepository;
@@ -160,4 +161,31 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
+    /** ================= BLOCK ACCOUNT ================= */
+    public void updateAccountStatus(Long id, AccountStatus status) {
+        accountRepository.updateStatusById(id, status);
+    }
+
+    /** ================= RESET PASSWORD ================= */
+    public void resetPassword(String email, String newPassword) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại"));
+        updatePassword(account, newPassword);
+    }
+
+    /** ================= CHANGE PASSWORD ================= */
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại"));
+        if (!passwordEncoder.matches(oldPassword, account.getPassword())) {
+            throw new RuntimeException("Mật khẩu cũ không chính xác");
+        }
+        updatePassword(account, newPassword);
+    }
+
+    /** ================= HELPER ================= */
+    private void updatePassword(Account account, String newPassword) {
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
 }

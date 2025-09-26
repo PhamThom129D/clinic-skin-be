@@ -11,6 +11,8 @@ public class AccountResponse {
     private String email;
     private String gender;
     private String avtPath;
+    private String dateOfBirth;
+    private String address;
     private Set<String> roles;
     private String status;
     private String createdAt;
