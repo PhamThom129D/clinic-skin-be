@@ -30,7 +30,7 @@ public class ChatRestController {
             String guestKey = "guest-" + request.getGuestId();
             List<ChatMessageResponse> guestMsgs = chatStore.getOrDefault(guestKey, new ArrayList<>());
             chatStore.computeIfAbsent(key, k -> new ArrayList<>()).addAll(guestMsgs);
-            chatStore.remove(guestKey);
+//            chatStore.remove(guestKey);
         }
 
         ChatMessageResponse response = ChatMessageResponse.builder()
