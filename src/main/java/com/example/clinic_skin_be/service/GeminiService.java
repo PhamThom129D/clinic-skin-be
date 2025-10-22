@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,12 +13,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@Component
+@Service
 public class GeminiService {
 
     @Value("${gemini.api.keys}")
     private String geminiApiKeysStr;
-
 
     private List<String> geminiApiKeys;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -32,6 +31,12 @@ public class GeminiService {
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toList();
+
+        if (geminiApiKeys.isEmpty()) {
+            throw new RuntimeException("❌ Không load được Gemini API keys! Kiểm tra application.properties hoặc biến môi trường.");
+        }
+
+        System.out.println("✅ Loaded Gemini API keys: " + geminiApiKeys.size());
     }
 
     /**
@@ -58,12 +63,19 @@ public class GeminiService {
                 InputStream is = (conn.getResponseCode() >= 400) ? conn.getErrorStream() : conn.getInputStream();
                 String response = (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8) : "";
 
-                if (!response.isEmpty() && conn.getResponseCode() < 400) {
+                if (conn.getResponseCode() >= 400) {
+                    System.err.println("❌ Key failed: " + key + ", HTTP code: " + conn.getResponseCode() + ", response: " + response);
+                    continue; // thử key khác
+                }
+
+                if (!response.isEmpty()) {
+                    System.out.println("✅ Gemini API success with key: " + key);
                     return response;
                 }
 
             } catch (Exception e) {
                 lastException = e;
+                System.err.println("❌ Exception with key " + key + ": " + e.getMessage());
             }
         }
 
@@ -108,6 +120,7 @@ public class GeminiService {
             String aiResponse = callGeminiApi(prompt);
             return parseAiResponse(aiResponse, expectedFields);
         } catch (Exception e) {
+            System.err.println("❌ Gemini API call failed: " + e.getMessage());
             Map<String, Object> fallback = new HashMap<>();
             expectedFields.forEach(f -> fallback.put(f, Collections.emptyList()));
             return fallback;
