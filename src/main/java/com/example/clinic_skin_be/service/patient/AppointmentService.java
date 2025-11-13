@@ -1,5 +1,6 @@
 package com.example.clinic_skin_be.service.patient;
 
+import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentResponse;
 import com.example.clinic_skin_be.mapper.AppointmentMapper;
@@ -16,6 +17,7 @@ import com.example.clinic_skin_be.repository.user.IAccountRepository;
 import com.example.clinic_skin_be.repository.staff.booking.IAppointmentRepository;
 import com.example.clinic_skin_be.repository.user.IRoleRepository;
 import com.example.clinic_skin_be.service.auth.impl.EmailService;
+import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +43,7 @@ public class AppointmentService {
     private final EmailService emailService;
     private final AppointmentMapper appointmentMapper;
     private final IRoleRepository roleRepository;
+    private final VisitSessionService visitSessionService;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -91,6 +94,13 @@ public class AppointmentService {
         }
 
         Appointment updated = appointmentRepository.save(appointment);
+        if(updated.getStatus() != ConsultationStatus.IN_PROGRESS) {
+            Long recordId = updated.getId();
+            VisitSessionDTO newSession = new VisitSessionDTO();
+            newSession.setSessionDate(updated.getDate().atStartOfDay());
+            newSession.setDiagnosis(updated.getNote());
+            visitSessionService.createVisitSession(recordId,newSession);
+        }
         return appointmentMapper.toResponse(updated);
     }
 
