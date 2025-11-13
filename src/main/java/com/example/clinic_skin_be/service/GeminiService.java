@@ -23,7 +23,8 @@ public class GeminiService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
+
 
     @PostConstruct
     private void init() {
@@ -33,10 +34,10 @@ public class GeminiService {
                 .toList();
 
         if (geminiApiKeys.isEmpty()) {
-            throw new RuntimeException("❌ Không load được Gemini API keys! Kiểm tra application.properties hoặc biến môi trường.");
+            throw new RuntimeException(" Không load được Gemini API keys! Kiểm tra application.properties hoặc biến môi trường.");
         }
 
-        System.out.println("✅ Loaded Gemini API keys: " + geminiApiKeys.size());
+        System.out.println("Loaded Gemini API keys: " + geminiApiKeys.size());
     }
 
     /**
@@ -64,18 +65,18 @@ public class GeminiService {
                 String response = (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8) : "";
 
                 if (conn.getResponseCode() >= 400) {
-                    System.err.println("❌ Key failed: " + key + ", HTTP code: " + conn.getResponseCode() + ", response: " + response);
+                    System.err.println(" Key failed: " + key + ", HTTP code: " + conn.getResponseCode() + ", response: " + response);
                     continue; // thử key khác
                 }
 
                 if (!response.isEmpty()) {
-                    System.out.println("✅ Gemini API success with key: " + key);
+                    System.out.println(" Gemini API success with key: " + key);
                     return response;
                 }
 
             } catch (Exception e) {
                 lastException = e;
-                System.err.println("❌ Exception with key " + key + ": " + e.getMessage());
+                System.err.println(" Exception with key " + key + ": " + e.getMessage());
             }
         }
 
