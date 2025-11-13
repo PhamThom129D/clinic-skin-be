@@ -3,6 +3,7 @@ package com.example.clinic_skin_be.controller.chat;
 import com.example.clinic_skin_be.model.message.ChatMessageRequest;
 import com.example.clinic_skin_be.model.message.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,6 @@ public class ChatRestController {
             String guestKey = "guest-" + request.getGuestId();
             List<ChatMessageResponse> guestMsgs = chatStore.getOrDefault(guestKey, new ArrayList<>());
             chatStore.computeIfAbsent(key, k -> new ArrayList<>()).addAll(guestMsgs);
-//            chatStore.remove(guestKey);
         }
 
         ChatMessageResponse response = ChatMessageResponse.builder()
@@ -39,6 +39,7 @@ public class ChatRestController {
                 .receiverId(request.getReceiverId())
                 .content(request.getContent())
                 .sentAt(System.currentTimeMillis())
+                .isRead(false)
                 .build();
 
         chatStore.computeIfAbsent(key, k -> new ArrayList<>()).add(response);
@@ -63,11 +64,14 @@ public class ChatRestController {
                 .receiverId(request.getReceiverId())
                 .content(request.getContent())
                 .sentAt(System.currentTimeMillis())
+                .isRead(false)
                 .build();
 
         chatStore.computeIfAbsent(key, k -> new ArrayList<>()).add(response);
+
         messagingTemplate.convertAndSend("/topic/message/" + key, response);
         messagingTemplate.convertAndSend("/topic/message/staff-" + request.getSenderId(), response);
+        messagingTemplate.convertAndSend("/topic/inbox-updates", "staff-1");
 
         return response;
     }
@@ -77,25 +81,74 @@ public class ChatRestController {
         return chatStore.getOrDefault(key, Collections.emptyList());
     }
 
+
+
     @GetMapping("/inbox/{staffId}")
     public List<Map<String, Object>> getInbox(@PathVariable Long staffId) {
         List<Map<String, Object>> inbox = new ArrayList<>();
 
         chatStore.forEach((key, msgs) -> {
-            List<ChatMessageResponse> staffMsgs = msgs.stream()
-                    .filter(m -> staffId.equals(m.getReceiverId()))
+            List<ChatMessageResponse> relatedMsgs = msgs.stream()
+                    .filter(m -> Objects.equals(m.getReceiverId(), staffId))
                     .toList();
 
-            if (!staffMsgs.isEmpty()) {
+            if (!relatedMsgs.isEmpty()) {
                 Map<String, Object> conv = new HashMap<>();
-                conv.put("customerId", msgs.get(0).getSenderId());
-                conv.put("guestId", msgs.get(0).getGuestId());
-                conv.put("customerName", "Customer " + key);
-                conv.put("messages", staffMsgs);
+
+                ChatMessageResponse lastMsg = msgs.get(msgs.size() - 1);
+
+                Long customerId = msgs.stream()
+                        .map(ChatMessageResponse::getSenderId)
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null);
+
+                String guestId = msgs.stream()
+                        .map(ChatMessageResponse::getGuestId)
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null);
+
+                conv.put("customerId", customerId);
+                conv.put("guestId", guestId);
+                conv.put("customerName", customerId != null
+                        ? "Người dùng " + customerId
+                        : "Khách " + guestId);
+
+                conv.put("messages", msgs);
+
+                boolean hasUnread = msgs.stream()
+                        .anyMatch(m -> !m.isRead() && !Objects.equals(m.getSenderId(), staffId));
+
+                conv.put("hasUnread", hasUnread);
+
                 inbox.add(conv);
             }
         });
 
         return inbox;
+    }
+
+
+    @PostMapping("/mark-read")
+    public ResponseEntity<Map<String, Object>> markAsRead(@RequestBody Map<String, String> body) {
+        String key = body.get("key");
+        Map<String, Object> response = new HashMap<>();
+
+        if (key == null || !chatStore.containsKey(key)) {
+            response.put("status", "error");
+            response.put("message", "Invalid conversation key");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        List<ChatMessageResponse> msgs = chatStore.get(key);
+        msgs.forEach(msg -> msg.setRead(true));
+
+        messagingTemplate.convertAndSend("/topic/message/" + key, "read");
+
+        response.put("status", "success");
+        response.put("key", key);
+        response.put("message", "Marked as read");
+        return ResponseEntity.ok(response);
     }
 }
