@@ -50,8 +50,8 @@ public class SecurityConfig {
                                         "/api/screen-dashboard/**",
                                         "/api/ai-suggest/**",
                                         "/ws-chat/**",
-                                        "/api/medical-records/**",
-                                        "/api/visit-sessions/**",
+//                                        "/api/medical-records/**",
+//                                        "/api/visit-sessions/**",
                                         "/api/accounts/**",
                                         "/api/staff/**"
                                 ).permitAll()
@@ -60,8 +60,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/chat/reply/**").hasAnyRole("ADMIN", "CONSULTANT", "PATIENT")
 
                                 // Các API cho bác sĩ
-//                                .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
-//                                .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
+                                .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
+                                .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
 
                                 // Các API public khác
                                 .requestMatchers(

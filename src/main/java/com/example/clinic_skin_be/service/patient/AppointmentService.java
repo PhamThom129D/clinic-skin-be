@@ -1,21 +1,26 @@
 package com.example.clinic_skin_be.service.patient;
 
+import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentResponse;
 import com.example.clinic_skin_be.mapper.AppointmentMapper;
 import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
 import com.example.clinic_skin_be.model.manage_enum.ConsultationStatus;
 import com.example.clinic_skin_be.model.manage_enum.Gender;
+import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.patient.Patient;
 import com.example.clinic_skin_be.model.user.Account;
 import com.example.clinic_skin_be.model.user.Appointment;
 import com.example.clinic_skin_be.model.user.Role;
+import com.example.clinic_skin_be.repository.medical.IMedicalRecordRepository;
 import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
 import com.example.clinic_skin_be.repository.patient.IPatientRepository;
 import com.example.clinic_skin_be.repository.user.IAccountRepository;
 import com.example.clinic_skin_be.repository.staff.booking.IAppointmentRepository;
 import com.example.clinic_skin_be.repository.user.IRoleRepository;
 import com.example.clinic_skin_be.service.auth.impl.EmailService;
+import com.example.clinic_skin_be.service.medical.MedicalRecordService;
+import com.example.clinic_skin_be.service.medical.VisitSessionService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +46,8 @@ public class AppointmentService {
     private final EmailService emailService;
     private final AppointmentMapper appointmentMapper;
     private final IRoleRepository roleRepository;
+    private final VisitSessionService visitSessionService;
+    private final IMedicalRecordRepository medicalRecordRepository;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -91,8 +98,38 @@ public class AppointmentService {
         }
 
         Appointment updated = appointmentRepository.save(appointment);
+
+
+//        if (updated.getStatus() == ConsultationStatus.IN_PROGRESS) {
+//
+//            Long patientId = updated.getPatient().getId();
+//
+//            // Lấy record hoặc tạo record mới
+//            var medicalRecord = medicalRecordRepository
+//                    .findByPatientId(patientId)
+//                    .orElseGet(() -> medicalRecordRepository.save(
+//                            MedicalRecord.builder()
+//                                    .patient(updated.getPatient())
+//                                    .visitDate(LocalDate.now())
+//                                    .build()
+//                    ));
+//
+//            // Lấy recordId
+//            Long recordId = medicalRecord.getRecordId();
+//
+//            // Tạo session
+//            VisitSessionDTO newSession = new VisitSessionDTO();
+//            newSession.setSessionDate(updated.getDate().atStartOfDay());
+//            newSession.setDiagnosis(updated.getNote());
+//            newSession.setRecordId(recordId);
+//
+//            visitSessionService.createVisitSession(recordId, newSession);
+//        }
+
+
         return appointmentMapper.toResponse(updated);
     }
+
 
     public List<AppointmentResponse> getAppointmentsByDate(String date) {
         List<Appointment> appointments;

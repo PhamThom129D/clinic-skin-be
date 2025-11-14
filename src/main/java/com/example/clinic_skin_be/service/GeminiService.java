@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,18 +13,20 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@Component
+@Service
 public class GeminiService {
 
     @Value("${gemini.api.keys}")
     private String geminiApiKeysStr;
 
-
     private List<String> geminiApiKeys;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    // Lưu thời gian retry key (timestamp millis)
+    private final Map<String, Long> keyRetryAfter = new HashMap<>();
+
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=";
 
     @PostConstruct
     private void init() {
@@ -32,18 +34,31 @@ public class GeminiService {
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toList();
+
+        if (geminiApiKeys.isEmpty()) {
+            throw new RuntimeException("Không load được Gemini API keys! Kiểm tra application.properties hoặc biến môi trường.");
+        }
+
+        System.out.println("Loaded Gemini API keys: " + geminiApiKeys.size());
     }
 
     /**
-     * Gọi API Gemini với cơ chế thử nhiều key
+     * Gọi API Gemini với cơ chế thử nhiều key, tạm khóa key bị 429
      */
     public String callGeminiApi(String prompt) throws Exception {
         String jsonInput = "{ \"contents\": [{\"parts\":[{\"text\":\""
                 + prompt.replace("\"", "\\\"") + "\"}]}]}";
 
         Exception lastException = null;
+        long now = System.currentTimeMillis();
 
         for (String key : geminiApiKeys) {
+            // Skip key đang bị tạm khóa
+            if (keyRetryAfter.getOrDefault(key, 0L) > now) {
+                System.out.println(" Key " + key + " đang bị tạm khóa, bỏ qua...");
+                continue;
+            }
+
             try {
                 URL url = new URL(GEMINI_API_URL + key);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -55,15 +70,29 @@ public class GeminiService {
                     os.write(jsonInput.getBytes(StandardCharsets.UTF_8));
                 }
 
-                InputStream is = (conn.getResponseCode() >= 400) ? conn.getErrorStream() : conn.getInputStream();
+                int statusCode = conn.getResponseCode();
+                InputStream is = (statusCode >= 400) ? conn.getErrorStream() : conn.getInputStream();
                 String response = (is != null) ? new String(is.readAllBytes(), StandardCharsets.UTF_8) : "";
 
-                if (!response.isEmpty() && conn.getResponseCode() < 400) {
+                if (statusCode == 429) {
+                    System.err.println(" Key " + key + " hết quota, tạm khóa 60s, thử key khác...");
+                    keyRetryAfter.put(key, System.currentTimeMillis() + 60_000L); // khóa 60s
+                    continue;
+                }
+
+                if (statusCode >= 400) {
+                    System.err.println(" Key failed: " + key + ", HTTP code: " + statusCode + ", response: " + response);
+                    continue;
+                }
+
+                if (!response.isEmpty()) {
+                    System.out.println(" Gemini API success with key: " + key);
                     return response;
                 }
 
             } catch (Exception e) {
                 lastException = e;
+                System.err.println(" Exception with key " + key + ": " + e.getMessage());
             }
         }
 
@@ -108,6 +137,7 @@ public class GeminiService {
             String aiResponse = callGeminiApi(prompt);
             return parseAiResponse(aiResponse, expectedFields);
         } catch (Exception e) {
+            System.err.println("❌ Gemini API call failed: " + e.getMessage());
             Map<String, Object> fallback = new HashMap<>();
             expectedFields.forEach(f -> fallback.put(f, Collections.emptyList()));
             return fallback;
