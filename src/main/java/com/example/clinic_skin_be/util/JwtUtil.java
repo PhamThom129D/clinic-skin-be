@@ -61,6 +61,11 @@ public class JwtUtil {
         return parseToken(token).getBody().getSubject();
     }
 
+    // Extract userid
+    public Long getUserIdFromToken(String token) {
+        return parseToken(token).getBody().get("userId", Long.class);
+    }
+
     // Validate token
     public boolean isValidToken(String token) {
         try {
