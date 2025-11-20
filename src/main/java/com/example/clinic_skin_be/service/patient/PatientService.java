@@ -20,7 +20,10 @@ public class PatientService {
 
     @Transactional(readOnly = true)
     public List<AppointmentHistorySummaryDTO> getAppointmentHistoryForPatient(Long accountId) {
-        Query query = entityManager.createNativeQuery("{CALL GetPatientAppointmentHistoryByAccount(:p_account_id)}");
+
+        Query query = entityManager.createNativeQuery(
+                "{CALL GetPatientAppointmentHistoryByAccount(:p_account_id)}"
+        );
         query.setParameter("p_account_id", accountId);
 
         List<Object[]> results = query.getResultList();
@@ -28,20 +31,33 @@ public class PatientService {
         return results.stream()
                 .map(row -> {
                     // 0: appointment_id
-                    Long appointmentId = (row[0] != null) ? ((Number) row[0]).longValue() : null;
+                    Long appointmentId = row[0] != null ? ((Number) row[0]).longValue() : null;
+
                     // 1: status
                     String status = (String) row[1];
-                    // 2: appointmentDateTime (CONCAT)
+
+                    // 2: appointment_date_time
                     String appointmentDateTime = (String) row[2];
-                    // 3: record_id
-                    Long recordId = (row[3] != null) ? ((Number) row[3]).longValue() : null;
-                    // 4: symptoms
-                    String symptoms = (String) row[4];
-                    // 5: doctorName
+
+                    // 3: appointment_note
+                    String appointmentNote = (String) row[3];
+
+                    // 4: record_id
+                    Long recordId = row[4] != null ? ((Number) row[4]).longValue() : null;
+
+                    // 5: doctor_name
                     String doctorName = (String) row[5];
-                    return new AppointmentHistorySummaryDTO(appointmentId, recordId, status, appointmentDateTime, symptoms, doctorName);
+
+                    return new AppointmentHistorySummaryDTO(
+                            appointmentId,
+                            recordId,
+                            status,
+                            appointmentDateTime,
+                            appointmentNote,
+                            doctorName
+                    );
                 })
-                // Lọc ra các dòng NULL mà Procedure trả về khi không tìm thấy patient_id (WHERE 1=0)
+                // Xóa dòng NULL từ procedure (WHERE 1=0)
                 .filter(dto -> dto.getAppointmentId() != null)
                 .collect(Collectors.toList());
     }

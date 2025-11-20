@@ -14,9 +14,10 @@ public class AppointmentHistorySummaryDTO implements Serializable {
     private Long appointmentId;
     private Long recordId;
 
-    // Dữ liệu hiển thị
+    // Hiển thị
     private String status;
-    private String appointmentDateTime; // YYYY-MM-DD HH:MM
-    private String symptoms;
+    private String appointmentDateTime;  // YYYY-MM-DD HH:MM
+    private String appointmentNote;      // <-- đổi tên
     private String doctorName;
 }
+
