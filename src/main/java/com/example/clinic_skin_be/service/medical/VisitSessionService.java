@@ -1,13 +1,11 @@
 package com.example.clinic_skin_be.service.medical;
 
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
-import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.PrescriptionDetailDTO;
 import com.example.clinic_skin_be.dto.medical.treatment_template.TreatmentStepTemplateDTO;
 import com.example.clinic_skin_be.dto.staff.DoctorDTO;
 import com.example.clinic_skin_be.mapper.DoctorMapper;
 import com.example.clinic_skin_be.mapper.PrescriptionMapper;
-import com.example.clinic_skin_be.mapper.TreatmentPlanMapper;
 import com.example.clinic_skin_be.mapper.VisitSessionMapper;
 import com.example.clinic_skin_be.model.medical.MedicalRecord;
 import com.example.clinic_skin_be.model.medical.VisitSession;
@@ -26,13 +24,9 @@ import com.example.clinic_skin_be.repository.medical.medication.IPrescriptionRep
 import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentPlanRepository;
 import com.example.clinic_skin_be.repository.medical.IVisitSessionRepository;
 import com.example.clinic_skin_be.repository.medical.treatment_plan.ITreatmentStepRepository;
-import com.example.clinic_skin_be.repository.staff.IDoctorRepository;
-import com.example.clinic_skin_be.service.medical.treatment_plan.TreatmentPlanService;
-import com.example.clinic_skin_be.service.medical.treatment_template.PrescriptionService;
 import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentItemService;
 import com.example.clinic_skin_be.service.medical.treatment_template.TreatmentTemplateService;
 import com.example.clinic_skin_be.service.staff.DoctorService;
-import com.example.clinic_skin_be.service.staff.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,7 +175,7 @@ public class VisitSessionService {
 
 
     public List<VisitSessionDTO> getSessionsByRecord(Long recordId) {
-        return visitSessionRepo.findByMedicalRecord_RecordId(recordId)
+        return visitSessionRepo.findAllByMedicalRecord_RecordId(recordId)
                 .stream()
                 .map(visitSessionMapper::toDTO)
                 .collect(Collectors.toList());

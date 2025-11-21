@@ -17,7 +17,7 @@ public class AppointmentHistorySummaryDTO implements Serializable {
     // Hiển thị
     private String status;
     private String appointmentDateTime;  // YYYY-MM-DD HH:MM
-    private String appointmentNote;      // <-- đổi tên
+    private String appointmentNote;
     private String doctorName;
 }
 

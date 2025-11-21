@@ -4,6 +4,7 @@ import com.example.clinic_skin_be.dto.ValidationGroups;
 import com.example.clinic_skin_be.dto.patient.AppointmentDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentHistorySummaryDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentResponse;
+import com.example.clinic_skin_be.dto.patient.appointmentdetail.MedicalRecordDetailDTO;
 import com.example.clinic_skin_be.service.patient.AppointmentService;
 import com.example.clinic_skin_be.service.patient.PatientService;
 import com.example.clinic_skin_be.util.JwtUtil;
@@ -80,5 +81,12 @@ public class AppointmentController {
         } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
             return ResponseEntity.status(401).build();
         }
+    }
+
+    // ================= GET: Chi tiết phiên khám trong lịch sử khám của người dùng =================
+    @GetMapping("/records/{recordId}")
+    public ResponseEntity<MedicalRecordDetailDTO> getMedicalRecordDetails(@PathVariable Long recordId) {
+        MedicalRecordDetailDTO details = patientService.getMedicalRecordDetails(recordId);
+        return ResponseEntity.ok(details);
     }
 }
