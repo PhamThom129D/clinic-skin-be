@@ -2,6 +2,7 @@ package com.example.clinic_skin_be.service.patient;
 
 import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentDTO;
+import com.example.clinic_skin_be.dto.patient.AppointmentHistorySummaryDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentResponse;
 import com.example.clinic_skin_be.mapper.AppointmentMapper;
 import com.example.clinic_skin_be.model.manage_enum.AccountStatus;
@@ -21,10 +22,10 @@ import com.example.clinic_skin_be.repository.user.IRoleRepository;
 import com.example.clinic_skin_be.service.auth.impl.EmailService;
 import com.example.clinic_skin_be.service.medical.MedicalRecordService;
 import com.example.clinic_skin_be.service.medical.VisitSessionService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

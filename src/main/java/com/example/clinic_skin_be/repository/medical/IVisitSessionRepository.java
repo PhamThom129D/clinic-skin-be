@@ -6,9 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IVisitSessionRepository extends JpaRepository<VisitSession, Long> {
-    List<VisitSession> findByMedicalRecord_RecordId(Long recordId);
+    List<VisitSession> findAllByMedicalRecord_RecordId(Long recordId);
     List<VisitSession> findBySessionDateBetween(LocalDateTime start, LocalDateTime end);
+    Optional<VisitSession> findFirstByMedicalRecord_RecordId(Long recordId);
 }

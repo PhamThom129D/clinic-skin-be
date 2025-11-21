@@ -2,12 +2,18 @@ package com.example.clinic_skin_be.controller.user;
 
 import com.example.clinic_skin_be.dto.ValidationGroups;
 import com.example.clinic_skin_be.dto.patient.AppointmentDTO;
+import com.example.clinic_skin_be.dto.patient.AppointmentHistorySummaryDTO;
 import com.example.clinic_skin_be.dto.patient.AppointmentResponse;
+import com.example.clinic_skin_be.dto.patient.appointmentdetail.MedicalRecordDetailDTO;
 import com.example.clinic_skin_be.service.patient.AppointmentService;
+import com.example.clinic_skin_be.service.patient.PatientService;
+import com.example.clinic_skin_be.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import io.jsonwebtoken.JwtException;
 
 import java.util.List;
 
@@ -17,6 +23,8 @@ import java.util.List;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final PatientService patientService;
+    private final JwtUtil jwtUtil;
 
     // ================= POST: đăng ký lịch hẹn =================
     @PostMapping("/register")
@@ -57,5 +65,28 @@ public class AppointmentController {
     public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
         appointmentService.deleteAppointment(id);
         return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+    // ================= GET: Bản tóm tắt lịch sử khám của người dùng =================
+    @GetMapping("/patient-history")
+    public ResponseEntity<List<AppointmentHistorySummaryDTO>> getPatientAppointmentHistory( Authentication authentication, @RequestHeader(name = "Authorization") String tokenHeader) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
+        }
+        try {
+            String token = tokenHeader.substring(7);
+            Long authenticatedAccountId = jwtUtil.getUserIdFromToken(token);
+            List<AppointmentHistorySummaryDTO> historyList = patientService.getAppointmentHistoryForPatient(authenticatedAccountId);
+            return ResponseEntity.ok(historyList);
+        } catch (JwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
+            return ResponseEntity.status(401).build();
+        }
+    }
+
+    // ================= GET: Chi tiết phiên khám trong lịch sử khám của người dùng =================
+    @GetMapping("/records/{recordId}")
+    public ResponseEntity<MedicalRecordDetailDTO> getMedicalRecordDetails(@PathVariable Long recordId) {
+        MedicalRecordDetailDTO details = patientService.getMedicalRecordDetails(recordId);
+        return ResponseEntity.ok(details);
     }
 }
