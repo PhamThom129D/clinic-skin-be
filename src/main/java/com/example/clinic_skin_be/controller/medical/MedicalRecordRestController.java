@@ -1,9 +1,15 @@
 package com.example.clinic_skin_be.controller.medical;
 
 import com.example.clinic_skin_be.dto.medical.MedicalRecordDTO;
+import com.example.clinic_skin_be.dto.patient.AppointmentHistorySummaryDTO;
+import com.example.clinic_skin_be.dto.patient.appointmentdetail.PatientMedicalHistoryDTO;
 import com.example.clinic_skin_be.service.medical.MedicalRecordService;
+import com.example.clinic_skin_be.service.patient.PatientService;
+import com.example.clinic_skin_be.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +20,8 @@ import java.util.List;
 public class MedicalRecordRestController {
 
     private final MedicalRecordService medicalRecordService;
+    private final JwtUtil jwtUtil;
+    private final PatientService patientService;
 
     // Lấy danh sách hồ sơ khám
     @GetMapping("")
@@ -50,4 +58,14 @@ public class MedicalRecordRestController {
         medicalRecordService.deleteMedicalRecord(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Lấy danh sách hồ sơ khám cơ bản
+    @GetMapping("/summary")
+    public ResponseEntity<List<PatientMedicalHistoryDTO>> getSummary(Authentication authentication, @RequestHeader("Authorization") String tokenHeader) {
+        String token = tokenHeader.substring(7);
+        Long userId = jwtUtil.getUserIdFromToken(token);
+        List<PatientMedicalHistoryDTO> historyList = patientService.getMedicalHistorySummaryForPatient(userId);
+        return ResponseEntity.ok(historyList);
+    }
+
 }

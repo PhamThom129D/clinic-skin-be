@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,49 @@ public class PatientService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    // Lấy ra lịch sử Y tế (Summary)
+    @Transactional(readOnly = true)
+    public List<PatientMedicalHistoryDTO> getMedicalHistorySummaryForPatient(Long accountId) {
+
+        // 1. Gọi Stored Procedure GetPatientMedicalHistoryByAccount
+        Query query = entityManager.createNativeQuery(
+                "{CALL GetPatientMedicalHistoryByAccount(:p_account_id)}"
+        );
+        query.setParameter("p_account_id", accountId);
+
+        List<Object[]> results = query.getResultList();
+
+        // 2. Ánh xạ kết quả sang List<PatientMedicalHistoryDTO>
+        return results.stream()
+                .map(row -> {
+                    // Thứ tự cột trả về:
+                    // 0: R.record_id
+                    // 1: VS.session_id
+                    // 2: VS.symptoms
+                    // 3: VS.diagnosis
+                    // 4: D_ACC.full_name (doctor_full_name)
+                    // 5: VS.session_date (Date/Timestamp)
+
+                    Long recordId = row[0] != null ? ((Number) row[0]).longValue() : null;
+                    Long sessionId = row[1] != null ? ((Number) row[1]).longValue() : null;
+                    String sessionDate = row[5] != null
+                            ? ((Timestamp) row[5]).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) // Chỉ lấy ngày
+                            : null;
+
+                    return new PatientMedicalHistoryDTO(
+                            recordId,
+                            sessionId,
+                            (String) row[2], // symptoms
+                            (String) row[3], // diagnosis
+                            (String) row[4], // doctor_full_name
+                            sessionDate
+                    );
+                })
+                .filter(dto -> dto.getRecordId() != null)
+                .collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     public List<AppointmentHistorySummaryDTO> getAppointmentHistoryForPatient(Long accountId) {
         Query query = entityManager.createNativeQuery(

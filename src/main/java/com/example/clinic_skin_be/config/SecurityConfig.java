@@ -60,7 +60,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/chat/reply/**").hasAnyRole("ADMIN", "CONSULTANT", "PATIENT")
 
                                 // Các API cho bác sĩ
-                                .requestMatchers("/api/medical-records/**").hasRole("DOCTOR")
+                                .requestMatchers("/api/medical-records/**").hasAnyRole("DOCTOR", "PATIENT")
                                 .requestMatchers("/api/visit-sessions/**").hasRole("DOCTOR")
 
                                 // Các API public khác
