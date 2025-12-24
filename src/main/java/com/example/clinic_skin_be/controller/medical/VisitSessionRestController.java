@@ -1,0 +1,84 @@
+package com.example.clinic_skin_be.controller.medical;
+
+import com.example.clinic_skin_be.dto.UpdateVisitSessionRequest;
+import com.example.clinic_skin_be.dto.medical.VisitSessionDTO;
+import com.example.clinic_skin_be.service.medical.VisitSessionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/visit-sessions")
+@RequiredArgsConstructor
+public class VisitSessionRestController {
+
+    private final VisitSessionService visitSessionService;
+
+    // danh sach phien
+    @GetMapping("/record/{recordId}")
+    public ResponseEntity<List<VisitSessionDTO>> getSessionsByRecord(@PathVariable Long recordId) {
+        return ResponseEntity.ok(visitSessionService.getSessionsByRecord(recordId));
+    }
+
+    // Chi tiet phien
+    @GetMapping("/{id}")
+    public ResponseEntity<VisitSessionDTO> getSessionById(@PathVariable Long id) {
+        VisitSessionDTO dto = visitSessionService.getSessionById(id);
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    }
+
+    // Them phien moi
+    @PostMapping("/record/{recordId}")
+    public ResponseEntity<VisitSessionDTO> createSession(
+            @PathVariable Long recordId,
+            @RequestBody VisitSessionDTO dto) {
+        return ResponseEntity.ok(visitSessionService.createVisitSession(recordId, dto));
+    }
+
+    @PutMapping("/{id}/record")
+    public ResponseEntity<VisitSessionDTO> updateSession(
+            @PathVariable Long id,
+            @RequestBody UpdateVisitSessionRequest request) {
+
+        request.getSession().setSessionId(id);
+
+        return ResponseEntity.ok(
+                visitSessionService.updateVisitSession(
+                        request.getSession(),
+                        request.getSteps(),
+                        request.getPrescriptions(),
+                        request.getLabTests()
+                )
+        );
+    }
+
+
+
+
+    // Xoá phiên khám
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
+        visitSessionService.deleteVisitSession(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Danh sach phien kham trong ngay
+    @GetMapping("/list-session-date")
+    public ResponseEntity<List<VisitSessionDTO>> getSessionByDate(
+            @RequestParam(value = "date", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        if (date == null) {
+            date = LocalDate.now();
+        }
+
+        List<VisitSessionDTO> sessions = visitSessionService.getSessionByDate(date);
+        return ResponseEntity.ok(sessions);
+    }
+
+
+}
